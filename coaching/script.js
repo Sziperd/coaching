@@ -164,10 +164,12 @@ tiltEls.forEach((el) => {
     const x = (event.clientX - rect.left) / rect.width;
     const y = (event.clientY - rect.top) / rect.height;
 
-    const rotateX = (0.5 - y) * 5;
-    const rotateY = (x - 0.5) * 7;
+    const isImage = el.classList.contains("blobImage");
+    const rotateX = (0.5 - y) * (isImage ? 7 : 5);
+    const rotateY = (x - 0.5) * (isImage ? 9 : 7);
+    const lift = isImage ? -5 : -2;
 
-    el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+    el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(${lift}px)`;
   });
 
   el.addEventListener("mouseleave", () => {
