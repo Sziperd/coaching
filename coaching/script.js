@@ -165,9 +165,9 @@ tiltEls.forEach((el) => {
     const y = (event.clientY - rect.top) / rect.height;
 
     const isImage = el.classList.contains("blobImage");
-    const rotateX = (0.5 - y) * (isImage ? 7 : 5);
-    const rotateY = (x - 0.5) * (isImage ? 9 : 7);
-    const lift = isImage ? -5 : -2;
+    const rotateX = (0.5 - y) * (isImage ? 4 : 5);
+    const rotateY = (x - 0.5) * (isImage ? 6 : 7);
+    const lift = isImage ? -3 : -2;
 
     el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(${lift}px)`;
   });
@@ -176,6 +176,105 @@ tiltEls.forEach((el) => {
     el.style.transform = "";
   });
 });
+
+/* =========================================================
+   HERO GOAL CARDS
+   ========================================================= */
+
+const goalCards = [
+  "Mniej chaosu. Więcej kierunku i decyzji, za którymi naprawdę stoisz.",
+  "Odzyskać czas na myślenie strategiczne, zamiast ciągle gasić bieżące sprawy.",
+  "Poukładać priorytety tak, żeby codzienna praca wspierała większy plan.",
+  "Podejmować decyzje spokojniej, szybciej i bez ciągłego wracania do punktu wyjścia.",
+  "Wyjść z przeciążenia i zbudować rytm pracy, który da się utrzymać.",
+  "Wzmocnić pewność siebie w rozmowach z zespołem, klientami i partnerami.",
+  "Nazwać to, co blokuje rozwój, zanim kolejny raz przykryje to lista zadań.",
+  "Zobaczyć firmę z dystansu i wybrać, czym naprawdę warto się zająć teraz.",
+  "Ułożyć granice między pracą a życiem bez poczucia, że coś tracisz.",
+  "Przejść od rozproszenia do działania, które jest spokojne, konkretne i Twoje."
+];
+
+const goalCard = document.querySelector("[data-goal-card]");
+const goalFace = document.querySelector("[data-goal-face]");
+const goalLabel = document.querySelector("[data-goal-label]");
+const goalText = document.querySelector("[data-goal-text]");
+const nextGoalLabel = document.querySelector("[data-next-goal-label]");
+const nextGoalText = document.querySelector("[data-next-goal-text]");
+let currentGoal = 0;
+let isGoalAnimating = false;
+
+function getGoalInfo(index) {
+  const displayIndex = index + 1;
+  const nextIndex = (index + 1) % goalCards.length;
+  const nextDisplayIndex = nextIndex + 1;
+
+  return {
+    displayIndex,
+    nextIndex,
+    nextDisplayIndex
+  };
+}
+
+function updateGoalCard(index) {
+  if (!goalCard || !goalLabel || !goalText || !nextGoalLabel || !nextGoalText) return;
+
+  const { displayIndex, nextIndex, nextDisplayIndex } = getGoalInfo(index);
+
+  goalLabel.textContent = `Cel ${displayIndex}`;
+  goalText.textContent = goalCards[index];
+  nextGoalLabel.textContent = `Cel ${nextDisplayIndex}`;
+  nextGoalText.textContent = goalCards[nextIndex];
+  goalCard.setAttribute("aria-label", `Pokaż kolejny cel. Aktualnie: cel ${displayIndex}`);
+}
+
+function updateFrontGoal(index) {
+  if (!goalCard || !goalLabel || !goalText) return;
+
+  const { displayIndex } = getGoalInfo(index);
+
+  goalLabel.textContent = `Cel ${displayIndex}`;
+  goalText.textContent = goalCards[index];
+  goalCard.setAttribute("aria-label", `Pokaż kolejny cel. Aktualnie: cel ${displayIndex}`);
+}
+
+function updateNextGoal(index) {
+  if (!nextGoalLabel || !nextGoalText) return;
+
+  const { nextIndex, nextDisplayIndex } = getGoalInfo(index);
+
+  nextGoalLabel.textContent = `Cel ${nextDisplayIndex}`;
+  nextGoalText.textContent = goalCards[nextIndex];
+}
+
+goalCard?.addEventListener("click", () => {
+  if (isGoalAnimating) return;
+
+  if (prefersReduced) {
+    currentGoal = (currentGoal + 1) % goalCards.length;
+    updateGoalCard(currentGoal);
+    return;
+  }
+
+  const advanceFrontGoal = () => {
+    currentGoal = (currentGoal + 1) % goalCards.length;
+    updateFrontGoal(currentGoal);
+    updateNextGoal(currentGoal);
+    goalCard.classList.add("is-handoff");
+  };
+
+  const finishGoalAnimation = () => {
+    goalCard.classList.remove("is-cycling");
+    goalCard.classList.remove("is-handoff");
+    isGoalAnimating = false;
+  };
+
+  isGoalAnimating = true;
+  goalCard.classList.add("is-cycling");
+  window.setTimeout(advanceFrontGoal, 915);
+  window.setTimeout(finishGoalAnimation, 950);
+});
+
+updateGoalCard(currentGoal);
 
 /* =========================================================
    CONTACT FORM

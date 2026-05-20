@@ -13,8 +13,8 @@
     content="Prywatny coaching biznesowy i work-life coaching. Znajdź kierunek, uporządkuj priorytety i świadomie buduj życie oraz pracę, które mają znaczenie."
   />
 
-  <link rel="preload" href="styles.css" as="style" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" href="styles.css?v=mobile-throw-right" as="style" />
+  <link rel="stylesheet" href="styles.css?v=mobile-throw-right" />
 </head>
 
 <body>
@@ -105,11 +105,23 @@
           </div>
         </div>
 
-        <div class="hero__aside reveal" aria-hidden="true">
-          <div class="quoteCard" data-tilt>
-            <span class="quoteCard__label">1:1</span>
-            <p>klarowność, decyzje, priorytety</p>
-          </div>
+        <div class="hero__aside reveal">
+          <button class="quoteCard" type="button" data-goal-card data-tilt aria-label="Pokaż kolejny cel">
+            <span class="quoteCard__layer quoteCard__layer--back" aria-hidden="true"></span>
+            <span class="quoteCard__layer quoteCard__layer--middle" aria-hidden="true"></span>
+            <span class="quoteCard__nextFace" aria-hidden="true" data-next-goal-face>
+              <span class="quoteCard__label" data-next-goal-label>Cel 2</span>
+              <span class="quoteCard__text" data-next-goal-text>
+                Odzyskać czas na myślenie strategiczne, zamiast ciągle gasić bieżące sprawy.
+              </span>
+            </span>
+            <span class="quoteCard__face" data-goal-face>
+              <span class="quoteCard__label" data-goal-label>Cel 1</span>
+              <span class="quoteCard__text" data-goal-text aria-live="polite">
+                Mniej chaosu. Więcej kierunku i decyzji, za którymi naprawdę stoisz.
+              </span>
+            </span>
+          </button>
         </div>
       </div>
     </section>
@@ -303,6 +315,6 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=mobile-throw-right"></script>
 </body>
 </html>
