@@ -575,6 +575,7 @@ img {
   cursor: pointer;
   font: inherit;
   text-align: left;
+  -webkit-tap-highlight-color: transparent;
   transition:
     filter 0.22s var(--ease);
 }
@@ -1438,6 +1439,8 @@ img {
   .quoteCard {
     width: 100%;
     min-height: 252px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
     --card-back-scale: 0.9;
     --card-middle-scale: 0.95;
     --card-next-scale: 0.985;
@@ -1459,6 +1462,7 @@ img {
   .quoteCard__nextFace,
   .quoteCard__face {
     height: 204px;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .quoteCard::before {
