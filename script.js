@@ -268,10 +268,14 @@ goalCard?.addEventListener("click", () => {
     isGoalAnimating = false;
   };
 
+  const isMobileGoalCard = window.matchMedia("(max-width: 680px)").matches;
+  const handoffDelay = isMobileGoalCard ? 1115 : 915;
+  const finishDelay = isMobileGoalCard ? 1160 : 950;
+
   isGoalAnimating = true;
   goalCard.classList.add("is-cycling");
-  window.setTimeout(advanceFrontGoal, 915);
-  window.setTimeout(finishGoalAnimation, 950);
+  window.setTimeout(advanceFrontGoal, handoffDelay);
+  window.setTimeout(finishGoalAnimation, finishDelay);
 });
 
 updateGoalCard(currentGoal);

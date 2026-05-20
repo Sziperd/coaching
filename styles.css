@@ -759,6 +759,21 @@ img {
   text-wrap: pretty;
 }
 
+.quoteCard__nextFace .quoteCard__label,
+.quoteCard__nextFace .quoteCard__text {
+  opacity: 0;
+}
+
+.quoteCard.is-cycling .quoteCard__nextFace .quoteCard__label,
+.quoteCard.is-cycling .quoteCard__nextFace .quoteCard__text {
+  opacity: 1;
+}
+
+.quoteCard.is-cycling.is-handoff .quoteCard__nextFace .quoteCard__label,
+.quoteCard.is-cycling.is-handoff .quoteCard__nextFace .quoteCard__text {
+  opacity: 0;
+}
+
 @keyframes cardToBack {
   0% {
     opacity: 1;
@@ -1499,8 +1514,8 @@ img {
 
   .quoteCard.is-cycling .quoteCard__face {
     animation:
-      cardThrowRightMobile 0.82s cubic-bezier(0.24, 1.12, 0.34, 1) forwards,
-      frontCardColorToBack 0.82s cubic-bezier(0.24, 1.12, 0.34, 1) forwards;
+      cardThrowRightMobile 1.02s cubic-bezier(0.24, 1.12, 0.34, 1) forwards,
+      frontCardColorToBack 1.02s cubic-bezier(0.24, 1.12, 0.34, 1) forwards;
   }
 
   .quoteCard__text {
