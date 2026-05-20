@@ -1,0 +1,320 @@
+<!-- Created by Patryk Piwowarczyk -->
+
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#eeeae6" />
+
+  <title>Personal Coach — Prywatny Coaching Biznesowy</title>
+  <meta
+    name="description"
+    content="Prywatny coaching biznesowy i work-life coaching. Znajdź kierunek, uporządkuj priorytety i świadomie buduj życie oraz pracę, które mają znaczenie."
+  />
+
+  <link rel="preload" href="styles.css?v=mobile-card-slower" as="style" />
+  <link rel="stylesheet" href="styles.css?v=mobile-card-slower" />
+</head>
+
+<body>
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__shape ambient__shape--one"></div>
+    <div class="ambient__shape ambient__shape--two"></div>
+    <div class="ambient__grid"></div>
+  </div>
+
+  <header class="siteHeader" id="siteHeader">
+    <div class="container nav__inner">
+      <a class="brand" href="#home" aria-label="Strona główna">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="28" height="28">
+            <path d="M10 26.5C10 16.84 16.84 10 26.5 10C34.14 10 40 15.86 40 23.5C40 31.14 34.14 37 26.5 37H14.8C12.15 37 10 34.85 10 32.2V26.5Z" fill="currentColor"/>
+            <path d="M18 26.5C18 21.25 21.25 18 26.5 18C30.05 18 32 19.95 32 23.5C32 27.05 30.05 29 26.5 29H21C19.34 29 18 27.66 18 26Z" fill="#eeeae6"/>
+          </svg>
+        </span>
+      </a>
+
+      <nav class="nav__links" aria-label="Nawigacja">
+        <a href="#o-mnie">O mnie</a>
+        <a href="#coaching">Coaching</a>
+        <a href="#oferta">Oferta</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+
+      <div class="nav__actions">
+        <a class="btn btn--outline nav__cta" href="#kontakt">Umów rozmowę</a>
+
+        <a
+          class="linkedin"
+          href="https://www.linkedin.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path fill="currentColor" d="M20.45 20.45h-3.56v-5.58c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.67H9.34V8.99h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.1 20.45H3.54V8.99H7.1v11.46Z"/>
+          </svg>
+        </a>
+
+        <button class="nav__toggle" id="navToggle" type="button" aria-label="Otwórz menu" aria-expanded="false">
+          <span></span>
+          <span class="nav__toggleMid"></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <button class="drawer__backdrop" id="drawerBackdrop" type="button" aria-label="Zamknij menu"></button>
+
+      <div class="drawer__panel">
+        <a href="#o-mnie" class="drawer__link">O mnie</a>
+        <a href="#coaching" class="drawer__link">Coaching</a>
+        <a href="#oferta" class="drawer__link">Oferta</a>
+        <a href="#kontakt" class="drawer__link">Kontakt</a>
+        <a href="#kontakt" class="btn btn--primary btn--wide">Umów rozmowę</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow reveal">Prywatny coaching biznesowy</p>
+
+          <h1 class="hero__title reveal">
+            Uwolnij swój potencjał
+          </h1>
+
+          <p class="hero__lead reveal">
+            Znajdź swój kierunek, uporządkuj priorytety i świadomie buduj życie oraz pracę,
+            które naprawdę mają znaczenie.
+          </p>
+
+          <div class="hero__actions reveal">
+            <a class="btn btn--primary" href="#kontakt" data-magnetic>
+              Umów rozmowę
+              <span class="btn__shine" aria-hidden="true"></span>
+            </a>
+
+            <a class="btn btn--text" href="#coaching">
+              Dowiedz się więcej
+            </a>
+          </div>
+        </div>
+
+        <div class="hero__aside reveal">
+          <button class="quoteCard" type="button" data-goal-card data-tilt aria-label="Pokaż kolejny cel">
+            <span class="quoteCard__layer quoteCard__layer--back" aria-hidden="true"></span>
+            <span class="quoteCard__layer quoteCard__layer--middle" aria-hidden="true"></span>
+            <span class="quoteCard__nextFace" aria-hidden="true" data-next-goal-face>
+              <span class="quoteCard__label" data-next-goal-label>Cel 2</span>
+              <span class="quoteCard__text" data-next-goal-text>
+                Odzyskać czas na myślenie strategiczne, zamiast ciągle gasić bieżące sprawy.
+              </span>
+            </span>
+            <span class="quoteCard__face" data-goal-face>
+              <span class="quoteCard__label" data-goal-label>Cel 1</span>
+              <span class="quoteCard__text" data-goal-text aria-live="polite">
+                Mniej chaosu. Więcej kierunku i decyzji, za którymi naprawdę stoisz.
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--white" id="o-mnie">
+      <div class="container split split--challenge">
+        <div class="blobImage reveal" data-tilt>
+          <img
+            src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80"
+            alt="Rozmowa coachingowa przy stole"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="section__copy reveal">
+          <p class="eyebrow">Wyzwanie</p>
+
+          <h2>Czy to brzmi znajomo?</h2>
+
+          <ul class="checkList">
+            <li>Twój biznes rośnie, ale Ty masz coraz mniej czasu.</li>
+            <li>Zespół pracuje ciężko, ale wyniki nie rosną tak, jak powinny.</li>
+            <li>Podejmujesz dziesiątki decyzji dziennie i czujesz ciągłe przeciążenie.</li>
+            <li>Jesteś potrzebny wszędzie.</li>
+            <li>Zamiast rozwijać firmę, ciągle rozwiązujesz bieżące problemy.</li>
+          </ul>
+
+          <div class="challengeNote">
+            <span>Jeśli choć raz odpowiedziałeś “tak”</span>
+            <strong>jesteś we właściwym miejscu</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--sand" id="coaching">
+      <div class="container split split--method">
+        <div class="section__copy reveal">
+          <p class="eyebrow">Metodologia</p>
+
+          <h2>Work-life coaching</h2>
+
+          <p>
+            Work-life coaching to proces wspierający świadome wprowadzanie zmian w życiu
+            osobistym i zawodowym. Pomaga lepiej zrozumieć siebie, swoje cele i blokady,
+            a następnie przełożyć tę wiedzę na konkretne działania.
+          </p>
+
+          <p>
+            W praktyce to rozmowy i narzędzia, które porządkują myślenie, wzmacniają
+            decyzyjność i pomagają przejść od miejsca, w którym jesteś, do miejsca,
+            w którym chcesz być — w sposób bardziej klarowny, spójny i uporządkowany.
+          </p>
+        </div>
+
+        <div class="blobImage blobImage--right reveal" data-tilt>
+          <img
+            src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80"
+            alt="Zespół trzymający dłonie razem"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--white" id="oferta">
+      <div class="container">
+        <div class="sectionHead reveal">
+          <p class="eyebrow">Oferta</p>
+          <h2>Co możemy przepracować?</h2>
+          <p>
+            Spotkania są dopasowane do Twojej sytuacji — od uporządkowania priorytetów,
+            przez lepsze decyzje, po świadome budowanie biznesu i życia poza nim.
+          </p>
+        </div>
+
+        <div class="offerGrid">
+          <article class="offerCard reveal" data-tilt>
+            <span class="offerCard__number">01</span>
+            <h3>Coaching biznesowy</h3>
+            <p>
+              Dla właścicieli, liderów i managerów, którzy chcą prowadzić firmę z większą
+              klarownością, spokojem i odpowiedzialnością.
+            </p>
+          </article>
+
+          <article class="offerCard reveal" data-tilt>
+            <span class="offerCard__number">02</span>
+            <h3>Work-life coaching</h3>
+            <p>
+              Dla osób, które chcą lepiej połączyć ambicję, relacje, odpoczynek i poczucie
+              sensu w codziennym działaniu.
+            </p>
+          </article>
+
+          <article class="offerCard reveal" data-tilt>
+            <span class="offerCard__number">03</span>
+            <h3>Decyzyjność i priorytety</h3>
+            <p>
+              Praca nad przeciążeniem, chaosem decyzyjnym, delegowaniem i odzyskiwaniem
+              przestrzeni na najważniejsze tematy.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--navy">
+      <div class="container process">
+        <div class="sectionHead reveal">
+          <p class="eyebrow eyebrow--light">Proces</p>
+          <h2>Prosty proces, konkretna zmiana</h2>
+        </div>
+
+        <div class="processGrid">
+          <article class="processStep reveal">
+            <span>01</span>
+            <h3>Rozmowa wstępna</h3>
+            <p>Sprawdzamy, gdzie jesteś teraz, z czym przychodzisz i czego realnie potrzebujesz.</p>
+          </article>
+
+          <article class="processStep reveal">
+            <span>02</span>
+            <h3>Ustalenie kierunku</h3>
+            <p>Porządkujemy cele, priorytety, blokady i obszary wymagające największej uwagi.</p>
+          </article>
+
+          <article class="processStep reveal">
+            <span>03</span>
+            <h3>Praca 1:1</h3>
+            <p>Podczas spotkań przekładamy wnioski na konkretne decyzje, działania i zmianę.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--sand" id="kontakt">
+      <div class="container contact">
+        <div class="contact__copy reveal">
+          <p class="eyebrow">Kontakt</p>
+          <h2>Umów rozmowę</h2>
+          <p>
+            Napisz kilka słów o tym, z czym przychodzisz. Odpowiem i zaproponuję termin
+            rozmowy wstępnej.
+          </p>
+
+          <div class="contactCards">
+            <a class="contactCard" href="mailto:kontakt@twojadomena.pl">
+              <span>E-mail</span>
+              <strong>kontakt@twojadomena.pl</strong>
+            </a>
+
+            <a class="contactCard" href="tel:+48123456789">
+              <span>Telefon</span>
+              <strong>+48 123 456 789</strong>
+            </a>
+          </div>
+        </div>
+
+        <form class="contactForm reveal" id="contactForm" data-email="kontakt@twojadomena.pl">
+          <label>
+            Imię
+            <input type="text" name="name" placeholder="Twoje imię" required />
+          </label>
+
+          <label>
+            E-mail
+            <input type="email" name="email" placeholder="twoj@email.pl" required />
+          </label>
+
+          <label>
+            Wiadomość
+            <textarea name="message" rows="5" placeholder="Napisz, czego potrzebujesz..." required></textarea>
+          </label>
+
+          <button class="btn btn--primary btn--wide" type="submit" data-magnetic>
+            Wyślij wiadomość
+            <span class="btn__shine" aria-hidden="true"></span>
+          </button>
+
+          <p class="formStatus" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> TODO ADD NAME. Wszystkie prawa zastrzeżone.</p>
+      <a href="#home">Wróć na górę</a>
+    </div>
+  </footer>
+
+  <script src="script.js?v=mobile-card-slower"></script>
+</body>
+</html>
