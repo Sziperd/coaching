@@ -13,8 +13,8 @@
     content="Prywatny coaching biznesowy i work-life coaching. Znajdź kierunek, uporządkuj priorytety i świadomie buduj życie oraz pracę, które mają znaczenie."
   />
 
-  <link rel="preload" href="styles.css?v=handoff-ghost-mobile-slow" as="style" />
-  <link rel="stylesheet" href="styles.css?v=handoff-ghost-mobile-slow" />
+  <link rel="preload" href="styles.css?v=resource-strings" as="style" />
+  <link rel="stylesheet" href="styles.css?v=resource-strings" />
 </head>
 
 <body>
@@ -40,6 +40,7 @@
         <a href="#o-mnie">O mnie</a>
         <a href="#coaching">Coaching</a>
         <a href="#oferta">Oferta</a>
+        <a href="#eksperci">Eksperci</a>
         <a href="#kontakt">Kontakt</a>
       </nav>
 
@@ -73,6 +74,7 @@
         <a href="#o-mnie" class="drawer__link">O mnie</a>
         <a href="#coaching" class="drawer__link">Coaching</a>
         <a href="#oferta" class="drawer__link">Oferta</a>
+        <a href="#eksperci" class="drawer__link">Eksperci</a>
         <a href="#kontakt" class="drawer__link">Kontakt</a>
         <a href="#kontakt" class="btn btn--primary btn--wide">Umów rozmowę</a>
       </div>
@@ -259,6 +261,80 @@
       </div>
     </section>
 
+    <section class="section section--white" id="eksperci">
+      <div class="container experts">
+        <div class="sectionHead reveal">
+          <p class="eyebrow">Eksperci</p>
+          <h2>Doświadczenie, które porządkuje decyzje</h2>
+          <p>
+            Sekcja będzie się rozwijać wraz z gronem ekspertów. Na start poznaj osobę,
+            która łączy perspektywę zarządczą z praktycznym spojrzeniem na ludzi,
+            przywództwo i zmianę.
+          </p>
+        </div>
+
+        <article class="expertProfile reveal">
+          <div class="expertPhoto">
+            <img src="pictures/expert_1_picture.jpg" alt="Miłosz Sławecki" loading="lazy" />
+            <span class="expertSignature" aria-label="Podpis: Miłosz Sławecki" aria-hidden="true">
+              <svg viewBox="0 0 520 150" role="img" focusable="false">
+                <title>Miłosz Sławecki</title>
+                <text class="signatureText" x="10" y="96">
+                  <tspan class="signatureGlyph" style="--i: 0">M</tspan><tspan class="signatureGlyph" style="--i: 1">i</tspan><tspan class="signatureGlyph" style="--i: 2">ł</tspan><tspan class="signatureGlyph" style="--i: 3">o</tspan><tspan class="signatureGlyph" style="--i: 4">s</tspan><tspan class="signatureGlyph" style="--i: 5">z</tspan><tspan dx="18"> </tspan><tspan class="signatureGlyph" style="--i: 6">S</tspan><tspan class="signatureGlyph" style="--i: 7">ł</tspan><tspan class="signatureGlyph" style="--i: 8">a</tspan><tspan class="signatureGlyph" style="--i: 9">w</tspan><tspan class="signatureGlyph" style="--i: 10">e</tspan><tspan class="signatureGlyph" style="--i: 11">c</tspan><tspan class="signatureGlyph" style="--i: 12">k</tspan><tspan class="signatureGlyph" style="--i: 13">i</tspan>
+                </text>
+              </svg>
+            </span>
+          </div>
+
+          <div class="expertBio">
+            <p class="eyebrow">Ekspert</p>
+            <h3>Miłosz Sławecki</h3>
+
+            <p>
+              Od ponad 30 lat wspiera firmy, liderów i zespoły w rozwoju, zmianie
+              i podejmowaniu kluczowych decyzji biznesowych. Pracował na stanowiskach
+              zarządczych i dyrektorskich w branżach medycznej, medialnej, logistycznej,
+              transportowej, handlowej i doradczej.
+            </p>
+
+            <p>
+              Budował firmy od podstaw, prowadził restrukturyzacje, rozwijał zespoły
+              i odpowiadał za strategiczne decyzje wpływające na wyniki organizacji.
+              Łączy doświadczenie menedżerskie z praktycznym spojrzeniem na ludzi,
+              przywództwo i rozwój.
+            </p>
+
+            <p>
+              Jego rolą nie jest dawanie gotowych odpowiedzi — pomaga spojrzeć szerzej,
+              uporządkować kierunek działania i przejść od decyzji do realnych efektów.
+            </p>
+          </div>
+        </article>
+
+        <div class="expertStats reveal" aria-label="Liczby budujące wiarygodność eksperta">
+          <article>
+            <strong data-count-to="30">1+</strong>
+            <span>lat doświadczenia w zarządzaniu</span>
+          </article>
+
+          <article>
+            <strong data-count-to="6">1+</strong>
+            <span>branż biznesowych</span>
+          </article>
+
+          <article>
+            <strong data-count-to="15">1+</strong>
+            <span>lat na stanowiskach zarządczych najwyższego szczebla</span>
+          </article>
+
+          <article>
+            <strong data-count-to="10">1+</strong>
+            <span>lat doświadczenia w restrukturyzacjach i transformacjach organizacji</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--sand" id="kontakt">
       <div class="container contact">
         <div class="contact__copy reveal">
@@ -316,6 +392,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=handoff-ghost-mobile-slow"></script>
+  <script src="content.js?v=resource-strings"></script>
+  <script src="script.js?v=resource-strings"></script>
 </body>
 </html>
