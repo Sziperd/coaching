@@ -13,7 +13,7 @@ window.siteContent = {
     showNextGoal: "Pokaż kolejny cel",
     currentGoal: "Aktualnie: cel",
     expertStats: "Liczby budujące wiarygodność eksperta",
-    expertSignature: "Podpis: Miłosz Sławecki"
+    expertSignature: "Podpis: Miłosz Stawecki"
   },
 
   nav: {
@@ -122,10 +122,10 @@ window.siteContent = {
     eyebrow: "Eksperci",
     title: "Doświadczenie, które porządkuje decyzje",
     lead: "Poznaj ludzi, którzy łączą perspektywę zarządczą z praktycznym spojrzeniem na ludzi, przywództwo i zmianę.",
-    photoAlt: "Miłosz Sławecki",
-    signature: "Miłosz Sławecki",
+    photoAlt: "Miłosz Stawecki",
+    signature: "Miłosz Stawecki",
     role: "Ekspert",
-    name: "Miłosz Sławecki",
+    name: "Miłosz Stawecki",
     bio: [
       "Od ponad 30 lat wspiera firmy, liderów i zespoły w rozwoju, zmianie i podejmowaniu kluczowych decyzji biznesowych. Pracował na stanowiskach zarządczych i dyrektorskich w branżach medycznej, medialnej, logistycznej, transportowej, handlowej i doradczej.",
       "Budował firmy od podstaw, prowadził restrukturyzacje, rozwijał zespoły i odpowiadał za strategiczne decyzje wpływające na wyniki organizacji. Łączy doświadczenie menedżerskie z praktycznym spojrzeniem na ludzi, przywództwo i rozwój.",
