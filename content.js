@@ -143,7 +143,7 @@ window.siteContent = {
       {
         role: "Ekspert",
         name: "Anna Kowalska",
-        photo: "",
+        photo: "pictures/expert_2_picture.jpg",
         photoAlt: "Anna Kowalska",
         signature: "Anna Kowalska",
         bio: [
