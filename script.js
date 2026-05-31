@@ -294,6 +294,7 @@ function applySiteContent() {
   const contactCards = document.querySelectorAll(".contactCard");
   const emailCard = contactCards[0];
   const phoneCard = contactCards[1];
+  const linkedinCard = contactCards[2];
 
   if (emailCard) {
     emailCard.href = `mailto:${content.contact?.email || emailCard.href}`;
@@ -305,6 +306,12 @@ function applySiteContent() {
     phoneCard.href = `tel:${content.contact?.phoneHref || content.contact?.phone || ""}`;
     setText("span", content.contact?.phoneLabel, phoneCard);
     setText("strong", content.contact?.phone, phoneCard);
+  }
+
+  if (linkedinCard) {
+    linkedinCard.href = content.contact?.linkedinHref || linkedinCard.href;
+    setText("span", content.contact?.linkedinLabel, linkedinCard);
+    setText("strong", content.contact?.linkedinText, linkedinCard);
   }
 
   const contactFormElement = document.getElementById("contactForm");
@@ -429,15 +436,15 @@ if (processSteps.length > 0) {
   if (!prefersReduced && "IntersectionObserver" in window) {
     const processObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        const requiredRatio = mobileProcessSteps.matches ? 0.72 : 0.28;
+        const requiredRatio = mobileProcessSteps.matches ? 0.42 : 0.28;
         if (!entry.isIntersecting || entry.intersectionRatio < requiredRatio) return;
 
         entry.target.classList.add("is-process-step-visible");
         processObserver.unobserve(entry.target);
       });
     }, {
-      rootMargin: mobileProcessSteps.matches ? "0px 0px -18% 0px" : "0px 0px -6% 0px",
-      threshold: [0.25, 0.5, 0.72, 0.9]
+      rootMargin: mobileProcessSteps.matches ? "0px 0px -8% 0px" : "0px 0px -6% 0px",
+      threshold: [0.25, 0.42, 0.5, 0.72, 0.9]
     });
 
     processSteps.forEach((step) => processObserver.observe(step));

@@ -170,6 +170,9 @@ window.siteContent = {
     phoneLabel: "Telefon",
     phone: "+48 123 456 789",
     phoneHref: "+48123456789",
+    linkedinLabel: "Profil",
+    linkedinText: "LinkedIn",
+    linkedinHref: "https://www.linkedin.com/",
     formEmail: "kontakt@twojadomena.pl",
     fields: {
       name: "Imię",

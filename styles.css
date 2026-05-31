@@ -1555,6 +1555,34 @@ img {
   background: rgba(255, 255, 255, 0.64);
 }
 
+.contactCard--linkedin {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  column-gap: 8px;
+  align-items: end;
+}
+
+.contactCard__icon {
+  grid-column: 1;
+  width: 18px;
+  height: 18px;
+  padding: 3px;
+  border-radius: 50%;
+  color: #fff;
+  background: #0a66c2;
+  align-self: center;
+  margin-top: 6px;
+}
+
+.contactCard--linkedin span {
+  grid-column: 1 / -1;
+}
+
+.contactCard--linkedin strong {
+  grid-column: 2;
+  align-self: center;
+}
+
 .contactCard span {
   display: block;
   color: var(--muted2);
