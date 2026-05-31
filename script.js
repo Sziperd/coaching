@@ -80,8 +80,7 @@ function setNavLinks(selector, links) {
   });
 }
 
-function writeSignatureText(text) {
-  const signatureText = document.querySelector(".signatureText");
+function writeSignatureText(text, signatureText = document.querySelector(".signatureText")) {
   if (!signatureText || !text) return;
 
   signatureText.innerHTML = "";
@@ -102,6 +101,116 @@ function writeSignatureText(text) {
     tspan.textContent = char;
     signatureText.appendChild(tspan);
     glyphIndex += 1;
+  });
+}
+
+function createExpertSlide(expert, index) {
+  const slide = document.createElement("article");
+  slide.className = "expertSlide";
+  slide.setAttribute("aria-label", expert.name || `Ekspert ${index + 1}`);
+
+  const profile = document.createElement("div");
+  profile.className = "expertProfile";
+
+  const photo = document.createElement("div");
+  photo.className = expert.photo ? "expertPhoto" : "expertPhoto expertPhoto--placeholder";
+
+  if (expert.photo) {
+    const img = document.createElement("img");
+    img.src = expert.photo;
+    img.alt = expert.photoAlt || expert.name || "";
+    img.loading = "lazy";
+    photo.appendChild(img);
+  } else {
+    const initials = document.createElement("span");
+    initials.className = "expertPhoto__initials";
+    initials.textContent = (expert.name || "EX")
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+    photo.appendChild(initials);
+  }
+
+  const signature = document.createElement("span");
+  signature.className = "expertSignature";
+  signature.setAttribute("aria-label", `${siteContent.labels?.expertSignature || "Podpis"} ${expert.name || ""}`.trim());
+  signature.setAttribute("aria-hidden", "true");
+  signature.innerHTML = `
+    <svg viewBox="0 0 520 150" role="img" focusable="false">
+      <title></title>
+      <text class="signatureText" x="10" y="96" textLength="500" lengthAdjust="spacingAndGlyphs"></text>
+    </svg>
+  `;
+  setText("title", expert.signature || expert.name || "", signature);
+  writeSignatureText(expert.signature || expert.name || "", signature.querySelector(".signatureText"));
+  photo.appendChild(signature);
+
+  const bio = document.createElement("div");
+  bio.className = "expertBio";
+
+  const name = document.createElement("h3");
+  name.textContent = expert.name || "";
+  bio.appendChild(name);
+
+  (expert.bio || []).forEach((paragraphText) => {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = paragraphText;
+    bio.appendChild(paragraph);
+  });
+
+  profile.appendChild(photo);
+  profile.appendChild(bio);
+  slide.appendChild(profile);
+
+  const stats = document.createElement("div");
+  stats.className = "expertStats";
+  stats.setAttribute("aria-label", siteContent.labels?.expertStats || "");
+
+  (expert.stats || []).forEach((item) => {
+    const stat = document.createElement("article");
+    const value = document.createElement("strong");
+    const suffix = item.suffix || "";
+    value.dataset.countTo = String(item.value || 0);
+    value.dataset.countSuffix = suffix;
+    value.textContent = `1${suffix}`;
+
+    const label = document.createElement("span");
+    label.textContent = item.label || "";
+
+    stat.appendChild(value);
+    stat.appendChild(label);
+    stats.appendChild(stat);
+  });
+
+  slide.appendChild(stats);
+  return slide;
+}
+
+function renderExperts(expertsContent) {
+  const track = document.querySelector("[data-experts-track]");
+  const dots = document.querySelector("[data-experts-dots]");
+  if (!track || !Array.isArray(expertsContent?.items)) return;
+
+  track.innerHTML = "";
+  expertsContent.items.forEach((expert, index) => {
+    track.appendChild(createExpertSlide(expert, index));
+  });
+
+  if (!dots) return;
+
+  dots.innerHTML = "";
+  expertsContent.items.forEach((expert, index) => {
+    const dot = document.createElement("button");
+    dot.className = "expertsDot";
+    dot.type = "button";
+    dot.dataset.expertDot = String(index);
+    dot.setAttribute("aria-label", expert.name || `Ekspert ${index + 1}`);
+
+    const fill = document.createElement("span");
+    dot.appendChild(fill);
+    dots.appendChild(dot);
   });
 }
 
@@ -175,28 +284,8 @@ function applySiteContent() {
 
   setText("#eksperci .sectionHead .eyebrow", content.experts?.eyebrow);
   setText("#eksperci .sectionHead h2", content.experts?.title);
-  setText("#eksperci .sectionHead > p:not(.eyebrow)", content.experts?.lead);
-
-  setAttr(".expertPhoto img", "alt", content.experts?.photoAlt);
-  setText(".expertSignature title", content.experts?.signature);
-  writeSignatureText(content.experts?.signature);
-  setText(".expertBio .eyebrow", content.experts?.role);
-  setText(".expertBio h3", content.experts?.name);
-  setParagraphs(".expertBio", content.experts?.bio);
-
-  document.querySelectorAll(".expertStats article").forEach((stat, index) => {
-    const item = content.experts?.stats?.[index];
-    if (!item) return;
-
-    const value = stat.querySelector("[data-count-to]");
-    if (value) {
-      value.dataset.countTo = String(item.value);
-      value.dataset.countSuffix = item.suffix || "";
-      value.textContent = `1${item.suffix || ""}`;
-    }
-
-    setText("span", item.label, stat);
-  });
+  setAttr(".expertsCarousel", "aria-label", content.experts?.title);
+  renderExperts(content.experts);
 
   setText("#kontakt .eyebrow", content.contact?.eyebrow);
   setText("#kontakt h2", content.contact?.title);
@@ -333,14 +422,38 @@ if (!prefersReduced && "IntersectionObserver" in window) {
   revealEls.forEach((el) => el.classList.add("is-visible"));
 }
 
+const processSteps = Array.from(document.querySelectorAll("[data-process-step]"));
+const mobileProcessSteps = window.matchMedia("(max-width: 980px)");
+
+if (processSteps.length > 0) {
+  if (!prefersReduced && "IntersectionObserver" in window) {
+    const processObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const requiredRatio = mobileProcessSteps.matches ? 0.72 : 0.28;
+        if (!entry.isIntersecting || entry.intersectionRatio < requiredRatio) return;
+
+        entry.target.classList.add("is-process-step-visible");
+        processObserver.unobserve(entry.target);
+      });
+    }, {
+      rootMargin: mobileProcessSteps.matches ? "0px 0px -18% 0px" : "0px 0px -6% 0px",
+      threshold: [0.25, 0.5, 0.72, 0.9]
+    });
+
+    processSteps.forEach((step) => processObserver.observe(step));
+  } else {
+    processSteps.forEach((step) => step.classList.add("is-process-step-visible"));
+  }
+}
+
 /* =========================================================
    EXPERT SECTION ANIMATION
    ========================================================= */
 
 const expertsSection = document.getElementById("eksperci");
-const expertStats = document.querySelector(".expertStats");
-const expertCounters = Array.from(document.querySelectorAll("[data-count-to]"));
-let expertCountersStarted = false;
+const expertSlides = Array.from(document.querySelectorAll(".expertSlide"));
+const expertStatsCards = Array.from(document.querySelectorAll(".expertStats"));
+const animatedExpertStats = new WeakSet();
 
 function animateExpertCounter(counter) {
   const target = Number(counter.dataset.countTo || 0);
@@ -384,13 +497,18 @@ function animateExpertCounter(counter) {
   requestAnimationFrame(tick);
 }
 
-function startExpertCounters() {
-  if (expertCountersStarted) return;
+function startExpertCounters(statsCard) {
+  if (!statsCard || animatedExpertStats.has(statsCard)) return;
 
-  expertCountersStarted = true;
-  expertCounters.forEach((counter) => {
+  animatedExpertStats.add(statsCard);
+  statsCard.querySelectorAll("[data-count-to]").forEach((counter) => {
     animateExpertCounter(counter);
   });
+}
+
+function startExpertSignature(slide) {
+  if (!slide || slide.classList.contains("is-signature-animated")) return;
+  slide.classList.add("is-signature-animated");
 }
 
 function startExpertsAnimation() {
@@ -415,17 +533,37 @@ if (expertsSection) {
     expertsObserver.observe(expertsSection);
   } else {
     startExpertsAnimation();
-    startExpertCounters();
+    expertSlides.forEach(startExpertSignature);
+    expertStatsCards.forEach(startExpertCounters);
   }
 }
 
-if (expertStats) {
+if (expertSlides.length > 0) {
+  if (!prefersReduced && "IntersectionObserver" in window) {
+    const expertSlideObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        startExpertSignature(entry.target);
+        expertSlideObserver.unobserve(entry.target);
+      });
+    }, {
+      threshold: 0.36
+    });
+
+    expertSlides.forEach((slide) => expertSlideObserver.observe(slide));
+  } else {
+    expertSlides.forEach(startExpertSignature);
+  }
+}
+
+if (expertStatsCards.length > 0) {
   if (!prefersReduced && "IntersectionObserver" in window) {
     const expertStatsObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
 
-        startExpertCounters();
+        startExpertCounters(entry.target);
         expertStatsObserver.unobserve(entry.target);
       });
     }, {
@@ -433,9 +571,109 @@ if (expertStats) {
       threshold: 0.12
     });
 
-    expertStatsObserver.observe(expertStats);
+    expertStatsCards.forEach((statsCard) => expertStatsObserver.observe(statsCard));
   } else {
-    startExpertCounters();
+    expertStatsCards.forEach(startExpertCounters);
+  }
+}
+
+const expertsTrack = document.querySelector("[data-experts-track]");
+const expertDots = Array.from(document.querySelectorAll("[data-expert-dot]"));
+let activeExpertSlide = 0;
+let expertCarouselVisible = false;
+let expertScrollTimer = null;
+let expertProgrammaticScroll = false;
+
+function setActiveExpertSlide(index, resetProgress = true) {
+  if (!expertsTrack || expertSlides.length === 0) return;
+
+  activeExpertSlide = (index + expertSlides.length) % expertSlides.length;
+  expertDots.forEach((dot, dotIndex) => {
+    const isActive = dotIndex === activeExpertSlide;
+    dot.classList.toggle("is-active", isActive);
+
+    if (isActive && resetProgress) {
+      dot.classList.remove("is-loading");
+      void dot.offsetWidth;
+      dot.classList.add("is-loading");
+    } else if (!isActive) {
+      dot.classList.remove("is-loading");
+    }
+  });
+}
+
+function scrollToExpertSlide(index) {
+  if (!expertsTrack || expertSlides.length === 0) return;
+
+  const nextIndex = (index + expertSlides.length) % expertSlides.length;
+  expertProgrammaticScroll = true;
+  expertsTrack.scrollTo({
+    left: expertSlides[nextIndex].offsetLeft - expertsTrack.offsetLeft,
+    behavior: "smooth"
+  });
+  setActiveExpertSlide(nextIndex);
+  window.setTimeout(() => {
+    expertProgrammaticScroll = false;
+  }, 560);
+}
+
+function syncActiveExpertFromScroll() {
+  if (!expertsTrack || expertSlides.length === 0) return;
+
+  const trackLeft = expertsTrack.scrollLeft;
+  const nearestIndex = expertSlides.reduce((nearest, slide, index) => {
+    const distance = Math.abs(slide.offsetLeft - expertsTrack.offsetLeft - trackLeft);
+    return distance < nearest.distance ? { index, distance } : nearest;
+  }, { index: 0, distance: Infinity }).index;
+
+  if (nearestIndex !== activeExpertSlide) {
+    setActiveExpertSlide(nearestIndex);
+  }
+}
+
+if (expertDots.length > 0) {
+  expertDots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      scrollToExpertSlide(index);
+    });
+
+    dot.addEventListener("animationend", () => {
+      if (!dot.classList.contains("is-active") || !expertCarouselVisible || prefersReduced) return;
+      scrollToExpertSlide(activeExpertSlide + 1);
+    });
+  });
+
+  setActiveExpertSlide(0, false);
+}
+
+expertsTrack?.addEventListener("scroll", () => {
+  if (expertScrollTimer) {
+    window.clearTimeout(expertScrollTimer);
+  }
+
+  expertScrollTimer = window.setTimeout(syncActiveExpertFromScroll, 120);
+}, { passive: true });
+
+if (expertsSection && expertDots.length > 0) {
+  if (!prefersReduced && "IntersectionObserver" in window) {
+    const expertCarouselObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        expertCarouselVisible = entry.isIntersecting;
+
+        if (entry.isIntersecting) {
+          setActiveExpertSlide(activeExpertSlide);
+        } else {
+          expertDots.forEach((dot) => dot.classList.remove("is-loading"));
+        }
+      });
+    }, {
+      threshold: 0.28
+    });
+
+    expertCarouselObserver.observe(expertsSection);
+  } else {
+    expertCarouselVisible = true;
+    setActiveExpertSlide(0, false);
   }
 }
 
@@ -539,6 +777,8 @@ const nextGoalLabel = document.querySelector("[data-next-goal-label]");
 const nextGoalText = document.querySelector("[data-next-goal-text]");
 let currentGoal = 0;
 let isGoalAnimating = false;
+let hasGoalAdvanced = false;
+let goalAnimationTimers = [];
 
 function getGoalInfo(index) {
   const displayIndex = index + 1;
@@ -586,8 +826,55 @@ function updateNextGoal(index) {
   nextGoalText.textContent = goalCards[nextIndex] || "";
 }
 
-goalCard?.addEventListener("click", () => {
-  if (isGoalAnimating) return;
+function clearGoalAnimationTimers() {
+  goalAnimationTimers.forEach((timer) => window.clearTimeout(timer));
+  goalAnimationTimers = [];
+}
+
+function advanceGoalCard() {
+  currentGoal = (currentGoal + 1) % goalCards.length;
+  updateFrontGoal(currentGoal);
+  updateNextGoal(currentGoal);
+  hasGoalAdvanced = true;
+  goalCard.classList.add("is-handoff");
+}
+
+function completeGoalAnimation() {
+  if (!goalCard || goalCards.length === 0) return;
+
+  clearGoalAnimationTimers();
+
+  if (isGoalAnimating && !hasGoalAdvanced) {
+    advanceGoalCard();
+  }
+
+  goalCard.classList.remove("is-cycling");
+  goalCard.classList.remove("is-handoff");
+  isGoalAnimating = false;
+  hasGoalAdvanced = false;
+}
+
+function runGoalAnimation() {
+  if (!goalCard || goalCards.length === 0) return;
+
+  const isMobileGoalCard = window.matchMedia("(max-width: 680px)").matches;
+  const handoffDelay = isMobileGoalCard ? 1115 : 915;
+  const finishDelay = isMobileGoalCard ? 1160 : 950;
+
+  clearGoalAnimationTimers();
+  isGoalAnimating = true;
+  goalCard.classList.remove("is-cycling");
+  goalCard.classList.remove("is-handoff");
+  void goalCard.offsetWidth;
+  goalCard.classList.add("is-cycling");
+  hasGoalAdvanced = false;
+  goalAnimationTimers = [
+    window.setTimeout(advanceGoalCard, handoffDelay),
+    window.setTimeout(completeGoalAnimation, finishDelay)
+  ];
+}
+
+function playNextGoal() {
   if (goalCards.length === 0) return;
 
   if (prefersReduced) {
@@ -596,27 +883,26 @@ goalCard?.addEventListener("click", () => {
     return;
   }
 
-  const advanceFrontGoal = () => {
-    currentGoal = (currentGoal + 1) % goalCards.length;
-    updateFrontGoal(currentGoal);
-    updateNextGoal(currentGoal);
-    goalCard.classList.add("is-handoff");
-  };
+  if (isGoalAnimating) {
+    completeGoalAnimation();
+  }
 
-  const finishGoalAnimation = () => {
-    goalCard.classList.remove("is-cycling");
-    goalCard.classList.remove("is-handoff");
-    isGoalAnimating = false;
-  };
+  runGoalAnimation();
+}
 
-  const isMobileGoalCard = window.matchMedia("(max-width: 680px)").matches;
-  const handoffDelay = isMobileGoalCard ? 1115 : 915;
-  const finishDelay = isMobileGoalCard ? 1160 : 950;
+goalCard?.addEventListener("pointerdown", (event) => {
+  if (event.button !== 0) return;
 
-  isGoalAnimating = true;
-  goalCard.classList.add("is-cycling");
-  window.setTimeout(advanceFrontGoal, handoffDelay);
-  window.setTimeout(finishGoalAnimation, finishDelay);
+  event.preventDefault();
+  playNextGoal();
+});
+
+goalCard?.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  if (event.detail === 0) {
+    playNextGoal();
+  }
 });
 
 updateGoalCard(currentGoal);

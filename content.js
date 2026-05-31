@@ -119,23 +119,45 @@ window.siteContent = {
   },
 
   experts: {
-    eyebrow: "Eksperci",
-    title: "Doświadczenie, które porządkuje decyzje",
-    lead: "Poznaj ludzi, którzy łączą perspektywę zarządczą z praktycznym spojrzeniem na ludzi, przywództwo i zmianę.",
-    photoAlt: "Miłosz Stawecki",
-    signature: "Miłosz Stawecki",
-    role: "Ekspert",
-    name: "Miłosz Stawecki",
-    bio: [
-      "Od ponad 30 lat wspiera firmy, liderów i zespoły w rozwoju, zmianie i podejmowaniu kluczowych decyzji biznesowych. Pracował na stanowiskach zarządczych i dyrektorskich w branżach medycznej, medialnej, logistycznej, transportowej, handlowej i doradczej.",
-      "Budował firmy od podstaw, prowadził restrukturyzacje, rozwijał zespoły i odpowiadał za strategiczne decyzje wpływające na wyniki organizacji. Łączy doświadczenie menedżerskie z praktycznym spojrzeniem na ludzi, przywództwo i rozwój.",
-      "Jego rolą nie jest dawanie gotowych odpowiedzi — pomaga spojrzeć szerzej, uporządkować kierunek działania i przejść od decyzji do realnych efektów."
-    ],
-    stats: [
-      { value: 30, suffix: "+", label: "lat doświadczenia w zarządzaniu" },
-      { value: 6, suffix: "+", label: "branż biznesowych" },
-      { value: 15, suffix: "+", label: "lat na stanowiskach zarządczych najwyższego szczebla" },
-      { value: 10, suffix: "+", label: "lat doświadczenia w restrukturyzacjach i transformacjach organizacji" }
+    eyebrow: "Nasi Eksperci",
+    title: "Poznaj nasz zespół",
+    items: [
+      {
+        role: "Ekspert",
+        name: "Miłosz Stawecki",
+        photo: "pictures/expert_1_picture.jpg",
+        photoAlt: "Miłosz Stawecki",
+        signature: "Miłosz Stawecki",
+        bio: [
+          "Od ponad 30 lat wspiera firmy, liderów i zespoły w rozwoju, zmianie i podejmowaniu kluczowych decyzji biznesowych. Pracował na stanowiskach zarządczych i dyrektorskich w branżach medycznej, medialnej, logistycznej, transportowej, handlowej i doradczej.",
+          "Budował firmy od podstaw, prowadził restrukturyzacje, rozwijał zespoły i odpowiadał za strategiczne decyzje wpływające na wyniki organizacji. Łączy doświadczenie menedżerskie z praktycznym spojrzeniem na ludzi, przywództwo i rozwój.",
+          "Jego rolą nie jest dawanie gotowych odpowiedzi — pomaga spojrzeć szerzej, uporządkować kierunek działania i przejść od decyzji do realnych efektów."
+        ],
+        stats: [
+          { value: 30, suffix: "+", label: "lat doświadczenia w zarządzaniu" },
+          { value: 6, suffix: "+", label: "branż biznesowych" },
+          { value: 15, suffix: "+", label: "lat na stanowiskach zarządczych najwyższego szczebla" },
+          { value: 10, suffix: "+", label: "lat doświadczenia w restrukturyzacjach i transformacjach organizacji" }
+        ]
+      },
+      {
+        role: "Ekspert",
+        name: "Anna Kowalska",
+        photo: "",
+        photoAlt: "Anna Kowalska",
+        signature: "Anna Kowalska",
+        bio: [
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae sem non neque posuere facilisis. Donec dictum, lectus a feugiat porta, nibh urna tincidunt massa, sed porta neque lorem non mi.",
+          "Praesent sed lorem sed arcu cursus porttitor. Suspendisse potenti. Curabitur non urna vel justo luctus viverra, a tincidunt nibh. Morbi lacinia, mi vitae feugiat vestibulum, magna justo blandit ipsum, sed tempor lacus nulla et lorem.",
+          "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer sit amet dui et risus consequat dignissim."
+        ],
+        stats: [
+          { value: 12, suffix: "+", label: "lat doświadczenia w pracy z liderami" },
+          { value: 4, suffix: "+", label: "obszary specjalizacji biznesowej" },
+          { value: 80, suffix: "+", label: "przeprowadzonych procesów rozwojowych" },
+          { value: 6, suffix: "+", label: "lat wspierania transformacji zespołów" }
+        ]
+      }
     ]
   },
 

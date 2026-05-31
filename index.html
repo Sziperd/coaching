@@ -13,8 +13,8 @@
     content="Prywatny coaching biznesowy i work-life coaching. Znajdź kierunek, uporządkuj priorytety i świadomie buduj życie oraz pracę, które mają znaczenie."
   />
 
-  <link rel="preload" href="styles.css?v=resource-strings" as="style" />
-  <link rel="stylesheet" href="styles.css?v=resource-strings" />
+  <link rel="preload" href="styles.css?v=goal-card-instant-pointer" as="style" />
+  <link rel="stylesheet" href="styles.css?v=goal-card-instant-pointer" />
 </head>
 
 <body>
@@ -232,7 +232,7 @@
       </div>
     </section>
 
-    <section class="section section--navy">
+    <section class="section section--navy" data-process-section>
       <div class="container process">
         <div class="sectionHead reveal">
           <p class="eyebrow eyebrow--light">Proces</p>
@@ -240,19 +240,19 @@
         </div>
 
         <div class="processGrid">
-          <article class="processStep reveal">
+          <article class="processStep" data-process-step>
             <span>01</span>
             <h3>Rozmowa wstępna</h3>
             <p>Sprawdzamy, gdzie jesteś teraz, z czym przychodzisz i czego realnie potrzebujesz.</p>
           </article>
 
-          <article class="processStep reveal">
+          <article class="processStep" data-process-step>
             <span>02</span>
             <h3>Ustalenie kierunku</h3>
             <p>Porządkujemy cele, priorytety, blokady i obszary wymagające największej uwagi.</p>
           </article>
 
-          <article class="processStep reveal">
+          <article class="processStep" data-process-step>
             <span>03</span>
             <h3>Praca 1:1</h3>
             <p>Podczas spotkań przekładamy wnioski na konkretne decyzje, działania i zmianę.</p>
@@ -265,72 +265,12 @@
       <div class="container experts">
         <div class="sectionHead reveal">
           <p class="eyebrow">Eksperci</p>
-          <h2>Doświadczenie, które porządkuje decyzje</h2>
-          <p>
-            Sekcja będzie się rozwijać wraz z gronem ekspertów. Na start poznaj osobę,
-            która łączy perspektywę zarządczą z praktycznym spojrzeniem na ludzi,
-            przywództwo i zmianę.
-          </p>
+          <h2>Nasi Eksperci</h2>
         </div>
 
-        <article class="expertProfile reveal">
-          <div class="expertPhoto">
-            <img src="pictures/expert_1_picture.jpg" alt="Miłosz Sławecki" loading="lazy" />
-            <span class="expertSignature" aria-label="Podpis: Miłosz Sławecki" aria-hidden="true">
-              <svg viewBox="0 0 520 150" role="img" focusable="false">
-                <title>Miłosz Sławecki</title>
-                <text class="signatureText" x="10" y="96">
-                  <tspan class="signatureGlyph" style="--i: 0">M</tspan><tspan class="signatureGlyph" style="--i: 1">i</tspan><tspan class="signatureGlyph" style="--i: 2">ł</tspan><tspan class="signatureGlyph" style="--i: 3">o</tspan><tspan class="signatureGlyph" style="--i: 4">s</tspan><tspan class="signatureGlyph" style="--i: 5">z</tspan><tspan dx="18"> </tspan><tspan class="signatureGlyph" style="--i: 6">S</tspan><tspan class="signatureGlyph" style="--i: 7">ł</tspan><tspan class="signatureGlyph" style="--i: 8">a</tspan><tspan class="signatureGlyph" style="--i: 9">w</tspan><tspan class="signatureGlyph" style="--i: 10">e</tspan><tspan class="signatureGlyph" style="--i: 11">c</tspan><tspan class="signatureGlyph" style="--i: 12">k</tspan><tspan class="signatureGlyph" style="--i: 13">i</tspan>
-                </text>
-              </svg>
-            </span>
-          </div>
-
-          <div class="expertBio">
-            <p class="eyebrow">Ekspert</p>
-            <h3>Miłosz Sławecki</h3>
-
-            <p>
-              Od ponad 30 lat wspiera firmy, liderów i zespoły w rozwoju, zmianie
-              i podejmowaniu kluczowych decyzji biznesowych. Pracował na stanowiskach
-              zarządczych i dyrektorskich w branżach medycznej, medialnej, logistycznej,
-              transportowej, handlowej i doradczej.
-            </p>
-
-            <p>
-              Budował firmy od podstaw, prowadził restrukturyzacje, rozwijał zespoły
-              i odpowiadał za strategiczne decyzje wpływające na wyniki organizacji.
-              Łączy doświadczenie menedżerskie z praktycznym spojrzeniem na ludzi,
-              przywództwo i rozwój.
-            </p>
-
-            <p>
-              Jego rolą nie jest dawanie gotowych odpowiedzi — pomaga spojrzeć szerzej,
-              uporządkować kierunek działania i przejść od decyzji do realnych efektów.
-            </p>
-          </div>
-        </article>
-
-        <div class="expertStats reveal" aria-label="Liczby budujące wiarygodność eksperta">
-          <article>
-            <strong data-count-to="30">1+</strong>
-            <span>lat doświadczenia w zarządzaniu</span>
-          </article>
-
-          <article>
-            <strong data-count-to="6">1+</strong>
-            <span>branż biznesowych</span>
-          </article>
-
-          <article>
-            <strong data-count-to="15">1+</strong>
-            <span>lat na stanowiskach zarządczych najwyższego szczebla</span>
-          </article>
-
-          <article>
-            <strong data-count-to="10">1+</strong>
-            <span>lat doświadczenia w restrukturyzacjach i transformacjach organizacji</span>
-          </article>
+        <div class="expertsCarousel reveal" aria-label="Nasi Eksperci">
+          <div class="expertsTrack" data-experts-track></div>
+          <div class="expertsDots" data-experts-dots aria-hidden="true"></div>
         </div>
       </div>
     </section>
@@ -392,7 +332,7 @@
     </div>
   </footer>
 
-  <script src="content.js?v=resource-strings"></script>
-  <script src="script.js?v=resource-strings"></script>
+  <script src="content.js?v=goal-card-instant-pointer"></script>
+  <script src="script.js?v=goal-card-instant-pointer"></script>
 </body>
 </html>
