@@ -26,11 +26,14 @@ function setLabelText(selector, value) {
   const textNode = Array.from(label.childNodes).find((node) => node.nodeType === Node.TEXT_NODE);
   if (textNode) {
     textNode.textContent = `${value}\n            `;
+    return;
   }
+
+  label.prepend(document.createTextNode(`${value}\n            `));
 }
 
-function setButtonText(selector, value) {
-  const button = document.querySelector(selector);
+function setButtonText(selector, value, root = document) {
+  const button = root.querySelector(selector);
   if (!button || value === undefined || value === null) return;
 
   const shine = button.querySelector(".btn__shine");
@@ -214,6 +217,180 @@ function renderExperts(expertsContent) {
   });
 }
 
+function renderSignals(signalsContent) {
+  const list = document.querySelector("[data-signals-list]");
+  if (!list || !Array.isArray(signalsContent?.items)) return;
+
+  list.innerHTML = "";
+  signalsContent.items.forEach((item, index) => {
+    const signal = document.createElement("li");
+    signal.className = "signalItem";
+    signal.style.setProperty("--i", index);
+
+    const number = document.createElement("span");
+    number.textContent = String(index + 1);
+
+    const text = document.createElement("p");
+    text.textContent = item;
+
+    signal.appendChild(number);
+    signal.appendChild(text);
+    list.appendChild(signal);
+  });
+}
+
+function renderStories(storiesContent) {
+  const grid = document.querySelector("[data-stories-grid]");
+  if (!grid || !Array.isArray(storiesContent?.items)) return;
+
+  grid.innerHTML = "";
+  storiesContent.items.forEach((item, index) => {
+    const card = document.createElement("article");
+    card.className = "storyCard reveal";
+    card.dataset.storyCard = String(index);
+    card.style.setProperty("--i", index);
+
+    const avatar = document.createElement("div");
+    avatar.className = "storyAvatar";
+    avatar.setAttribute("aria-hidden", "true");
+
+    if (item.photo) {
+      const avatarImage = document.createElement("img");
+      avatarImage.src = item.photo;
+      avatarImage.alt = "";
+      avatarImage.loading = "lazy";
+      avatar.appendChild(avatarImage);
+    } else {
+      avatar.textContent = (item.name || "?").slice(0, 1);
+    }
+
+    const name = document.createElement("h3");
+    name.textContent = item.name || "";
+
+    const profile = document.createElement("blockquote");
+    profile.textContent = item.profile || "";
+
+    const text = document.createElement("p");
+    text.textContent = item.text || "";
+
+    const recommendation = document.createElement("p");
+    recommendation.className = "storyCard__recommendation";
+    const recommendationText = item.package || "";
+    const packageName = recommendationText.split(" ").pop() || "";
+    const prefix = packageName ? recommendationText.slice(0, -packageName.length) : recommendationText;
+    recommendation.append(prefix);
+
+    if (packageName) {
+      const recommendationPackage = document.createElement("strong");
+      recommendationPackage.textContent = packageName;
+      recommendation.appendChild(recommendationPackage);
+    }
+
+    card.appendChild(avatar);
+    card.appendChild(name);
+    card.appendChild(profile);
+    card.appendChild(text);
+    card.appendChild(recommendation);
+    grid.appendChild(card);
+  });
+}
+
+function renderPackages(packagesContent) {
+  const grid = document.querySelector("[data-packages-grid]");
+  if (!grid || !Array.isArray(packagesContent?.items)) return;
+
+  grid.innerHTML = "";
+  packagesContent.items.forEach((item, index) => {
+    const card = document.createElement("article");
+    card.className = "packagePath reveal";
+    card.style.setProperty("--i", index);
+
+    const meta = document.createElement("div");
+    meta.className = "packagePath__meta";
+
+    const step = document.createElement("span");
+    step.textContent = item.step || String(index + 1).padStart(2, "0");
+
+    const type = document.createElement("small");
+    type.textContent = item.type || "";
+
+    meta.appendChild(step);
+    meta.appendChild(type);
+
+    const name = document.createElement("h3");
+    name.textContent = item.name || "";
+
+    const tagline = document.createElement("p");
+    tagline.className = "packagePath__tagline";
+    tagline.textContent = item.tagline || "";
+
+    const context = document.createElement("div");
+    context.className = "packagePath__context";
+
+    const contextLabel = document.createElement("span");
+    contextLabel.textContent = item.contextLabel || "";
+
+    const contextText = document.createElement("p");
+    contextText.textContent = item.context || "";
+
+    context.appendChild(contextLabel);
+    context.appendChild(contextText);
+
+    const featureList = document.createElement("ul");
+    (item.focus || []).forEach((feature) => {
+      const li = document.createElement("li");
+      li.textContent = feature;
+      featureList.appendChild(li);
+    });
+
+    const outcome = document.createElement("p");
+    outcome.className = "packagePath__result";
+    outcome.textContent = item.result || "";
+
+    card.appendChild(meta);
+    card.appendChild(name);
+    card.appendChild(tagline);
+    card.appendChild(context);
+    card.appendChild(featureList);
+    card.appendChild(outcome);
+    grid.appendChild(card);
+  });
+}
+
+function renderPackageActions(packagesContent) {
+  const ctaItems = document.querySelectorAll("#pakiety .packagesCta__item");
+  const consultItem = ctaItems[0];
+  const quizItem = ctaItems[1];
+
+  if (consultItem) {
+    const text = consultItem.querySelector("p");
+
+    if (text) {
+      text.innerHTML = "";
+      const lead = document.createElement("strong");
+      lead.textContent = packagesContent?.ctaLead || "";
+      text.appendChild(lead);
+      text.append(` ${packagesContent?.ctaText || ""}`);
+    }
+
+    setButtonText(".btn", packagesContent?.cta, consultItem);
+  }
+
+  if (quizItem) {
+    const text = quizItem.querySelector("p");
+
+    if (text) {
+      text.innerHTML = "";
+      const lead = document.createElement("strong");
+      lead.textContent = packagesContent?.quizLead || "";
+      text.appendChild(lead);
+      text.append(` ${packagesContent?.quizText || ""}`);
+    }
+
+    setButtonText("[data-open-quiz]", packagesContent?.quizCta, quizItem);
+  }
+}
+
 function applySiteContent() {
   const content = siteContent;
   if (!content || Object.keys(content).length === 0) return;
@@ -226,6 +403,8 @@ function applySiteContent() {
 
   setAttr('meta[name="description"]', "content", content.meta?.description);
   setAttr(".brand", "aria-label", content.labels?.home);
+  setAttr(".brand__logo", "alt", content.labels?.home);
+  setAttr(".heroLogo", "alt", content.labels?.home);
   setAttr(".nav__links", "aria-label", content.labels?.navigation);
   setAttr(".linkedin", "aria-label", content.labels?.linkedin);
   setAttr("#navToggle", "aria-label", content.labels?.openMenu);
@@ -252,6 +431,11 @@ function applySiteContent() {
   setText("#o-mnie .challengeNote span", content.challenge?.note);
   setText("#o-mnie .challengeNote strong", content.challenge?.noteStrong);
 
+  setText("#sygnaly .eyebrow", content.signals?.eyebrow);
+  setText("#sygnaly h2", content.signals?.title);
+  setText("#sygnaly .signalsKicker", content.signals?.kicker);
+  renderSignals(content.signals);
+
   setAttr("#coaching img", "alt", content.method?.imageAlt);
   setText("#coaching .eyebrow", content.method?.eyebrow);
   setText("#coaching h2", content.method?.title);
@@ -269,6 +453,36 @@ function applySiteContent() {
     setText("h3", item.title, card);
     setText("p", item.text, card);
   });
+
+  setText("#historie .sectionHead .eyebrow", content.stories?.eyebrow);
+  setText("#historie .sectionHead h2", content.stories?.title);
+  setText("#historie .sectionHead > p:not(.eyebrow)", content.stories?.lead);
+  renderStories(content.stories);
+  const storiesCtaText = document.querySelector("#historie .storiesCta p");
+  if (storiesCtaText) {
+    storiesCtaText.innerHTML = "";
+    const ctaLead = document.createElement("strong");
+    ctaLead.textContent = content.stories?.ctaLead || "";
+    storiesCtaText.appendChild(ctaLead);
+    storiesCtaText.append(` ${content.stories?.ctaText || ""}`);
+  }
+  setButtonText("#historie .storiesCta .btn", content.stories?.ctaButton);
+
+  setText("#pakiety .sectionHead .eyebrow", content.packages?.eyebrow);
+  setText("#pakiety .sectionHead h2", content.packages?.title);
+  setText("#pakiety .sectionHead > p:not(.eyebrow)", content.packages?.lead);
+  renderPackages(content.packages);
+  renderPackageActions(content.packages);
+  setText(".nav__cta", content.nav?.cta);
+
+  setText("#formula .eyebrow", content.formula?.eyebrow);
+  setText("#formula h2", content.formula?.title);
+  setText("#formula .formula__lead", content.formula?.lead);
+  setText("#formula .formula__text", content.formula?.text);
+  setText("#formula .formula__punchline", content.formula?.punchline);
+  setText("#formula .formulaRadioCard > span", content.formula?.teamLabel);
+  setAttr("#formula .formula__image", "alt", content.formula?.imageAlt);
+  setList("#formula [data-formula-points]", content.formula?.points);
 
   setText(".section--navy .sectionHead .eyebrow", content.process?.eyebrow);
   setText(".section--navy .sectionHead h2", content.process?.title);
@@ -314,6 +528,8 @@ function applySiteContent() {
     setText("strong", content.contact?.linkedinText, linkedinCard);
   }
 
+  setText(".contact__actions [data-open-modal='faq']", content.contact?.faqButton);
+
   const contactFormElement = document.getElementById("contactForm");
   if (contactFormElement && content.contact?.formEmail) {
     contactFormElement.dataset.email = content.contact.formEmail;
@@ -325,6 +541,7 @@ function applySiteContent() {
   setAttr('input[name="name"]', "placeholder", content.contact?.fields?.namePlaceholder);
   setAttr('input[name="email"]', "placeholder", content.contact?.fields?.emailPlaceholder);
   setAttr('textarea[name="message"]', "placeholder", content.contact?.fields?.messagePlaceholder);
+  setText(".contactConsent span", content.contact?.fields?.consent);
   setButtonText(".contactForm .btn--primary", content.contact?.submit);
 
   const footerYear = document.getElementById("year");
@@ -335,9 +552,667 @@ function applySiteContent() {
   }
 
   setText(".footer a", content.footer?.backToTop);
+  const footerModalButtons = document.querySelectorAll(".footer__links button");
+  if (footerModalButtons[0] && content.footer?.faq) {
+    footerModalButtons[0].textContent = content.footer.faq;
+  }
+  if (footerModalButtons[1] && content.footer?.privacy) {
+    footerModalButtons[1].textContent = content.footer.privacy;
+  }
 }
 
 applySiteContent();
+
+/* =========================================================
+   SITE MODALS
+   ========================================================= */
+
+function initSiteModals(modalContent) {
+  const modal = document.querySelector("[data-site-modal]");
+  const panel = modal?.querySelector(".siteModal__panel");
+  const content = modal?.querySelector("[data-modal-content]");
+  const closeButtons = modal?.querySelectorAll("[data-modal-close]");
+  const openButtons = document.querySelectorAll("[data-open-modal]");
+
+  if (!modal || !panel || !content) return;
+
+  let activeType = null;
+
+  function textEl(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    element.textContent = text || "";
+    return element;
+  }
+
+  function renderHeader(data) {
+    const header = document.createElement("header");
+    header.className = "siteModal__header";
+    header.appendChild(textEl("p", "eyebrow", data?.eyebrow));
+    const title = textEl("h2", "", data?.title);
+    title.id = "siteModalTitle";
+    header.appendChild(title);
+    if (data?.lead) {
+      header.appendChild(textEl("p", "siteModal__lead", data.lead));
+    }
+    return header;
+  }
+
+  function renderCooperation(data) {
+    const fragment = document.createDocumentFragment();
+    fragment.appendChild(renderHeader(data));
+
+    const note = document.createElement("div");
+    note.className = "siteModal__note";
+    note.innerHTML = `<span aria-hidden="true">●</span><p>${data?.secureNote || ""}</p>`;
+    fragment.appendChild(note);
+
+    const form = document.createElement("form");
+    form.className = "modalForm";
+    form.dataset.cooperationForm = "";
+    form.noValidate = true;
+
+    const fields = data?.fields || {};
+    form.innerHTML = `
+      <label>
+        <span>${fields.name || "Imię i nazwisko"}</span>
+        <input type="text" name="name" placeholder="${fields.namePlaceholder || ""}" required>
+      </label>
+      <label>
+        <span>${fields.email || "Adres e-mail"}</span>
+        <input type="email" name="email" placeholder="${fields.emailPlaceholder || ""}" required>
+      </label>
+      <label>
+        <span>${fields.phone || "Telefon"}</span>
+        <input type="tel" name="phone" placeholder="${fields.phonePlaceholder || ""}">
+      </label>
+      <label class="modalForm__wide">
+        <span>${fields.message || "Wiadomość"}</span>
+        <textarea name="message" rows="6" placeholder="${fields.messagePlaceholder || ""}" required></textarea>
+      </label>
+      <label class="modalConsent modalForm__wide">
+        <input type="checkbox" name="consent" required>
+        <span>${data?.consent || ""}</span>
+      </label>
+      <button class="btn btn--primary btn--wide modalForm__wide" type="submit" data-cooperation-submit disabled>
+        ${data?.submit || "Wyślij"}
+        <span class="btn__shine" aria-hidden="true"></span>
+      </button>
+      <p class="formStatus modalForm__wide" role="status" aria-live="polite"></p>
+    `;
+
+    const consentInput = form.querySelector('input[name="consent"]');
+    const submitButton = form.querySelector("[data-cooperation-submit]");
+    const syncSubmitState = () => {
+      if (!submitButton) return;
+      submitButton.disabled = !consentInput?.checked;
+    };
+
+    consentInput?.addEventListener("change", syncSubmitState);
+    syncSubmitState();
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const status = form.querySelector(".formStatus");
+      const name = String(formData.get("name") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+      const phone = String(formData.get("phone") || "").trim();
+      const message = String(formData.get("message") || "").trim();
+      const consent = formData.get("consent");
+
+      if (!name || !email || !message || !consent) {
+        if (status) status.textContent = data?.status?.missingFields || "";
+        return;
+      }
+
+      const targetEmail = data?.formEmail || "wspolpraca@twojadomena.pl";
+      const subject = encodeURIComponent(`${data?.status?.subjectPrefix || "Zapytanie"} - ${name}`);
+      const body = encodeURIComponent([
+        `${fields.name || "Imię i nazwisko"}: ${name}`,
+        `${fields.email || "Adres e-mail"}: ${email}`,
+        `${fields.phone || "Telefon"}: ${phone || "-"}`,
+        "",
+        `${fields.message || "Wiadomość"}:`,
+        message,
+        "",
+        `${data?.consent || "Zgoda na kontakt"}: tak`
+      ].join("\n"));
+
+      if (status) {
+        status.textContent = data?.status?.openingEmail || "";
+        window.setTimeout(() => {
+          status.textContent = data?.status?.emailFallback || "";
+        }, 1800);
+      }
+
+      window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+    });
+
+    fragment.appendChild(form);
+    return fragment;
+  }
+
+  function renderFaq(data) {
+    const fragment = document.createDocumentFragment();
+    fragment.appendChild(renderHeader(data));
+
+    const list = document.createElement("div");
+    list.className = "modalFaq";
+    (data?.items || []).forEach((item) => {
+      const article = document.createElement("article");
+      article.className = "modalFaq__item";
+      article.appendChild(textEl("h3", "", item.question));
+      article.appendChild(textEl("p", "", item.answer));
+      list.appendChild(article);
+    });
+    fragment.appendChild(list);
+
+    const cta = document.createElement("div");
+    cta.className = "modalCta";
+    const text = document.createElement("p");
+    const lead = document.createElement("strong");
+    lead.textContent = data?.ctaLead || "";
+    text.appendChild(lead);
+    text.append(` ${data?.ctaText || ""}`);
+    cta.appendChild(text);
+    cta.appendChild(textEl("span", "", data?.microcopy));
+    const link = document.createElement("a");
+    link.className = "btn btn--primary";
+    link.href = "#kontakt";
+    link.textContent = data?.ctaText || "Umów konsultację";
+    link.addEventListener("click", closeModal);
+    cta.appendChild(link);
+    fragment.appendChild(cta);
+
+    return fragment;
+  }
+
+  function renderPrivacy(data) {
+    const fragment = document.createDocumentFragment();
+    fragment.appendChild(renderHeader(data));
+
+    const list = document.createElement("div");
+    list.className = "modalPrivacy";
+    (data?.sections || []).forEach((section) => {
+      const article = document.createElement("article");
+      article.className = "modalPrivacy__section";
+      article.appendChild(textEl("h3", "", section.title));
+      article.appendChild(textEl("p", "", section.text));
+      list.appendChild(article);
+    });
+    fragment.appendChild(list);
+
+    return fragment;
+  }
+
+  function renderModal(type) {
+    const data = modalContent?.[type];
+    if (!data) return false;
+
+    content.innerHTML = "";
+    if (type === "cooperation") {
+      content.appendChild(renderCooperation(data));
+    } else if (type === "faq") {
+      content.appendChild(renderFaq(data));
+    } else if (type === "privacy") {
+      content.appendChild(renderPrivacy(data));
+    }
+
+    return true;
+  }
+
+  function openModal(type) {
+    if (!renderModal(type)) return;
+    activeType = type;
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    panel.scrollTop = 0;
+    requestAnimationFrame(() => modal.querySelector("[data-modal-close]")?.focus({ preventScroll: true }));
+  }
+
+  function closeModal() {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    activeType = null;
+  }
+
+  closeButtons?.forEach((button) => {
+    button.setAttribute("aria-label", modalContent?.closeLabel || "Zamknij okno");
+    button.addEventListener("click", closeModal);
+  });
+
+  openButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const type = button.getAttribute("data-open-modal");
+      if (typeof setDrawer === "function") setDrawer(false);
+      openModal(type);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && activeType) {
+      closeModal();
+    }
+  });
+}
+
+initSiteModals(siteContent.modals);
+
+/* =========================================================
+   PACKAGE QUIZ
+   ========================================================= */
+
+function initPackageQuiz(quizContent) {
+  const widget = document.querySelector("[data-quiz-widget]");
+  const toggle = document.querySelector("[data-quiz-toggle]");
+  const panel = document.querySelector("[data-quiz-panel]");
+  const close = document.querySelector("[data-quiz-close]");
+  const messages = document.querySelector("[data-quiz-messages]");
+  const footer = document.querySelector("[data-quiz-footer]");
+  const openButtons = Array.from(document.querySelectorAll("[data-open-quiz]"));
+  const questions = Array.isArray(quizContent?.questions) ? quizContent.questions : [];
+
+  if (!widget || !toggle || !panel || !messages || !footer || questions.length === 0) return;
+
+  const personas = ["magda", "aleksandra", "marek", "krzysztof"];
+  const pairResults = quizContent?.pairResults || {};
+
+  let started = false;
+  let completed = false;
+  let currentQuestion = 0;
+  let scores = {};
+  let timers = [];
+  let panelResizeTimer = null;
+
+  function clearTimers() {
+    timers.forEach((timer) => window.clearTimeout(timer));
+    timers = [];
+  }
+
+  function schedule(callback, delay) {
+    const timer = window.setTimeout(callback, prefersReduced ? 0 : delay);
+    timers.push(timer);
+    return timer;
+  }
+
+  function scrollMessages() {
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function scrollMessagesToEnd() {
+    scrollMessages();
+    requestAnimationFrame(() => {
+      scrollMessages();
+      requestAnimationFrame(scrollMessages);
+    });
+  }
+
+  function withPanelResize(callback) {
+    if (prefersReduced) {
+      callback();
+      return;
+    }
+
+    const startHeight = panel.offsetHeight;
+    callback();
+    const endHeight = panel.offsetHeight;
+
+    if (Math.abs(endHeight - startHeight) < 2) return;
+
+    panel.style.height = `${startHeight}px`;
+    panel.style.transition = "height 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s var(--ease), transform 0.34s var(--ease2)";
+
+    requestAnimationFrame(() => {
+      panel.style.height = `${endHeight}px`;
+    });
+
+    if (panelResizeTimer) {
+      window.clearTimeout(panelResizeTimer);
+    }
+
+    panelResizeTimer = window.setTimeout(() => {
+      panel.style.height = "";
+      panel.style.transition = "";
+      scrollMessagesToEnd();
+      panelResizeTimer = null;
+    }, prefersReduced ? 0 : 560);
+  }
+
+  function openQuiz(shouldStart = true) {
+    widget.classList.add("is-open");
+    panel.setAttribute("aria-hidden", "false");
+    toggle.setAttribute("aria-expanded", "true");
+
+    if (shouldStart && !started) {
+      startQuiz();
+    }
+  }
+
+  function closeQuiz() {
+    widget.classList.remove("is-open");
+    panel.setAttribute("aria-hidden", "true");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  function addMessage(text, type = "bot") {
+    const bubble = document.createElement("div");
+    bubble.className = `quizMessage quizMessage--${type}`;
+    bubble.textContent = text;
+    withPanelResize(() => {
+      messages.appendChild(bubble);
+    });
+    scrollMessages();
+    return bubble;
+  }
+
+  function addTyping(callback) {
+    if (prefersReduced) {
+      callback();
+      return;
+    }
+
+    const typing = document.createElement("div");
+    typing.className = "quizMessage quizMessage--bot quizTyping";
+    typing.setAttribute("aria-label", quizContent?.typingLabel || "Piszę...");
+    typing.innerHTML = "<span></span><span></span><span></span>";
+    withPanelResize(() => {
+      messages.appendChild(typing);
+    });
+    scrollMessages();
+
+    schedule(() => {
+      withPanelResize(() => {
+        typing.remove();
+        callback();
+      });
+    }, 900);
+  }
+
+  function addBotMessage(text, delay = 620, after) {
+    schedule(() => {
+      addTyping(() => {
+        addMessage(text);
+        if (after) after();
+      });
+    }, delay);
+  }
+
+  function setFooterDefault() {
+    footer.innerHTML = "";
+
+    if (!completed) return;
+
+    const restart = document.createElement("button");
+    restart.className = "btn btn--secondary";
+    restart.type = "button";
+    restart.textContent = quizContent?.restartLabel || "Zacznij od nowa";
+    restart.addEventListener("click", startQuiz);
+    footer.appendChild(restart);
+
+    if (completed) {
+      const cta = document.createElement("a");
+      cta.className = "btn btn--primary";
+      cta.href = "#kontakt";
+      cta.textContent = quizContent?.cta || "Umów konsultację";
+      cta.addEventListener("click", closeQuiz);
+      footer.appendChild(cta);
+    }
+
+    scrollMessagesToEnd();
+  }
+
+  function addAnswers(question) {
+    const group = document.createElement("div");
+    group.className = "quizAnswers";
+
+    question.answers.forEach((answer, index) => {
+      const button = document.createElement("button");
+      button.className = "quizAnswer";
+      button.type = "button";
+      button.textContent = answer.text || "";
+      button.style.setProperty("--quiz-answer-delay", `${index * 110}ms`);
+      if ((answer.text || "").length > 42) {
+        button.classList.add("quizAnswer--wide");
+      }
+      button.addEventListener("click", () => {
+        group.remove();
+        addMessage(answer.text || "", "user");
+        scores[answer.persona] = (scores[answer.persona] || 0) + Number(answer.points || 0);
+        currentQuestion += 1;
+
+        if (currentQuestion >= questions.length) {
+          showResult();
+        } else {
+          askQuestion();
+        }
+      });
+      group.appendChild(button);
+    });
+
+    withPanelResize(() => {
+      messages.appendChild(group);
+    });
+    scrollMessagesToEnd();
+  }
+
+  function askQuestion() {
+    const question = questions[currentQuestion];
+    if (!question) return;
+
+    const progress = `${quizContent?.progressLabel || "Pytanie"} ${currentQuestion + 1}/${questions.length}`;
+    addBotMessage(`${progress}: ${question.text}`, 620, () => addAnswers(question));
+  }
+
+  function getRecommendation() {
+    const ranked = personas
+      .map((persona) => ({ persona, score: scores[persona] || 0 }))
+      .sort((a, b) => b.score - a.score);
+    const top = ranked[0];
+    const second = ranked[1];
+
+    if (!top || top.score === 0) return quizContent?.results?.dispersed;
+
+    if (top.score - second.score >= 4) {
+      return quizContent?.results?.[top.persona] || quizContent?.results?.dispersed;
+    }
+
+    const closePersonas = ranked.filter((item) => item.score > 0 && top.score - item.score <= 3);
+
+    if (closePersonas.length === 2) {
+      const key = closePersonas.map((item) => item.persona).sort().join("+");
+      return {
+        ...(quizContent?.results?.mixed || {}),
+        ...(pairResults[key] || {})
+      };
+    }
+
+    return quizContent?.results?.dispersed || quizContent?.results?.mixed;
+  }
+
+  function addResultMessage(result) {
+    const bubble = document.createElement("article");
+    bubble.className = "quizMessage quizMessage--bot quizMessage--result";
+
+    const title = document.createElement("h3");
+    title.textContent = result?.title || "";
+
+    const packageLabel = document.createElement("span");
+    packageLabel.className = "quizResultPackage";
+    packageLabel.append(quizContent?.resultPackagePrefix || "");
+    const packageName = document.createElement("strong");
+    packageName.textContent = result?.package || "";
+    packageLabel.appendChild(packageName);
+
+    const text = document.createElement("p");
+    text.textContent = result?.text || "";
+
+    const note = document.createElement("em");
+    note.textContent = result?.note || result?.label || "";
+
+    bubble.appendChild(title);
+    bubble.appendChild(packageLabel);
+    bubble.appendChild(text);
+    bubble.appendChild(note);
+    messages.appendChild(bubble);
+    scrollMessagesToEnd();
+  }
+
+  function showResult() {
+    completed = true;
+    addBotMessage(quizContent?.calculatingMessage || "", 700, () => {
+      addTyping(() => {
+        addResultMessage(getRecommendation());
+        setFooterDefault();
+      });
+    });
+  }
+
+  function startQuiz() {
+    clearTimers();
+    started = true;
+    completed = false;
+    currentQuestion = 0;
+    scores = personas.reduce((acc, persona) => {
+      acc[persona] = 0;
+      return acc;
+    }, {});
+    messages.innerHTML = "";
+    footer.innerHTML = "";
+
+    const intro = Array.isArray(quizContent?.intro) ? quizContent.intro : [];
+    addMessage(intro[0] || "Pomogę Ci dobrać właściwy pakiet.");
+    addBotMessage(intro[1] || "Odpowiedz na kilka pytań.", 780, askQuestion);
+    setFooterDefault();
+  }
+
+  setText("[data-quiz-title]", quizContent?.title || "");
+  setText("[data-quiz-eyebrow]", quizContent?.eyebrow || "");
+  setText(".quizFab__text", quizContent?.fabLabel || "");
+  setAttr("[data-quiz-panel]", "aria-label", quizContent?.panelLabel || "");
+  setAttr("[data-quiz-close]", "aria-label", quizContent?.closeLabel || "");
+
+  toggle.addEventListener("click", () => {
+    if (widget.classList.contains("is-open")) {
+      closeQuiz();
+      return;
+    }
+
+    openQuiz(true);
+  });
+
+  close?.addEventListener("click", closeQuiz);
+  openButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (typeof setDrawer === "function") setDrawer(false);
+      openQuiz(true);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && widget.classList.contains("is-open")) {
+      closeQuiz();
+    }
+  });
+}
+
+initPackageQuiz(siteContent.quiz);
+
+const quizWidget = document.querySelector("[data-quiz-widget]");
+const pageFooter = document.querySelector(".footer");
+
+function updateQuizWidgetOffset() {
+  if (!quizWidget || !pageFooter) return;
+
+  const baseOffset = window.matchMedia("(max-width: 680px)").matches ? 12 : 22;
+  const footerGap = 8;
+  const footerTop = pageFooter.getBoundingClientRect().top;
+  const overlap = Math.max(0, window.innerHeight - footerTop + footerGap);
+
+  quizWidget.style.setProperty("--quiz-bottom-offset", `${baseOffset + overlap}px`);
+}
+
+updateQuizWidgetOffset();
+window.addEventListener("scroll", rafThrottle(updateQuizWidgetOffset), { passive: true });
+window.addEventListener("resize", rafThrottle(updateQuizWidgetOffset), { passive: true });
+
+/* =========================================================
+   MOBILE STORY CARDS
+   ========================================================= */
+
+const storiesGrid = document.querySelector("[data-stories-grid]");
+const mobileStories = window.matchMedia("(max-width: 680px)");
+
+storiesGrid?.addEventListener("click", (event) => {
+  if (!mobileStories.matches) return;
+  if (!(event.target instanceof Element)) return;
+
+  const card = event.target.closest("[data-story-card]");
+  if (!card || !storiesGrid.contains(card)) return;
+
+  const cards = Array.from(storiesGrid.querySelectorAll("[data-story-card]"));
+  const cardIndex = cards.indexOf(card);
+  if (cardIndex < 0) return;
+
+  const cardRect = card.getBoundingClientRect();
+  const gridRect = storiesGrid.getBoundingClientRect();
+  const gap = parseFloat(window.getComputedStyle(storiesGrid).columnGap) || 0;
+  const step = cardRect.width + gap;
+  const currentIndex = Math.round(storiesGrid.scrollLeft / step);
+
+  if (cardIndex > currentIndex) {
+    storiesGrid.scrollTo({
+      left: Math.min((currentIndex + 1) * step, storiesGrid.scrollWidth - storiesGrid.clientWidth),
+      behavior: "smooth"
+    });
+  } else if (cardIndex < currentIndex || cardRect.left < gridRect.left + 8) {
+    storiesGrid.scrollTo({
+      left: Math.max((currentIndex - 1) * step, 0),
+      behavior: "smooth"
+    });
+  }
+});
+
+const packagesGrid = document.querySelector("[data-packages-grid]");
+const mobilePackages = window.matchMedia("(max-width: 680px)");
+
+packagesGrid?.addEventListener("click", (event) => {
+  if (!mobilePackages.matches) return;
+  if (!(event.target instanceof Element)) return;
+
+  const card = event.target.closest(".packagePath");
+  if (!card || !packagesGrid.contains(card)) return;
+
+  const cards = Array.from(packagesGrid.querySelectorAll(".packagePath"));
+  const cardIndex = cards.indexOf(card);
+  if (cardIndex < 0) return;
+
+  const cardRect = card.getBoundingClientRect();
+  const gridRect = packagesGrid.getBoundingClientRect();
+  const firstOffset = cards[0]?.offsetLeft || 0;
+  const positions = cards.map((item) => item.offsetLeft - firstOffset);
+  const currentIndex = positions.reduce((nearestIndex, position, index) => {
+    const nearestDistance = Math.abs(positions[nearestIndex] - packagesGrid.scrollLeft);
+    const distance = Math.abs(position - packagesGrid.scrollLeft);
+    return distance < nearestDistance ? index : nearestIndex;
+  }, 0);
+
+  if (cardIndex > currentIndex) {
+    packagesGrid.scrollTo({
+      left: positions[Math.min(currentIndex + 1, positions.length - 1)],
+      behavior: "smooth"
+    });
+  } else if (cardIndex < currentIndex || cardRect.left < gridRect.left + 8) {
+    packagesGrid.scrollTo({
+      left: positions[Math.max(currentIndex - 1, 0)],
+      behavior: "smooth"
+    });
+  }
+});
 
 /* =========================================================
    YEAR
@@ -704,7 +1579,8 @@ function updateActiveNav() {
 
   navLinks.forEach((link) => {
     const href = link.getAttribute("href");
-    link.classList.toggle("is-active", href === `#${currentId}`);
+    const isActionLink = link.hasAttribute("data-open-quiz") || link.hasAttribute("data-open-modal");
+    link.classList.toggle("is-active", !isActionLink && href === `#${currentId}`);
   });
 }
 
@@ -774,6 +1650,7 @@ tiltEls.forEach((el) => {
    ========================================================= */
 
 const goalCards = siteContent.hero?.goals || [];
+const goalTitle = siteContent.hero?.goalTitle || "";
 const goalPrefix = siteContent.hero?.goalPrefix || "Cel";
 
 const goalCard = document.querySelector("[data-goal-card]");
@@ -799,15 +1676,19 @@ function getGoalInfo(index) {
   };
 }
 
+function getGoalLabel(displayIndex) {
+  return goalTitle || `${goalPrefix} ${displayIndex}`;
+}
+
 function updateGoalCard(index) {
   if (!goalCard || !goalLabel || !goalText || !nextGoalLabel || !nextGoalText) return;
   if (goalCards.length === 0) return;
 
   const { displayIndex, nextIndex, nextDisplayIndex } = getGoalInfo(index);
 
-  goalLabel.textContent = `${goalPrefix} ${displayIndex}`;
+  goalLabel.textContent = getGoalLabel(displayIndex);
   goalText.textContent = goalCards[index] || "";
-  nextGoalLabel.textContent = `${goalPrefix} ${nextDisplayIndex}`;
+  nextGoalLabel.textContent = getGoalLabel(nextDisplayIndex);
   nextGoalText.textContent = goalCards[nextIndex] || "";
   goalCard.setAttribute("aria-label", `${siteContent.labels?.showNextGoal || "Pokaż kolejny cel"}. ${siteContent.labels?.currentGoal || "Aktualnie: cel"} ${displayIndex}`);
 }
@@ -818,7 +1699,7 @@ function updateFrontGoal(index) {
 
   const { displayIndex } = getGoalInfo(index);
 
-  goalLabel.textContent = `${goalPrefix} ${displayIndex}`;
+  goalLabel.textContent = getGoalLabel(displayIndex);
   goalText.textContent = goalCards[index] || "";
   goalCard.setAttribute("aria-label", `${siteContent.labels?.showNextGoal || "Pokaż kolejny cel"}. ${siteContent.labels?.currentGoal || "Aktualnie: cel"} ${displayIndex}`);
 }
@@ -829,7 +1710,7 @@ function updateNextGoal(index) {
 
   const { nextIndex, nextDisplayIndex } = getGoalInfo(index);
 
-  nextGoalLabel.textContent = `${goalPrefix} ${nextDisplayIndex}`;
+  nextGoalLabel.textContent = getGoalLabel(nextDisplayIndex);
   nextGoalText.textContent = goalCards[nextIndex] || "";
 }
 
@@ -920,6 +1801,16 @@ updateGoalCard(currentGoal);
 
 const contactForm = document.getElementById("contactForm");
 const formStatus = document.getElementById("formStatus");
+const contactConsentInput = contactForm?.querySelector('input[name="privacyConsent"]');
+const contactSubmitButton = contactForm?.querySelector("[data-contact-submit]");
+
+function syncContactSubmitState() {
+  if (!contactSubmitButton) return;
+  contactSubmitButton.disabled = !contactConsentInput?.checked;
+}
+
+contactConsentInput?.addEventListener("change", syncContactSubmitState);
+syncContactSubmitState();
 
 contactForm?.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -928,12 +1819,13 @@ contactForm?.addEventListener("submit", (event) => {
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim();
   const message = String(formData.get("message") || "").trim();
+  const privacyConsent = formData.get("privacyConsent");
   const targetEmail = contactForm.dataset.email || "kontakt@twojadomena.pl";
   const contactText = siteContent.contact || {};
   const fieldText = contactText.fields || {};
   const statusText = contactText.status || {};
 
-  if (!name || !email || !message) {
+  if (!name || !email || !message || !privacyConsent) {
     setFormStatus(statusText.missingFields || "");
     return;
   }
@@ -941,7 +1833,7 @@ contactForm?.addEventListener("submit", (event) => {
   const subjectPrefix = statusText.subjectPrefix || "";
   const subject = encodeURIComponent(`${subjectPrefix} — ${name}`);
   const body = encodeURIComponent(
-    `${fieldText.name || "Name"}: ${name}\n${fieldText.email || "E-mail"}: ${email}\n\n${fieldText.message || "Message"}:\n${message}`
+    `${fieldText.name || ""}: ${name}\n${fieldText.email || ""}: ${email}\n\n${fieldText.message || ""}:\n${message}\n\n${fieldText.consentMailLabel || ""}: tak`
   );
 
   setFormStatus(statusText.openingEmail || "");

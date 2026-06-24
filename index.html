@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#eeeae6" />
 
-  <title>Personal Coach — Prywatny Coaching Biznesowy</title>
+  <title>Relevateme — coaching i mentoring biznesowo-życiowy</title>
   <meta
     name="description"
-    content="Prywatny coaching biznesowy i work-life coaching. Znajdź kierunek, uporządkuj priorytety i świadomie buduj życie oraz pracę, które mają znaczenie."
+    content="Coaching i mentoring biznesowo-życiowy dla osób, które chcą rozwijać firmę bez tracenia życia. Praca 1:1, konkretna mapa i decyzje dopasowane do Twojej sytuacji."
   />
 
-  <link rel="preload" href="styles.css?v=expert-two-photo" as="style" />
-  <link rel="stylesheet" href="styles.css?v=expert-two-photo" />
+  <link rel="preload" href="styles.css?v=brand-modals-v1" as="style" />
+  <link rel="stylesheet" href="styles.css?v=brand-modals-v1" />
 </head>
 
 <body>
@@ -26,40 +26,23 @@
 
   <header class="siteHeader" id="siteHeader">
     <div class="container nav__inner">
-      <a class="brand" href="#home" aria-label="Strona główna">
-        <span class="brand__mark" aria-hidden="true">
-          <svg viewBox="0 0 48 48" width="28" height="28">
-            <path d="M12 23.2L24 13L36 23.2V36C36 36.55 35.55 37 35 37H28.5V27.5H19.5V37H13C12.45 37 12 36.55 12 36V23.2Z" fill="#eeeae6"/>
-            <path d="M8.8 24.6L22.38 13.06C23.31 12.27 24.69 12.27 25.62 13.06L39.2 24.6C39.83 25.14 39.91 26.09 39.37 26.72C38.83 27.35 37.88 27.43 37.25 26.89L36 25.83V36C36 37.66 34.66 39 33 39H27V29.5H21V39H15C13.34 39 12 37.66 12 36V25.83L10.75 26.89C10.12 27.43 9.17 27.35 8.63 26.72C8.09 26.09 8.17 25.14 8.8 24.6Z" fill="currentColor"/>
-            <path d="M16 24.13V35H18V27.5C18 26.67 18.67 26 19.5 26H28.5C29.33 26 30 26.67 30 27.5V35H32V24.13L24 17.33L16 24.13Z" fill="#eeeae6"/>
-          </svg>
-        </span>
+      <a class="brand" href="#home" aria-label="">
+        <img class="brand__logo" src="pictures/relevateme-icon.png" alt="" />
       </a>
 
-      <nav class="nav__links" aria-label="Nawigacja">
-        <a href="#o-mnie">O mnie</a>
-        <a href="#coaching">Coaching</a>
-        <a href="#oferta">Oferta</a>
-        <a href="#eksperci">Eksperci</a>
-        <a href="#kontakt">Kontakt</a>
+      <nav class="nav__links" aria-label="">
+        <a href="#o-mnie"></a>
+        <a href="#pakiety"></a>
+        <a href="#formula"></a>
+        <a href="#eksperci"></a>
+        <a href="#pakiety" data-open-quiz></a>
+        <a href="#wspolpraca" data-open-modal="cooperation"></a>
       </nav>
 
       <div class="nav__actions">
-        <a class="btn btn--outline nav__cta" href="#kontakt">Umów rozmowę</a>
+        <a class="btn btn--outline nav__cta" href="#kontakt"></a>
 
-        <a
-          class="linkedin"
-          href="https://www.linkedin.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn"
-        >
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-            <path fill="currentColor" d="M20.45 20.45h-3.56v-5.58c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.67H9.34V8.99h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.1 20.45H3.54V8.99H7.1v11.46Z"/>
-          </svg>
-        </a>
-
-        <button class="nav__toggle" id="navToggle" type="button" aria-label="Otwórz menu" aria-expanded="false">
+        <button class="nav__toggle" id="navToggle" type="button" aria-label="" aria-expanded="false">
           <span></span>
           <span class="nav__toggleMid"></span>
           <span></span>
@@ -68,15 +51,16 @@
     </div>
 
     <div class="drawer" id="drawer" aria-hidden="true">
-      <button class="drawer__backdrop" id="drawerBackdrop" type="button" aria-label="Zamknij menu"></button>
+      <button class="drawer__backdrop" id="drawerBackdrop" type="button" aria-label=""></button>
 
       <div class="drawer__panel">
-        <a href="#o-mnie" class="drawer__link">O mnie</a>
-        <a href="#coaching" class="drawer__link">Coaching</a>
-        <a href="#oferta" class="drawer__link">Oferta</a>
-        <a href="#eksperci" class="drawer__link">Eksperci</a>
-        <a href="#kontakt" class="drawer__link">Kontakt</a>
-        <a href="#kontakt" class="btn btn--primary btn--wide">Umów rozmowę</a>
+        <a href="#o-mnie" class="drawer__link"></a>
+        <a href="#pakiety" class="drawer__link"></a>
+        <a href="#formula" class="drawer__link"></a>
+        <a href="#eksperci" class="drawer__link"></a>
+        <a href="#pakiety" class="drawer__link" data-open-quiz></a>
+        <a href="#wspolpraca" class="drawer__link" data-open-modal="cooperation"></a>
+        <a href="#kontakt" class="btn btn--primary btn--wide"></a>
       </div>
     </div>
   </header>
@@ -85,44 +69,33 @@
     <section class="hero" id="home">
       <div class="container hero__inner">
         <div class="hero__copy">
-          <p class="eyebrow reveal">Prywatny coaching biznesowy</p>
+          <img class="heroLogo reveal" src="pictures/relevateme-logotype-cropped.png" alt="" />
+          <p class="eyebrow reveal"></p>
 
-          <h1 class="hero__title reveal">
-            Uwolnij swój potencjał
-          </h1>
+          <h1 class="hero__title reveal"></h1>
 
-          <p class="hero__lead reveal">
-            Znajdź swój kierunek, uporządkuj priorytety i świadomie buduj życie oraz pracę,
-            które naprawdę mają znaczenie.
-          </p>
+          <p class="hero__lead reveal"></p>
 
           <div class="hero__actions reveal">
             <a class="btn btn--primary" href="#kontakt" data-magnetic>
-              Umów rozmowę
               <span class="btn__shine" aria-hidden="true"></span>
             </a>
 
-            <a class="btn btn--text" href="#coaching">
-              Dowiedz się więcej
-            </a>
+            <a class="btn btn--text" href="#formula"></a>
           </div>
         </div>
 
         <div class="hero__aside reveal">
-          <button class="quoteCard" type="button" data-goal-card data-tilt aria-label="Pokaż kolejny cel">
+          <button class="quoteCard" type="button" data-goal-card data-tilt aria-label="">
             <span class="quoteCard__layer quoteCard__layer--back" aria-hidden="true"></span>
             <span class="quoteCard__layer quoteCard__layer--middle" aria-hidden="true"></span>
             <span class="quoteCard__nextFace" aria-hidden="true" data-next-goal-face>
-              <span class="quoteCard__label" data-next-goal-label>Cel 2</span>
-              <span class="quoteCard__text" data-next-goal-text>
-                Odzyskać czas na myślenie strategiczne, zamiast ciągle gasić bieżące sprawy.
-              </span>
+              <span class="quoteCard__label" data-next-goal-label></span>
+              <span class="quoteCard__text" data-next-goal-text></span>
             </span>
             <span class="quoteCard__face" data-goal-face>
-              <span class="quoteCard__label" data-goal-label>Cel 1</span>
-              <span class="quoteCard__text" data-goal-text aria-live="polite">
-                Mniej chaosu. Więcej kierunku i decyzji, za którymi naprawdę stoisz.
-              </span>
+              <span class="quoteCard__label" data-goal-label></span>
+              <span class="quoteCard__text" data-goal-text aria-live="polite"></span>
             </span>
           </button>
         </div>
@@ -134,28 +107,37 @@
         <div class="blobImage reveal" data-tilt>
           <img
             src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80"
-            alt="Rozmowa coachingowa przy stole"
+            alt=""
             loading="lazy"
           />
         </div>
 
         <div class="section__copy reveal">
-          <p class="eyebrow">Wyzwanie</p>
+          <p class="eyebrow"></p>
 
-          <h2>Czy to brzmi znajomo?</h2>
+          <h2></h2>
 
-          <ul class="checkList">
-            <li>Twój biznes rośnie, ale Ty masz coraz mniej czasu.</li>
-            <li>Zespół pracuje ciężko, ale wyniki nie rosną tak, jak powinny.</li>
-            <li>Podejmujesz dziesiątki decyzji dziennie i czujesz ciągłe przeciążenie.</li>
-            <li>Jesteś potrzebny wszędzie.</li>
-            <li>Zamiast rozwijać firmę, ciągle rozwiązujesz bieżące problemy.</li>
-          </ul>
+          <ul class="checkList"></ul>
 
           <div class="challengeNote">
-            <span>Jeśli choć raz odpowiedziałeś “tak”</span>
-            <strong>jesteś we właściwym miejscu</strong>
+            <span></span>
+            <strong></strong>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--sand" id="sygnaly">
+      <div class="container signals">
+        <div class="signals__intro reveal">
+          <p class="eyebrow"></p>
+          <h2></h2>
+        </div>
+
+        <div class="signals__panel reveal">
+          <ol class="signalsList" data-signals-list></ol>
+
+          <p class="signalsKicker"></p>
         </div>
       </div>
     </section>
@@ -163,27 +145,19 @@
     <section class="section section--sand" id="coaching">
       <div class="container split split--method">
         <div class="section__copy reveal">
-          <p class="eyebrow">Metodologia</p>
+          <p class="eyebrow"></p>
 
-          <h2>Work-life coaching</h2>
+          <h2></h2>
 
-          <p>
-            Work-life coaching to proces wspierający świadome wprowadzanie zmian w życiu
-            osobistym i zawodowym. Pomaga lepiej zrozumieć siebie, swoje cele i blokady,
-            a następnie przełożyć tę wiedzę na konkretne działania.
-          </p>
+          <p></p>
 
-          <p>
-            W praktyce to rozmowy i narzędzia, które porządkują myślenie, wzmacniają
-            decyzyjność i pomagają przejść od miejsca, w którym jesteś, do miejsca,
-            w którym chcesz być — w sposób bardziej klarowny, spójny i uporządkowany.
-          </p>
+          <p></p>
         </div>
 
         <div class="blobImage blobImage--right reveal" data-tilt>
           <img
             src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80"
-            alt="Zespół trzymający dłonie razem"
+            alt=""
             loading="lazy"
           />
         </div>
@@ -193,69 +167,126 @@
     <section class="section section--white" id="oferta">
       <div class="container">
         <div class="sectionHead reveal">
-          <p class="eyebrow">Oferta</p>
-          <h2>Co możemy przepracować?</h2>
-          <p>
-            Spotkania są dopasowane do Twojej sytuacji — od uporządkowania priorytetów,
-            przez lepsze decyzje, po świadome budowanie biznesu i życia poza nim.
-          </p>
+          <p class="eyebrow"></p>
+          <h2></h2>
+          <p></p>
         </div>
 
         <div class="offerGrid">
           <article class="offerCard reveal" data-tilt>
-            <span class="offerCard__number">01</span>
-            <h3>Coaching biznesowy</h3>
-            <p>
-              Dla właścicieli, liderów i managerów, którzy chcą prowadzić firmę z większą
-              klarownością, spokojem i odpowiedzialnością.
-            </p>
+            <span class="offerCard__number"></span>
+            <h3></h3>
+            <p></p>
           </article>
 
           <article class="offerCard reveal" data-tilt>
-            <span class="offerCard__number">02</span>
-            <h3>Work-life coaching</h3>
-            <p>
-              Dla osób, które chcą lepiej połączyć ambicję, relacje, odpoczynek i poczucie
-              sensu w codziennym działaniu.
-            </p>
+            <span class="offerCard__number"></span>
+            <h3></h3>
+            <p></p>
           </article>
 
           <article class="offerCard reveal" data-tilt>
-            <span class="offerCard__number">03</span>
-            <h3>Decyzyjność i priorytety</h3>
-            <p>
-              Praca nad przeciążeniem, chaosem decyzyjnym, delegowaniem i odzyskiwaniem
-              przestrzeni na najważniejsze tematy.
-            </p>
+            <span class="offerCard__number"></span>
+            <h3></h3>
+            <p></p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section section--navy" data-process-section>
+    <section class="section section--white" id="historie">
+      <div class="container stories">
+        <div class="sectionHead reveal">
+          <p class="eyebrow"></p>
+          <h2></h2>
+          <p></p>
+        </div>
+
+        <div class="storiesGrid" data-stories-grid></div>
+
+        <div class="storiesCta reveal">
+          <p><strong></strong></p>
+          <a class="btn btn--primary" href="#kontakt" data-magnetic>
+            <span class="btn__shine" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--sand" id="pakiety">
+      <div class="container packages">
+        <div class="sectionHead reveal">
+          <p class="eyebrow"></p>
+          <h2></h2>
+          <p></p>
+        </div>
+
+        <div class="packagesGrid" data-packages-grid></div>
+
+        <div class="packagesCta reveal">
+          <article class="packagesCta__item">
+            <p><strong></strong></p>
+            <a class="btn btn--primary" href="#kontakt" data-magnetic>
+              <span class="btn__shine" aria-hidden="true"></span>
+            </a>
+          </article>
+
+          <article class="packagesCta__item packagesCta__item--quiz">
+            <p><strong></strong></p>
+            <button class="btn btn--secondary" type="button" data-open-quiz></button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section formulaSection" id="formula">
+      <div class="container formula reveal">
+        <img
+          class="formula__image"
+          src="pictures/f1-cockpit-section.png"
+          alt=""
+          loading="lazy"
+        />
+
+        <div class="formula__copy">
+          <p class="eyebrow eyebrow--light"></p>
+          <h2></h2>
+          <p class="formula__lead"></p>
+          <p class="formula__text"></p>
+          <strong class="formula__punchline"></strong>
+
+          <div class="formulaRadioCard">
+            <span></span>
+            <ul data-formula-points></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--navy processSection" data-process-section>
       <div class="container process">
         <div class="sectionHead reveal">
-          <p class="eyebrow eyebrow--light">Proces</p>
-          <h2>Prosty proces, konkretna zmiana</h2>
+          <p class="eyebrow eyebrow--light"></p>
+          <h2></h2>
         </div>
 
         <div class="processGrid">
           <article class="processStep" data-process-step>
-            <span>01</span>
-            <h3>Rozmowa wstępna</h3>
-            <p>Sprawdzamy, gdzie jesteś teraz, z czym przychodzisz i czego realnie potrzebujesz.</p>
+            <span></span>
+            <h3></h3>
+            <p></p>
           </article>
 
           <article class="processStep" data-process-step>
-            <span>02</span>
-            <h3>Ustalenie kierunku</h3>
-            <p>Porządkujemy cele, priorytety, blokady i obszary wymagające największej uwagi.</p>
+            <span></span>
+            <h3></h3>
+            <p></p>
           </article>
 
           <article class="processStep" data-process-step>
-            <span>03</span>
-            <h3>Praca 1:1</h3>
-            <p>Podczas spotkań przekładamy wnioski na konkretne decyzje, działania i zmianę.</p>
+            <span></span>
+            <h3></h3>
+            <p></p>
           </article>
         </div>
       </div>
@@ -264,11 +295,11 @@
     <section class="section section--white" id="eksperci">
       <div class="container experts">
         <div class="sectionHead reveal">
-          <p class="eyebrow">Eksperci</p>
-          <h2>Nasi Eksperci</h2>
+          <p class="eyebrow"></p>
+          <h2></h2>
         </div>
 
-        <div class="expertsCarousel reveal" aria-label="Nasi Eksperci">
+        <div class="expertsCarousel reveal" aria-label="">
           <div class="expertsTrack" data-experts-track></div>
           <div class="expertsDots" data-experts-dots aria-hidden="true"></div>
         </div>
@@ -278,52 +309,54 @@
     <section class="section section--sand" id="kontakt">
       <div class="container contact">
         <div class="contact__copy reveal">
-          <p class="eyebrow">Kontakt</p>
-          <h2>Umów rozmowę</h2>
-          <p>
-            Napisz kilka słów o tym, z czym przychodzisz. Odpowiem i zaproponuję termin
-            rozmowy wstępnej.
-          </p>
+          <p class="eyebrow"></p>
+          <h2></h2>
+          <p></p>
 
           <div class="contactCards">
-            <a class="contactCard" href="mailto:kontakt@twojadomena.pl">
-              <span>E-mail</span>
-              <strong>kontakt@twojadomena.pl</strong>
+            <a class="contactCard" href="#">
+              <span></span>
+              <strong></strong>
             </a>
 
-            <a class="contactCard" href="tel:+48123456789">
-              <span>Telefon</span>
-              <strong>+48 123 456 789</strong>
+            <a class="contactCard" href="#">
+              <span></span>
+              <strong></strong>
             </a>
 
-            <a class="contactCard contactCard--linkedin" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
-              <span>Profil</span>
+            <a class="contactCard contactCard--linkedin" href="#" target="_blank" rel="noopener noreferrer">
+              <span></span>
               <svg class="contactCard__icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
                 <path fill="currentColor" d="M20.45 20.45h-3.56v-5.58c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.67H9.34V8.99h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.1 20.45H3.54V8.99H7.1v11.46Z"/>
               </svg>
-              <strong>LinkedIn</strong>
+              <strong></strong>
             </a>
+          </div>
+
+          <div class="contact__actions">
+            <button class="btn btn--secondary" type="button" data-open-modal="faq"></button>
           </div>
         </div>
 
-        <form class="contactForm reveal" id="contactForm" data-email="kontakt@twojadomena.pl">
+        <form class="contactForm reveal" id="contactForm" data-email="">
           <label>
-            Imię
-            <input type="text" name="name" placeholder="Twoje imię" required />
+            <input type="text" name="name" placeholder="" required />
           </label>
 
           <label>
-            E-mail
-            <input type="email" name="email" placeholder="twoj@email.pl" required />
+            <input type="email" name="email" placeholder="" required />
           </label>
 
           <label>
-            Wiadomość
-            <textarea name="message" rows="5" placeholder="Napisz, czego potrzebujesz..." required></textarea>
+            <textarea name="message" rows="5" placeholder="" required></textarea>
           </label>
 
-          <button class="btn btn--primary btn--wide" type="submit" data-magnetic>
-            Wyślij wiadomość
+          <label class="contactConsent">
+            <input type="checkbox" name="privacyConsent" required />
+            <span></span>
+          </label>
+
+          <button class="btn btn--primary btn--wide" type="submit" data-contact-submit data-magnetic disabled>
             <span class="btn__shine" aria-hidden="true"></span>
           </button>
 
@@ -335,12 +368,44 @@
 
   <footer class="footer">
     <div class="container footer__inner">
-      <p>© <span id="year"></span> TODO ADD NAME. Wszystkie prawa zastrzeżone.</p>
-      <a href="#home">Wróć na górę</a>
+      <p>© <span id="year"></span></p>
+      <div class="footer__links">
+        <button type="button" data-open-modal="faq"></button>
+        <button type="button" data-open-modal="privacy"></button>
+        <a href="#home"></a>
+      </div>
     </div>
   </footer>
 
-  <script src="content.js?v=expert-two-photo"></script>
-  <script src="script.js?v=expert-two-photo"></script>
+  <div class="siteModal" data-site-modal aria-hidden="true">
+    <button class="siteModal__backdrop" type="button" data-modal-close aria-label=""></button>
+    <section class="siteModal__panel" role="dialog" aria-modal="true" aria-labelledby="siteModalTitle">
+      <button class="siteModal__close" type="button" data-modal-close aria-label="">×</button>
+      <div class="siteModal__content" data-modal-content></div>
+    </section>
+  </div>
+
+  <div class="quizWidget" data-quiz-widget>
+    <button class="quizFab" type="button" data-quiz-toggle aria-expanded="false" aria-controls="quizPanel">
+      <span class="quizFab__text"></span>
+    </button>
+
+    <section class="quizPanel" id="quizPanel" data-quiz-panel aria-hidden="true" aria-label="">
+      <header class="quizPanel__header">
+        <div>
+          <span data-quiz-eyebrow></span>
+          <strong data-quiz-title></strong>
+        </div>
+        <button class="quizPanel__close" type="button" data-quiz-close aria-label="">×</button>
+      </header>
+
+      <div class="quizPanel__body" data-quiz-messages aria-live="polite"></div>
+
+      <footer class="quizPanel__footer" data-quiz-footer></footer>
+    </section>
+  </div>
+
+  <script src="content.js?v=brand-modals-v1"></script>
+  <script src="script.js?v=brand-modals-v1"></script>
 </body>
 </html>
