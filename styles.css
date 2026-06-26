@@ -3760,6 +3760,11 @@ img {
     bottom: max(var(--quiz-bottom-offset, 12px), env(safe-area-inset-bottom));
   }
 
+  .quizFab,
+  .quizFab:hover {
+    box-shadow: none;
+  }
+
   .quizFab {
     min-width: 174px;
     min-height: 54px;

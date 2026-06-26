@@ -640,9 +640,11 @@ function applySiteContent() {
 
   setLabelText('label:has(input[name="name"])', content.contact?.fields?.name);
   setLabelText('label:has(input[name="email"])', content.contact?.fields?.email);
+  setLabelText('label:has(input[name="phone"])', content.contact?.fields?.phone || "Telefon (opcjonalnie)");
   setLabelText('label:has(textarea[name="message"])', content.contact?.fields?.message);
   setAttr('input[name="name"]', "placeholder", content.contact?.fields?.namePlaceholder);
   setAttr('input[name="email"]', "placeholder", content.contact?.fields?.emailPlaceholder);
+  setAttr('input[name="phone"]', "placeholder", content.contact?.fields?.phonePlaceholder || "+48 000 000 000");
   setAttr('textarea[name="message"]', "placeholder", content.contact?.fields?.messagePlaceholder);
   setText(".contactConsent span", content.contact?.fields?.consent);
   setButtonText(".contactForm .btn--primary", content.contact?.submit);
@@ -2186,6 +2188,7 @@ contactForm?.addEventListener("submit", async (event) => {
   const formData = new FormData(contactForm);
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim();
+  const phone = String(formData.get("phone") || "").trim();
   const message = String(formData.get("message") || "").trim();
   const privacyConsent = formData.get("privacyConsent");
   const website = String(formData.get("website") || "").trim();
@@ -2199,7 +2202,7 @@ contactForm?.addEventListener("submit", async (event) => {
 
   const sent = await sendSiteForm({
     type: "contact",
-    payload: { name, email, message, consent: Boolean(privacyConsent), website },
+    payload: { name, email, phone, message, consent: Boolean(privacyConsent), website },
     statusElement: formStatus,
     statusText,
     submitButton: contactSubmitButton
