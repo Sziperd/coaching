@@ -4381,3 +4381,22 @@ img {
     transform: none;
   }
 }
+
+@media (max-width: 680px) {
+  .quizWidget .quizFab,
+  .quizWidget .quizFab:hover,
+  .quizWidget .quizFab:active,
+  .quizWidget .quizFab:focus,
+  .quizWidget .quizFab:focus-visible {
+    box-shadow: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .quizWidget .quizFab {
+    transition:
+      transform 0.24s var(--ease),
+      opacity 0.2s var(--ease);
+  }
+}
