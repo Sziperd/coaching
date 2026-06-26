@@ -241,9 +241,14 @@ function renderSignals(signalsContent) {
 
 function renderStories(storiesContent) {
   const grid = document.querySelector("[data-stories-grid]");
+  const dots = document.querySelector("[data-stories-dots]");
   if (!grid || !Array.isArray(storiesContent?.items)) return;
 
   grid.innerHTML = "";
+  if (dots) {
+    dots.innerHTML = "";
+  }
+
   storiesContent.items.forEach((item, index) => {
     const card = document.createElement("article");
     card.className = "storyCard reveal";
@@ -292,14 +297,31 @@ function renderStories(storiesContent) {
     card.appendChild(text);
     card.appendChild(recommendation);
     grid.appendChild(card);
+
+    if (dots) {
+      const dot = document.createElement("button");
+      dot.className = "expertsDot storyDot";
+      dot.type = "button";
+      dot.dataset.storyDot = String(index);
+      dot.setAttribute("aria-label", item.name || `Historia ${index + 1}`);
+
+      const fill = document.createElement("span");
+      dot.appendChild(fill);
+      dots.appendChild(dot);
+    }
   });
 }
 
 function renderPackages(packagesContent) {
   const grid = document.querySelector("[data-packages-grid]");
+  const dots = document.querySelector("[data-packages-dots]");
   if (!grid || !Array.isArray(packagesContent?.items)) return;
 
   grid.innerHTML = "";
+  if (dots) {
+    dots.innerHTML = "";
+  }
+
   packagesContent.items.forEach((item, index) => {
     const card = document.createElement("article");
     card.className = "packagePath reveal";
@@ -354,6 +376,18 @@ function renderPackages(packagesContent) {
     card.appendChild(featureList);
     card.appendChild(outcome);
     grid.appendChild(card);
+
+    if (dots) {
+      const dot = document.createElement("button");
+      dot.className = "expertsDot packageDot";
+      dot.type = "button";
+      dot.dataset.packageDot = String(index);
+      dot.setAttribute("aria-label", item.name || `Pakiet ${index + 1}`);
+
+      const fill = document.createElement("span");
+      dot.appendChild(fill);
+      dots.appendChild(dot);
+    }
   });
 }
 
@@ -391,6 +425,75 @@ function renderPackageActions(packagesContent) {
   }
 }
 
+function renderFormulaMobile(formulaContent) {
+  const mobile = document.querySelector("[data-formula-mobile]");
+  const track = document.querySelector("[data-formula-mobile-track]");
+  const dots = document.querySelector("[data-formula-dots]");
+  const slides = Array.isArray(formulaContent?.mobileSlides) ? formulaContent.mobileSlides.slice(0, 3) : [];
+  if (!mobile || !track || !dots || slides.length === 0) return;
+
+  setAttr("[data-formula-mobile]", "aria-label", formulaContent?.mobileLabel || "");
+  track.innerHTML = "";
+  dots.innerHTML = "";
+  track.style.setProperty("--formula-slide-count", String(slides.length));
+
+  const background = document.createElement("span");
+  background.className = "formulaMobile__background";
+  background.setAttribute("aria-hidden", "true");
+  track.appendChild(background);
+
+  slides.forEach((slide, index) => {
+    const article = document.createElement("article");
+    article.className = "formulaMobileSlide";
+    article.dataset.formulaSlide = String(index);
+    article.style.setProperty("--slide-index", index);
+
+    const eyebrow = document.createElement("p");
+    eyebrow.className = "eyebrow eyebrow--light";
+    eyebrow.textContent = slide.eyebrow || "";
+    article.appendChild(eyebrow);
+
+    const title = document.createElement("h3");
+    title.textContent = slide.title || "";
+    article.appendChild(title);
+
+    if (slide.text) {
+      const text = document.createElement("p");
+      text.className = "formulaMobileSlide__text";
+      text.textContent = slide.text;
+      article.appendChild(text);
+    }
+
+    if (slide.strong) {
+      const strong = document.createElement("strong");
+      strong.textContent = slide.strong;
+      article.appendChild(strong);
+    }
+
+    if (Array.isArray(slide.points)) {
+      const list = document.createElement("ul");
+      slide.points.forEach((point) => {
+        const item = document.createElement("li");
+        item.textContent = point;
+        list.appendChild(item);
+      });
+      article.appendChild(list);
+    }
+
+    track.appendChild(article);
+
+    const dot = document.createElement("button");
+    dot.className = "expertsDot formulaDot";
+    dot.type = "button";
+    dot.dataset.formulaDot = String(index);
+    dot.setAttribute("aria-label", `${formulaContent?.mobileLabel || "Slajd"} ${index + 1}`);
+
+    const fill = document.createElement("span");
+    dot.appendChild(fill);
+    dots.appendChild(dot);
+  });
+}
+
 function applySiteContent() {
   const content = siteContent;
   if (!content || Object.keys(content).length === 0) return;
@@ -404,7 +507,7 @@ function applySiteContent() {
   setAttr('meta[name="description"]', "content", content.meta?.description);
   setAttr(".brand", "aria-label", content.labels?.home);
   setAttr(".brand__logo", "alt", content.labels?.home);
-  setAttr(".heroLogo", "alt", content.labels?.home);
+  setAttr(".heroLogo", "aria-label", content.labels?.home);
   setAttr(".nav__links", "aria-label", content.labels?.navigation);
   setAttr(".linkedin", "aria-label", content.labels?.linkedin);
   setAttr("#navToggle", "aria-label", content.labels?.openMenu);
@@ -418,7 +521,6 @@ function applySiteContent() {
   setText(".nav__cta", content.nav?.cta);
   setText(".drawer__panel .btn", content.nav?.cta);
 
-  setText(".hero .eyebrow", content.hero?.eyebrow);
   setText(".hero__title", content.hero?.title);
   setText(".hero__lead", content.hero?.lead);
   setButtonText(".hero__actions .btn--primary", content.hero?.primaryCta);
@@ -483,6 +585,7 @@ function applySiteContent() {
   setText("#formula .formulaRadioCard > span", content.formula?.teamLabel);
   setAttr("#formula .formula__image", "alt", content.formula?.imageAlt);
   setList("#formula [data-formula-points]", content.formula?.points);
+  renderFormulaMobile(content.formula);
 
   setText(".section--navy .sectionHead .eyebrow", content.process?.eyebrow);
   setText(".section--navy .sectionHead h2", content.process?.title);
@@ -630,6 +733,7 @@ function initSiteModals(modalContent) {
         <span>${fields.message || "Wiadomość"}</span>
         <textarea name="message" rows="6" placeholder="${fields.messagePlaceholder || ""}" required></textarea>
       </label>
+      <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="modalConsent modalForm__wide">
         <input type="checkbox" name="consent" required>
         <span>${data?.consent || ""}</span>
@@ -651,7 +755,7 @@ function initSiteModals(modalContent) {
     consentInput?.addEventListener("change", syncSubmitState);
     syncSubmitState();
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const formData = new FormData(form);
       const status = form.querySelector(".formStatus");
@@ -660,33 +764,25 @@ function initSiteModals(modalContent) {
       const phone = String(formData.get("phone") || "").trim();
       const message = String(formData.get("message") || "").trim();
       const consent = formData.get("consent");
+      const website = String(formData.get("website") || "").trim();
 
       if (!name || !email || !message || !consent) {
         if (status) status.textContent = data?.status?.missingFields || "";
         return;
       }
 
-      const targetEmail = data?.formEmail || "wspolpraca@twojadomena.pl";
-      const subject = encodeURIComponent(`${data?.status?.subjectPrefix || "Zapytanie"} - ${name}`);
-      const body = encodeURIComponent([
-        `${fields.name || "Imię i nazwisko"}: ${name}`,
-        `${fields.email || "Adres e-mail"}: ${email}`,
-        `${fields.phone || "Telefon"}: ${phone || "-"}`,
-        "",
-        `${fields.message || "Wiadomość"}:`,
-        message,
-        "",
-        `${data?.consent || "Zgoda na kontakt"}: tak`
-      ].join("\n"));
+      const sent = await sendSiteForm({
+        type: "cooperation",
+        payload: { name, email, phone, message, consent: Boolean(consent), website },
+        statusElement: status,
+        statusText: data?.status || {},
+        submitButton
+      });
 
-      if (status) {
-        status.textContent = data?.status?.openingEmail || "";
-        window.setTimeout(() => {
-          status.textContent = data?.status?.emailFallback || "";
-        }, 1800);
+      if (sent) {
+        form.reset();
+        syncSubmitState();
       }
-
-      window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
     });
 
     fragment.appendChild(form);
@@ -827,6 +923,8 @@ function initPackageQuiz(quizContent) {
   let scores = {};
   let timers = [];
   let panelResizeTimer = null;
+  let panelResizeFrame = null;
+  let panelLockedHeight = 0;
 
   function clearTimers() {
     timers.forEach((timer) => window.clearTimeout(timer));
@@ -851,35 +949,93 @@ function initPackageQuiz(quizContent) {
     });
   }
 
+  function getPanelMaxHeight() {
+    const maxHeight = window.getComputedStyle(panel).maxHeight;
+    const parsed = Number.parseFloat(maxHeight);
+    return Number.isFinite(parsed) ? parsed : window.innerHeight;
+  }
+
+  function easePanelResize(progress) {
+    return 1 - Math.pow(1 - progress, 3);
+  }
+
+  function finishPanelResize() {
+    if (panelResizeTimer) {
+      window.clearTimeout(panelResizeTimer);
+      panelResizeTimer = null;
+    }
+
+    if (panelResizeFrame) {
+      cancelAnimationFrame(panelResizeFrame);
+      panelResizeFrame = null;
+    }
+
+    panel.style.height = "";
+    panel.style.maxHeight = "";
+    panel.style.minHeight = panelLockedHeight ? `${panelLockedHeight}px` : "";
+    panel.classList.remove("is-resizing");
+    scrollMessagesToEnd();
+  }
+
   function withPanelResize(callback) {
     if (prefersReduced) {
       callback();
       return;
     }
 
-    const startHeight = panel.offsetHeight;
-    callback();
-    const endHeight = panel.offsetHeight;
-
-    if (Math.abs(endHeight - startHeight) < 2) return;
-
-    panel.style.height = `${startHeight}px`;
-    panel.style.transition = "height 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s var(--ease), transform 0.34s var(--ease2)";
-
-    requestAnimationFrame(() => {
-      panel.style.height = `${endHeight}px`;
-    });
-
     if (panelResizeTimer) {
       window.clearTimeout(panelResizeTimer);
+      panelResizeTimer = null;
     }
 
-    panelResizeTimer = window.setTimeout(() => {
-      panel.style.height = "";
-      panel.style.transition = "";
-      scrollMessagesToEnd();
-      panelResizeTimer = null;
-    }, prefersReduced ? 0 : 560);
+    if (panelResizeFrame) {
+      cancelAnimationFrame(panelResizeFrame);
+      panelResizeFrame = null;
+    }
+
+    const maxHeight = getPanelMaxHeight();
+    const startHeight = Math.min(Math.max(panel.getBoundingClientRect().height, panelLockedHeight), maxHeight);
+    panel.style.height = `${startHeight}px`;
+    panel.style.maxHeight = `${maxHeight}px`;
+    panel.classList.add("is-resizing");
+    void panel.offsetHeight;
+
+    callback();
+
+    panelResizeFrame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        panel.style.maxHeight = "none";
+        const measuredHeight = Math.min(panel.scrollHeight, maxHeight);
+        const endHeight = Math.max(startHeight, measuredHeight, panelLockedHeight);
+        panelLockedHeight = endHeight;
+        panel.style.maxHeight = `${maxHeight}px`;
+        const duration = 920;
+        const delta = endHeight - startHeight;
+        const startedAt = performance.now();
+
+        if (delta < 1) {
+          panel.style.height = `${endHeight}px`;
+          panelResizeTimer = window.setTimeout(finishPanelResize, 0);
+          return;
+        }
+
+        const animateResize = (timestamp) => {
+          const progress = Math.min((timestamp - startedAt) / duration, 1);
+          const eased = easePanelResize(progress);
+          panel.style.height = `${startHeight + delta * eased}px`;
+
+          if (progress < 1) {
+            panelResizeFrame = requestAnimationFrame(animateResize);
+            return;
+          }
+
+          panel.style.height = `${endHeight}px`;
+          panelResizeTimer = window.setTimeout(finishPanelResize, 0);
+        };
+
+        panelResizeFrame = requestAnimationFrame(animateResize);
+      });
+    });
   }
 
   function openQuiz(shouldStart = true) {
@@ -896,12 +1052,19 @@ function initPackageQuiz(quizContent) {
     widget.classList.remove("is-open");
     panel.setAttribute("aria-hidden", "true");
     toggle.setAttribute("aria-expanded", "false");
+    panel.style.minHeight = "";
+    panelLockedHeight = 0;
   }
 
-  function addMessage(text, type = "bot") {
+  function createMessage(text, type = "bot") {
     const bubble = document.createElement("div");
     bubble.className = `quizMessage quizMessage--${type}`;
     bubble.textContent = text;
+    return bubble;
+  }
+
+  function addMessage(text, type = "bot") {
+    const bubble = createMessage(text, type);
     withPanelResize(() => {
       messages.appendChild(bubble);
     });
@@ -935,8 +1098,9 @@ function initPackageQuiz(quizContent) {
   function addBotMessage(text, delay = 620, after) {
     schedule(() => {
       addTyping(() => {
-        addMessage(text);
-        if (after) after();
+        messages.appendChild(createMessage(text));
+        scrollMessages();
+        if (after) schedule(after, 180);
       });
     }, delay);
   }
@@ -979,16 +1143,22 @@ function initPackageQuiz(quizContent) {
         button.classList.add("quizAnswer--wide");
       }
       button.addEventListener("click", () => {
-        group.remove();
-        addMessage(answer.text || "", "user");
-        scores[answer.persona] = (scores[answer.persona] || 0) + Number(answer.points || 0);
-        currentQuestion += 1;
+        withPanelResize(() => {
+          group.remove();
+          messages.appendChild(createMessage(answer.text || "", "user"));
+          scrollMessages();
+        });
 
-        if (currentQuestion >= questions.length) {
-          showResult();
-        } else {
-          askQuestion();
-        }
+        schedule(() => {
+          scores[answer.persona] = (scores[answer.persona] || 0) + Number(answer.points || 0);
+          currentQuestion += 1;
+
+          if (currentQuestion >= questions.length) {
+            showResult();
+          } else {
+            askQuestion();
+          }
+        }, 120);
       });
       group.appendChild(button);
     });
@@ -996,7 +1166,6 @@ function initPackageQuiz(quizContent) {
     withPanelResize(() => {
       messages.appendChild(group);
     });
-    scrollMessagesToEnd();
   }
 
   function askQuestion() {
@@ -1082,6 +1251,8 @@ function initPackageQuiz(quizContent) {
     }, {});
     messages.innerHTML = "";
     footer.innerHTML = "";
+    panel.style.minHeight = "";
+    panelLockedHeight = 0;
 
     const intro = Array.isArray(quizContent?.intro) ? quizContent.intro : [];
     addMessage(intro[0] || "Pomogę Ci dobrać właściwy pakiet.");
@@ -1145,7 +1316,59 @@ window.addEventListener("resize", rafThrottle(updateQuizWidgetOffset), { passive
    ========================================================= */
 
 const storiesGrid = document.querySelector("[data-stories-grid]");
+const storyDots = Array.from(document.querySelectorAll("[data-story-dot]"));
 const mobileStories = window.matchMedia("(max-width: 680px)");
+let activeStorySlide = 0;
+let storyScrollTimer = null;
+
+function getStoryCards() {
+  return Array.from(storiesGrid?.querySelectorAll("[data-story-card]") || []);
+}
+
+function getStorySlidePositions(cards = getStoryCards()) {
+  if (!storiesGrid) return [];
+
+  return cards.map((card) => card.offsetLeft - storiesGrid.offsetLeft);
+}
+
+function setActiveStorySlide(index) {
+  const cards = getStoryCards();
+  if (cards.length === 0) return;
+
+  activeStorySlide = Math.max(0, Math.min(index, cards.length - 1));
+  storyDots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("is-active", dotIndex === activeStorySlide);
+  });
+}
+
+function scrollToStorySlide(index) {
+  if (!storiesGrid || !mobileStories.matches) return;
+
+  const cards = getStoryCards();
+  const positions = getStorySlidePositions(cards);
+  if (positions.length === 0) return;
+
+  const nextIndex = Math.max(0, Math.min(index, positions.length - 1));
+  storiesGrid.scrollTo({
+    left: positions[nextIndex],
+    behavior: "smooth"
+  });
+  setActiveStorySlide(nextIndex);
+}
+
+function syncActiveStoryFromScroll() {
+  if (!storiesGrid || !mobileStories.matches) return;
+
+  const positions = getStorySlidePositions();
+  if (positions.length === 0) return;
+
+  const nearestIndex = positions.reduce((nearest, position, index) => {
+    const distance = Math.abs(position - storiesGrid.scrollLeft);
+    return distance < nearest.distance ? { index, distance } : nearest;
+  }, { index: 0, distance: Infinity }).index;
+
+  setActiveStorySlide(nearestIndex);
+}
 
 storiesGrid?.addEventListener("click", (event) => {
   if (!mobileStories.matches) return;
@@ -1160,25 +1383,79 @@ storiesGrid?.addEventListener("click", (event) => {
 
   const cardRect = card.getBoundingClientRect();
   const gridRect = storiesGrid.getBoundingClientRect();
-  const gap = parseFloat(window.getComputedStyle(storiesGrid).columnGap) || 0;
-  const step = cardRect.width + gap;
-  const currentIndex = Math.round(storiesGrid.scrollLeft / step);
+  syncActiveStoryFromScroll();
 
-  if (cardIndex > currentIndex) {
-    storiesGrid.scrollTo({
-      left: Math.min((currentIndex + 1) * step, storiesGrid.scrollWidth - storiesGrid.clientWidth),
-      behavior: "smooth"
-    });
-  } else if (cardIndex < currentIndex || cardRect.left < gridRect.left + 8) {
-    storiesGrid.scrollTo({
-      left: Math.max((currentIndex - 1) * step, 0),
-      behavior: "smooth"
-    });
+  if (cardIndex > activeStorySlide) {
+    scrollToStorySlide(activeStorySlide + 1);
+  } else if (cardIndex < activeStorySlide || cardRect.left < gridRect.left + 8) {
+    scrollToStorySlide(activeStorySlide - 1);
   }
 });
 
+storyDots.forEach((dot, index) => {
+  dot.addEventListener("click", () => scrollToStorySlide(index));
+});
+
+storiesGrid?.addEventListener("scroll", () => {
+  if (storyScrollTimer) {
+    window.clearTimeout(storyScrollTimer);
+  }
+
+  storyScrollTimer = window.setTimeout(syncActiveStoryFromScroll, 90);
+}, { passive: true });
+
+setActiveStorySlide(0);
+
 const packagesGrid = document.querySelector("[data-packages-grid]");
+const packageDots = Array.from(document.querySelectorAll("[data-package-dot]"));
 const mobilePackages = window.matchMedia("(max-width: 680px)");
+let activePackageSlide = 0;
+let packageScrollTimer = null;
+
+function getPackageCards() {
+  return Array.from(packagesGrid?.querySelectorAll(".packagePath") || []);
+}
+
+function getPackageSlidePositions(cards = getPackageCards()) {
+  const firstOffset = cards[0]?.offsetLeft || 0;
+  return cards.map((item) => item.offsetLeft - firstOffset);
+}
+
+function setActivePackageSlide(index) {
+  if (packageDots.length === 0) return;
+
+  activePackageSlide = Math.max(0, Math.min(index, packageDots.length - 1));
+  packageDots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("is-active", dotIndex === activePackageSlide);
+  });
+}
+
+function scrollToPackageSlide(index) {
+  if (!packagesGrid) return;
+
+  const cards = getPackageCards();
+  const positions = getPackageSlidePositions(cards);
+  const nextIndex = Math.max(0, Math.min(index, positions.length - 1));
+
+  packagesGrid.scrollTo({
+    left: positions[nextIndex] || 0,
+    behavior: "smooth"
+  });
+  setActivePackageSlide(nextIndex);
+}
+
+function syncActivePackageFromScroll() {
+  if (!packagesGrid || packageDots.length === 0) return;
+
+  const positions = getPackageSlidePositions();
+  const nearestIndex = positions.reduce((nearestIndex, position, index) => {
+    const nearestDistance = Math.abs(positions[nearestIndex] - packagesGrid.scrollLeft);
+    const distance = Math.abs(position - packagesGrid.scrollLeft);
+    return distance < nearestDistance ? index : nearestIndex;
+  }, 0);
+
+  setActivePackageSlide(nearestIndex);
+}
 
 packagesGrid?.addEventListener("click", (event) => {
   if (!mobilePackages.matches) return;
@@ -1193,8 +1470,7 @@ packagesGrid?.addEventListener("click", (event) => {
 
   const cardRect = card.getBoundingClientRect();
   const gridRect = packagesGrid.getBoundingClientRect();
-  const firstOffset = cards[0]?.offsetLeft || 0;
-  const positions = cards.map((item) => item.offsetLeft - firstOffset);
+  const positions = getPackageSlidePositions(cards);
   const currentIndex = positions.reduce((nearestIndex, position, index) => {
     const nearestDistance = Math.abs(positions[nearestIndex] - packagesGrid.scrollLeft);
     const distance = Math.abs(position - packagesGrid.scrollLeft);
@@ -1202,17 +1478,104 @@ packagesGrid?.addEventListener("click", (event) => {
   }, 0);
 
   if (cardIndex > currentIndex) {
-    packagesGrid.scrollTo({
-      left: positions[Math.min(currentIndex + 1, positions.length - 1)],
-      behavior: "smooth"
-    });
+    scrollToPackageSlide(currentIndex + 1);
   } else if (cardIndex < currentIndex || cardRect.left < gridRect.left + 8) {
-    packagesGrid.scrollTo({
-      left: positions[Math.max(currentIndex - 1, 0)],
-      behavior: "smooth"
-    });
+    scrollToPackageSlide(currentIndex - 1);
   }
 });
+
+packagesGrid?.addEventListener("scroll", () => {
+  if (!mobilePackages.matches) return;
+  if (packageScrollTimer) {
+    window.clearTimeout(packageScrollTimer);
+  }
+
+  packageScrollTimer = window.setTimeout(syncActivePackageFromScroll, 100);
+}, { passive: true });
+
+packageDots.forEach((dot, index) => {
+  dot.addEventListener("click", () => {
+    scrollToPackageSlide(index);
+  });
+});
+
+if (packageDots.length > 0) {
+  setActivePackageSlide(0);
+}
+
+/* =========================================================
+   MOBILE FORMULA SLIDES
+   ========================================================= */
+
+const formulaTrack = document.querySelector("[data-formula-mobile-track]");
+const formulaDots = Array.from(document.querySelectorAll("[data-formula-dot]"));
+const mobileFormula = window.matchMedia("(max-width: 680px)");
+let activeFormulaSlide = 0;
+let formulaScrollTimer = null;
+
+function getFormulaSlides() {
+  return Array.from(formulaTrack?.querySelectorAll("[data-formula-slide]") || []);
+}
+
+function getFormulaSlidePositions(slides = getFormulaSlides()) {
+  const firstOffset = slides[0]?.offsetLeft || 0;
+  return slides.map((slide) => slide.offsetLeft - firstOffset);
+}
+
+function setActiveFormulaSlide(index) {
+  if (formulaDots.length === 0) return;
+
+  activeFormulaSlide = Math.max(0, Math.min(index, formulaDots.length - 1));
+  formulaDots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("is-active", dotIndex === activeFormulaSlide);
+  });
+}
+
+function scrollToFormulaSlide(index) {
+  if (!formulaTrack || !mobileFormula.matches) return;
+
+  const positions = getFormulaSlidePositions();
+  if (positions.length === 0) return;
+
+  const nextIndex = Math.max(0, Math.min(index, positions.length - 1));
+  formulaTrack.scrollTo({
+    left: positions[nextIndex],
+    behavior: "smooth"
+  });
+  setActiveFormulaSlide(nextIndex);
+}
+
+function syncActiveFormulaFromScroll() {
+  if (!formulaTrack || !mobileFormula.matches || formulaDots.length === 0) return;
+
+  const positions = getFormulaSlidePositions();
+  if (positions.length === 0) return;
+
+  const nearestIndex = positions.reduce((nearestIndex, position, index) => {
+    const nearestDistance = Math.abs(positions[nearestIndex] - formulaTrack.scrollLeft);
+    const distance = Math.abs(position - formulaTrack.scrollLeft);
+    return distance < nearestDistance ? index : nearestIndex;
+  }, 0);
+
+  setActiveFormulaSlide(nearestIndex);
+}
+
+formulaTrack?.addEventListener("scroll", () => {
+  if (!mobileFormula.matches) return;
+  if (formulaScrollTimer) {
+    window.clearTimeout(formulaScrollTimer);
+  }
+
+  formulaScrollTimer = window.setTimeout(syncActiveFormulaFromScroll, 90);
+}, { passive: true });
+
+formulaDots.forEach((dot, index) => {
+  dot.addEventListener("click", () => scrollToFormulaSlide(index));
+});
+
+if (formulaDots.length > 0) {
+  setActiveFormulaSlide(0);
+}
 
 /* =========================================================
    YEAR
@@ -1654,6 +2017,7 @@ const goalTitle = siteContent.hero?.goalTitle || "";
 const goalPrefix = siteContent.hero?.goalPrefix || "Cel";
 
 const goalCard = document.querySelector("[data-goal-card]");
+const goalStackTitle = document.querySelector("[data-goal-title]");
 const goalFace = document.querySelector("[data-goal-face]");
 const goalLabel = document.querySelector("[data-goal-label]");
 const goalText = document.querySelector("[data-goal-text]");
@@ -1677,7 +2041,7 @@ function getGoalInfo(index) {
 }
 
 function getGoalLabel(displayIndex) {
-  return goalTitle || `${goalPrefix} ${displayIndex}`;
+  return String(displayIndex);
 }
 
 function updateGoalCard(index) {
@@ -1686,6 +2050,9 @@ function updateGoalCard(index) {
 
   const { displayIndex, nextIndex, nextDisplayIndex } = getGoalInfo(index);
 
+  if (goalStackTitle) {
+    goalStackTitle.textContent = goalTitle;
+  }
   goalLabel.textContent = getGoalLabel(displayIndex);
   goalText.textContent = goalCards[index] || "";
   nextGoalLabel.textContent = getGoalLabel(nextDisplayIndex);
@@ -1803,6 +2170,7 @@ const contactForm = document.getElementById("contactForm");
 const formStatus = document.getElementById("formStatus");
 const contactConsentInput = contactForm?.querySelector('input[name="privacyConsent"]');
 const contactSubmitButton = contactForm?.querySelector("[data-contact-submit]");
+const FORM_ENDPOINT = "send-form.php";
 
 function syncContactSubmitState() {
   if (!contactSubmitButton) return;
@@ -1812,7 +2180,7 @@ function syncContactSubmitState() {
 contactConsentInput?.addEventListener("change", syncContactSubmitState);
 syncContactSubmitState();
 
-contactForm?.addEventListener("submit", (event) => {
+contactForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const formData = new FormData(contactForm);
@@ -1820,9 +2188,8 @@ contactForm?.addEventListener("submit", (event) => {
   const email = String(formData.get("email") || "").trim();
   const message = String(formData.get("message") || "").trim();
   const privacyConsent = formData.get("privacyConsent");
-  const targetEmail = contactForm.dataset.email || "kontakt@twojadomena.pl";
+  const website = String(formData.get("website") || "").trim();
   const contactText = siteContent.contact || {};
-  const fieldText = contactText.fields || {};
   const statusText = contactText.status || {};
 
   if (!name || !email || !message || !privacyConsent) {
@@ -1830,23 +2197,70 @@ contactForm?.addEventListener("submit", (event) => {
     return;
   }
 
-  const subjectPrefix = statusText.subjectPrefix || "";
-  const subject = encodeURIComponent(`${subjectPrefix} — ${name}`);
-  const body = encodeURIComponent(
-    `${fieldText.name || ""}: ${name}\n${fieldText.email || ""}: ${email}\n\n${fieldText.message || ""}:\n${message}\n\n${fieldText.consentMailLabel || ""}: tak`
-  );
+  const sent = await sendSiteForm({
+    type: "contact",
+    payload: { name, email, message, consent: Boolean(privacyConsent), website },
+    statusElement: formStatus,
+    statusText,
+    submitButton: contactSubmitButton
+  });
 
-  setFormStatus(statusText.openingEmail || "");
-  window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
-
-  window.setTimeout(() => {
-    setFormStatus(statusText.emailFallback || "");
-  }, 1200);
+  if (sent) {
+    contactForm.reset();
+    syncContactSubmitState();
+  }
 });
 
 function setFormStatus(text) {
   if (!formStatus) return;
   formStatus.textContent = text;
+}
+
+async function sendSiteForm({ type, payload, statusElement, statusText = {}, submitButton }) {
+  const setStatus = (text) => {
+    if (statusElement) statusElement.textContent = text;
+  };
+
+  if (window.location.protocol === "file:") {
+    setStatus(statusText.localOnly || "");
+    return false;
+  }
+
+  const previousDisabled = submitButton?.disabled;
+
+  try {
+    if (submitButton) submitButton.disabled = true;
+    setStatus(statusText.sending || "");
+
+    const response = await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ type, ...payload })
+    });
+
+    let result = null;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
+
+    if (!response.ok || !result?.ok) {
+      throw new Error(result?.message || "Form submission failed");
+    }
+
+    setStatus(statusText.success || "");
+    return true;
+  } catch {
+    setStatus(statusText.error || "");
+    return false;
+  } finally {
+    if (submitButton) submitButton.disabled = Boolean(previousDisabled);
+    syncContactSubmitState();
+  }
 }
 
 /* =========================================================

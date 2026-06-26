@@ -69,8 +69,7 @@
     <section class="hero" id="home">
       <div class="container hero__inner">
         <div class="hero__copy">
-          <img class="heroLogo reveal" src="pictures/relevateme-logotype-cropped.png" alt="" />
-          <p class="eyebrow reveal"></p>
+          <div class="heroLogo reveal" aria-label="Relevateme">RELEVATE<span>ME</span></div>
 
           <h1 class="hero__title reveal"></h1>
 
@@ -86,6 +85,7 @@
         </div>
 
         <div class="hero__aside reveal">
+          <p class="quoteStackTitle" data-goal-title></p>
           <button class="quoteCard" type="button" data-goal-card data-tilt aria-label="">
             <span class="quoteCard__layer quoteCard__layer--back" aria-hidden="true"></span>
             <span class="quoteCard__layer quoteCard__layer--middle" aria-hidden="true"></span>
@@ -203,6 +203,7 @@
         </div>
 
         <div class="storiesGrid" data-stories-grid></div>
+        <div class="storiesDots expertsDots" data-stories-dots aria-hidden="true"></div>
 
         <div class="storiesCta reveal">
           <p><strong></strong></p>
@@ -222,6 +223,7 @@
         </div>
 
         <div class="packagesGrid" data-packages-grid></div>
+        <div class="packagesDots expertsDots" data-packages-dots aria-hidden="true"></div>
 
         <div class="packagesCta reveal">
           <article class="packagesCta__item">
@@ -259,6 +261,11 @@
             <span></span>
             <ul data-formula-points></ul>
           </div>
+        </div>
+
+        <div class="formulaMobile" data-formula-mobile aria-label="">
+          <div class="formulaMobile__track" data-formula-mobile-track></div>
+          <div class="formulaDots expertsDots" data-formula-dots aria-hidden="true"></div>
         </div>
       </div>
     </section>
@@ -350,6 +357,8 @@
           <label>
             <textarea name="message" rows="5" placeholder="" required></textarea>
           </label>
+
+          <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
           <label class="contactConsent">
             <input type="checkbox" name="privacyConsent" required />

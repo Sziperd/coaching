@@ -28,7 +28,6 @@ window.siteContent = {
   },
 
   hero: {
-    eyebrow: "Coaching i mentoring biznesowo-życiowy",
     title: "Rozwiń firmę.\nNie strać życia.",
     lead: "Pomagamy ludziom, którzy chcą rosnąć - w firmie i w życiu. Pracujemy 1:1, dobierając mentora pod Twoją sytuację. Dajemy mapę i konkretne kroki.",
     primaryCta: "Umów bezpłatną konsultację",
@@ -350,6 +349,29 @@ window.siteContent = {
       "Kiedy przyspieszyć, a kiedy zdjąć nogę z gazu.",
       "Który problem jest realnym ryzykiem, a który tylko hałasem.",
       "Jak utrzymać tempo bez przepalania siebie i zespołu."
+    ],
+    mobileLabel: "Jak działa wsparcie w praktyce",
+    mobileSlides: [
+      {
+        eyebrow: "Partner w kokpicie",
+        title: "Ty prowadzisz. My widzimy zakręt wcześniej.",
+        text: "Nie przejmujemy kierownicy. Dajemy widok z pit wall: tempo, ryzyko i moment, w którym warto zmienić strategię."
+      },
+      {
+        eyebrow: "Druga perspektywa",
+        title: "Jesteś blisko operacji. My patrzymy z boku.",
+        text: "Wyłapujemy zakręty wcześniej i przekładamy sygnały na krótką, użyteczną informację.",
+        strong: "Kierownicę trzymasz Ty. My pomagamy podjąć decyzję z lepszej perspektywy."
+      },
+      {
+        eyebrow: "Sygnały z boksu",
+        title: "Krótko, konkretnie, wtedy kiedy trzeba.",
+        points: [
+          "Kiedy przyspieszyć, a kiedy zdjąć nogę z gazu.",
+          "Który problem jest realnym ryzykiem, a który tylko hałasem.",
+          "Jak utrzymać tempo bez przepalania siebie i zespołu."
+        ]
+      }
     ]
   },
 
@@ -445,8 +467,10 @@ window.siteContent = {
     submit: "Wyślij wiadomość",
     status: {
       missingFields: "Uzupełnij wszystkie pola formularza.",
-      openingEmail: "Otwieram klienta pocztowego...",
-      emailFallback: "Jeśli klient pocztowy się nie otworzył, napisz bezpośrednio na adres e-mail podany obok.",
+      sending: "Wysyłam wiadomość...",
+      success: "Dziękujemy. Wiadomość została wysłana.",
+      error: "Nie udało się wysłać formularza. Spróbuj ponownie albo napisz bezpośrednio na adres e-mail podany obok.",
+      localOnly: "Wysyłka formularza zadziała po uruchomieniu strony na hostingu CyberFolks.",
       subjectPrefix: "Rozmowa coachingowa"
     }
   },
@@ -473,8 +497,10 @@ window.siteContent = {
       },
       status: {
         missingFields: "Uzupełnij wymagane pola i zaznacz zgodę na kontakt.",
-        openingEmail: "Otwieram klienta pocztowego z gotową wiadomością.",
-        emailFallback: "Jeśli nic się nie otworzyło, napisz bezpośrednio na wspolpraca@twojadomena.pl.",
+        sending: "Wysyłam zapytanie...",
+        success: "Dziękujemy. Zapytanie zostało wysłane.",
+        error: "Nie udało się wysłać zapytania. Spróbuj ponownie albo napisz bezpośrednio na wspolpraca@twojadomena.pl.",
+        localOnly: "Wysyłka formularza zadziała po uruchomieniu strony na hostingu CyberFolks.",
         subjectPrefix: "Zapytanie o współpracę"
       }
     },
