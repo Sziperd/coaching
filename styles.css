@@ -2796,7 +2796,7 @@ img {
   gap: 24px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 4px 0 44px;
+  padding: 4px 0 58px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -2874,7 +2874,7 @@ img {
   border-radius: var(--radius2);
   background:
     linear-gradient(145deg, #111b32, #19314f);
-  box-shadow: var(--shadow), 0 18px 46px rgba(65, 107, 157, 0.1);
+  box-shadow: 0 24px 72px rgba(22, 33, 58, 0.08), 0 18px 54px rgba(65, 107, 157, 0.06);
   color: var(--sand);
 }
 
@@ -3022,8 +3022,8 @@ img {
   background:
     linear-gradient(90deg, rgba(65, 107, 157, 0.32), rgba(189, 150, 87, 0.24), rgba(65, 107, 157, 0.24)) border-box;
   box-shadow:
-    var(--shadowTint),
-    0 16px 44px rgba(189, 150, 87, 0.11);
+    0 34px 110px rgba(22, 33, 58, 0.055),
+    0 28px 96px rgba(189, 150, 87, 0.045);
 }
 
 .expertStats article {
@@ -3704,7 +3704,7 @@ img {
 
   .expertsTrack {
     gap: 14px;
-    padding-bottom: 34px;
+    padding-bottom: 56px;
   }
 
   .expertsDots {
@@ -3770,8 +3770,8 @@ img {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 18px;
     box-shadow:
-      0 18px 46px rgba(22, 33, 58, 0.08),
-      0 12px 30px rgba(189, 150, 87, 0.06);
+      0 28px 86px rgba(22, 33, 58, 0.05),
+      0 22px 70px rgba(189, 150, 87, 0.04);
   }
 
   .expertStats article {
@@ -4427,6 +4427,9 @@ img {
     -webkit-overflow-scrolling: touch;
     isolation: isolate;
     background: #07101f;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .formulaMobile__track::before {
@@ -4477,11 +4480,16 @@ img {
     z-index: 0;
     display: block;
     width: calc(100% * var(--formula-slide-count, 3));
+    height: 100%;
     min-width: 100%;
     pointer-events: none;
-    background: url("pictures/f1-mobile-panorama.png") center / cover no-repeat;
+    object-fit: cover;
+    object-position: center;
     filter: saturate(0.88) contrast(1.08) brightness(0.9);
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
   }
 
   .formulaMobile__track::-webkit-scrollbar {
@@ -4632,7 +4640,7 @@ img {
 
   .expertsTrack {
     gap: 14px;
-    padding-bottom: 34px;
+    padding-bottom: 56px;
   }
 
   .expertsDots {
@@ -4708,8 +4716,8 @@ img {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 18px;
     box-shadow:
-      0 18px 46px rgba(22, 33, 58, 0.08),
-      0 12px 30px rgba(189, 150, 87, 0.06);
+      0 28px 86px rgba(22, 33, 58, 0.05),
+      0 22px 70px rgba(189, 150, 87, 0.04);
   }
 
   .expertStats article {
