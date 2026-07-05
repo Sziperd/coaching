@@ -17,7 +17,7 @@ window.siteContent = {
 
   nav: {
     links: [
-      { href: "#o-mnie", label: "O nas" },
+      { href: "#home", label: "O nas" },
       { href: "#pakiety", label: "Oferta" },
       { href: "#formula", label: "Jak działamy" },
       { href: "#eksperci", label: "Eksperci" },
@@ -43,18 +43,7 @@ window.siteContent = {
   },
 
   challenge: {
-    imageAlt: "Rozmowa coachingowa przy stole",
-    eyebrow: "Wyzwanie",
-    title: "Czy to brzmi znajomo?",
-    items: [
-      "Twój biznes rośnie, ale Ty masz coraz mniej czasu.",
-      "Zespół pracuje ciężko, ale wyniki nie rosną tak, jak powinny.",
-      "Podejmujesz dziesiątki decyzji dziennie i czujesz ciągłe przeciążenie.",
-      "Jesteś potrzebny wszędzie.",
-      "Zamiast rozwijać firmę, ciągle rozwiązujesz bieżące problemy."
-    ],
-    note: "Jeśli choć raz odpowiedziałeś “tak”",
-    noteStrong: "jesteś we właściwym miejscu"
+    imageAlt: "Rozmowa coachingowa przy stole"
   },
 
   signals: {
@@ -75,32 +64,41 @@ window.siteContent = {
   method: {
     imageAlt: "Zespół trzymający dłonie razem",
     eyebrow: "Metodologia",
-    title: "Work-life coaching",
+    title: "Sztuka porządkowania chaosu",
     paragraphs: [
-      "Work-life coaching to proces wspierający świadome wprowadzanie zmian w życiu osobistym i zawodowym. Pomaga lepiej zrozumieć siebie, swoje cele i blokady, a następnie przełożyć tę wiedzę na konkretne działania.",
-      "W praktyce to rozmowy i narzędzia, które porządkują myślenie, wzmacniają decyzyjność i pomagają przejść od miejsca, w którym jesteś, do miejsca, w którym chcesz być — w sposób bardziej klarowny, spójny i uporządkowany."
+      "Gdy natłok obowiązków i setki codziennych decyzji zaczynają Cię przytłaczać, tracisz efektywność zarówno w pracy, jak i w życiu osobistym. Nasza współpraca to ustrukturyzowany proces, który pozwala wyeliminować szum informacyjny, ustalić realne priorytety oraz odzyskać pełną kontrolę nad własnym czasem.",
+      "W zależności od Twoich aktualnych potrzeb i wyzwań, w pracy indywidualnej elastycznie łączymy trzy uzupełniające się ścieżki. Zobacz, które podejście najlepiej odpowiada na moment, w którym się teraz znajdujesz:"
     ]
   },
 
   offer: {
     eyebrow: "Oferta",
     title: "Co możemy przepracować?",
-    lead: "Spotkania są dopasowane do Twojej sytuacji — od uporządkowania priorytetów, przez lepsze decyzje, po świadome budowanie biznesu i życia poza nim.",
+    lead: "Relevateme powstało z prostego przekonania: nie musisz wybierać między firmą a życiem. Jesteśmy grupą coachów i mentorów, którzy sami prowadzili biznesy. Naszą specjalizacją jest work-life coaching - rozwijanie firmy tak, żeby była środkiem do celu, nie celem samym w sobie. Bez żargonu, bez gotowych szablonów. Konkretna praca 1:1 nad Twoimi decyzjami i Twoim życiem poza pracą.",
     cards: [
       {
         number: "01",
-        title: "Coaching biznesowy",
-        text: "Dla właścicieli, liderów i managerów, którzy chcą prowadzić firmę z większą klarownością, spokojem i odpowiedzialnością."
+        eyebrow: "Start | klasyczny coaching",
+        title: "Navigate",
+        text: "Gdy masz mętlik w głowie, natłok opcji i czujesz paraliż decyzyjny w celach osobistych lub zawodowych.",
+        tags: ["odcinanie szumu", "odkrywanie barier", "ramy decyzji"],
+        result: "Wypracowujesz własne odpowiedzi, zyskujesz pewność działania i jasny plan na najbliższe tygodnie."
       },
       {
         number: "02",
-        title: "Work-life coaching",
-        text: "Dla osób, które chcą lepiej połączyć ambicję, relacje, odpoczynek i poczucie sensu w codziennym działaniu."
+        eyebrow: "Regeneracja | work-life coaching",
+        title: "Elevate",
+        text: "Gdy biznes idzie świetnie, ale płacisz za to brakiem snu, stresem i utratą relacji z bliskimi.",
+        tags: ["osobisty dobrostan", "twarde granice", "odpoczynek bez winy"],
+        result: "Odzyskujesz wolne weekendy, zdrowie i kontrolę nad życiem bez straty dla Twoich projektów."
       },
       {
         number: "03",
-        title: "Decyzyjność i priorytety",
-        text: "Praca nad przeciążeniem, chaosem decyzyjnym, delegowaniem i odzyskiwaniem przestrzeni na najważniejsze tematy."
+        eyebrow: "Skalowanie | work-life mentoring",
+        title: "Relevate",
+        text: "Gdy uświadamiasz sobie, że jesteś największym wąskim gardłem w firmie i chcesz czerpać z wiedzy praktyków.",
+        tags: ["skalowanie biznesu", "delegowanie zadań", "gotowe strategie"],
+        result: "Przebudowujesz strukturę z pomocą doświadczonego mentora, by firma rosła bez Twojej ciągłej obecności."
       }
     ]
   },
@@ -116,30 +114,38 @@ window.siteContent = {
       {
         name: "Marek",
         photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=240&h=240&q=85",
+        context: "producent mebli na wymiar, 21 osób",
         profile: "Wiem, jak rozwijać firmę, ale boję się ceny.",
         text: "Mam plan, doświadczenie i zespół. Wiem, co trzeba zrobić, żeby firma weszła wyżej, ale widzę też, ile mnie to będzie kosztować w domu, zdrowiu i relacjach. Stoję w miejscu już piąty rok i nie wiem, czy mam dość siły, żeby ruszyć.",
-        package: "Najczęściej zaczyna od pakietu Relevate"
+        package: "Najczęściej zaczyna od pakietu Relevate",
+        packageDetail: "work-life mentoring"
       },
       {
         name: "Aleksandra",
         photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&h=240&q=85",
+        context: "agencja marketingowa, 12 osób",
         profile: "Firma rośnie, ale rośnie kosztem mnie.",
         text: "Trzymam wszystko w ryzach, bo nikt nie zrobi tego tak dobrze jak ja. Pracuję po godzinach, gaszę pożary i coraz częściej czuję, że kontroluję firmę kosztem siebie.",
-        package: "Najczęściej zaczyna od pakietu Elevate"
+        package: "Najczęściej zaczyna od pakietu Elevate",
+        packageDetail: "work-life coaching"
       },
       {
         name: "Krzysztof",
         photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=240&h=240&q=85",
+        context: "dystrybutor części, 40 osób",
         profile: "Firma działa, ale chcę czegoś nowego.",
         text: "Od lat jestem w jednym temacie. Firma działa, ludzie wiedzą, co robią, a ja mam pomysł na nowy rozdział. Nie wiem tylko, jak zacząć bez ryzyka dla tego, co już zbudowałem.",
-        package: "Najczęściej zaczyna od pakietu Relevate"
+        package: "Najczęściej zaczyna od pakietu Relevate",
+        packageDetail: "work-life mentoring"
       },
       {
         name: "Magda",
         photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=240&h=240&q=85",
+        context: "managerka e-commerce, 7 osób",
         profile: "Mam czas pomyśleć, ale nie wiem, od czego zacząć.",
         text: "Czuję, że mam energię i potencjał, ale coś się rozmywa. Szukam kogoś, kto pomoże mi nazwać kierunek, zada dobre pytania i przełoży chaos w głowie na konkretny pierwszy krok.",
-        package: "Najczęściej zaczyna od pakietu Navigate"
+        package: "Najczęściej zaczyna od pakietu Navigate",
+        packageDetail: "coaching"
       }
     ]
   },
@@ -157,33 +163,37 @@ window.siteContent = {
     items: [
       {
         step: "01",
-        type: "Start",
+        type: "Start | klasyczny coaching",
         name: "Navigate",
-        tagline: "Gdy potrzebujesz kierunku.",
+        detail: "coaching",
+        tagline: "Gdy masz mętlik w głowie, natłok opcji i czujesz paraliż decyzyjny w celach osobistych lub zawodowych.",
         contextLabel: "Punkt startu",
-        context: "Jest potrzeba ruchu, ale brakuje mapy. Ustalamy priorytety i pierwszy spokojny krok, żeby decyzje przestały wracać w kółko.",
-        focus: ["klarowny cel", "ramy decyzji", "konkretne zadania"],
-        result: "Wychodzisz z jasnym kierunkiem i planem, który da się zacząć od razu."
+        context: "Odcinamy szum, odkrywamy bariery i ustawiamy ramy decyzji, żeby łatwiej było ruszyć z miejsca.",
+        focus: ["odcinanie szumu", "odkrywanie barier", "ramy decyzji"],
+        focusBreakBefore: 2,
+        result: "Wypracowujesz własne odpowiedzi, zyskujesz pewność działania i jasny plan na najbliższe tygodnie."
       },
       {
         step: "02",
-        type: "Regeneracja i sprawczość",
+        type: "Regeneracja | work-life coaching",
         name: "Elevate",
-        tagline: "Gdy sukces zaczął kosztować za dużo.",
+        detail: "work-life coaching",
+        tagline: "Gdy biznes idzie świetnie, ale płacisz za to brakiem snu, stresem i utratą relacji z bliskimi.",
         contextLabel: "Napięcie",
-        context: "Wyniki są, ale cena robi się za wysoka. Pracujemy nad energią, rytmem i decyzjami, które nie dokładają kolejnej warstwy presji.",
-        focus: ["energia i rytm", "odporność psychiczna", "decyzje bez przeciążenia"],
-        result: "Odzyskujesz wpływ bez udawania, że wystarczy mocniej spiąć kalendarz."
+        context: "Pracujemy nad osobistym dobrostanem, twardymi granicami i odpoczynkiem bez poczucia winy.",
+        focus: ["osobisty dobrostan", "twarde granice", "odpoczynek bez winy"],
+        result: "Odzyskujesz wolne weekendy, zdrowie i kontrolę nad życiem bez straty dla Twoich projektów."
       },
       {
         step: "03",
-        type: "Skalowanie albo wolność",
+        type: "Skalowanie | work-life mentoring",
         name: "Relevate",
-        tagline: "Gdy firma ma wejść na kolejny poziom.",
+        detail: "work-life mentoring",
+        tagline: "Gdy uświadamiasz sobie, że jesteś największym wąskim gardłem w firmie i chcesz czerpać z wiedzy praktyków.",
         contextLabel: "Próg decyzji",
-        context: "Chcesz rozwijać firmę albo odzyskać więcej przestrzeni dla siebie. Układamy ruch tak, żeby biznes mniej zależał od Twojej codziennej obecności.",
-        focus: ["strategiczna mapa", "wsparcie między sesjami", "mentoring praktyka"],
-        result: "Masz strukturę, partnera do decyzji i więcej przestrzeni na sprawy naprawdę strategiczne."
+        context: "Łączymy skalowanie biznesu, delegowanie zadań i gotowe strategie sprawdzone w praktyce.",
+        focus: ["skalowanie biznesu", "delegowanie zadań", "gotowe strategie"],
+        result: "Przebudowujesz strukturę z pomocą doświadczonego mentora, by firma rosła bez Twojej ciągłej obecności."
       }
     ]
   },
@@ -337,40 +347,32 @@ window.siteContent = {
     imageAlt: "Widok z kokpitu bolidu na tor wyścigowy",
     eyebrow: "Partner w kokpicie",
     title: "Ty prowadzisz. My widzimy zakręt wcześniej.",
-    lead: "Nie przejmujemy kierownicy. Dajemy widok z pit wall: tempo, ryzyko i moment, w którym warto zmienić strategię.",
-    text: "Ty jesteś blisko operacji. My patrzymy z boku, wyłapujemy zakręty wcześniej i przekładamy sygnały na krótką, użyteczną informację.",
-    punchline: "Kierownicę trzymasz Ty. My pomagamy podjąć decyzję z lepszej perspektywy.",
+    lead: "Wyobraź sobie, że jesteś kierowcą Formuły 1. Siedzisz sam za kierownicą - czujesz tor, znasz swój samochód, podejmujesz decyzje w ułamku sekundy. Ale w słuchawce masz inżyniera, który widzi z boksu to, czego Ty z kokpitu nie widzisz: dane telemetryczne, zachowania konkurencji, zmiany pogody.",
+    text: "Tak właśnie wygląda nasza rola. Nie siedzimy z Tobą w aucie. Jesteśmy w słuchawce, gdy podejmujesz trudne decyzje - widzimy zakręt, zanim w niego wjedziesz, i mówimy krótko: \"hamuj wcześniej\" albo \"możesz dodać gazu\".",
+    punchline: "Kierownicę trzymasz Ty. Zawsze.",
     driverLabel: "Kokpit",
     driverTitle: "Twoja perspektywa",
     driverText: "Decyzje, presja, tempo, zespół i firma, którą znasz od środka.",
-    teamLabel: "Sygnały z boksu",
+    teamLabel: "",
     teamTitle: "Nasza rola",
-    points: [
-      "Kiedy przyspieszyć, a kiedy zdjąć nogę z gazu.",
-      "Który problem jest realnym ryzykiem, a który tylko hałasem.",
-      "Jak utrzymać tempo bez przepalania siebie i zespołu."
-    ],
+    points: [],
     mobileLabel: "Jak działa wsparcie w praktyce",
     mobileSlides: [
       {
-        eyebrow: "Partner w kokpicie",
-        title: "Ty prowadzisz. My widzimy zakręt wcześniej.",
-        text: "Nie przejmujemy kierownicy. Dajemy widok z pit wall: tempo, ryzyko i moment, w którym warto zmienić strategię."
+        eyebrow: "PARTNER W KOKPICIE",
+        title: "Wyobraź sobie, że jesteś kierowcą Formuły 1.",
+        text: "Czujesz tor, znasz swój samochód, podejmujesz decyzje w ułamku sekundy. Ale w słuchawce masz inżyniera - kogoś, kto widzi z boksu to, czego Ty z kokpitu nie widzisz."
       },
       {
-        eyebrow: "Druga perspektywa",
-        title: "Jesteś blisko operacji. My patrzymy z boku.",
-        text: "Wyłapujemy zakręty wcześniej i przekładamy sygnały na krótką, użyteczną informację.",
-        strong: "Kierownicę trzymasz Ty. My pomagamy podjąć decyzję z lepszej perspektywy."
+        eyebrow: "DRUGA PERSPEKTYWA",
+        title: "Kiedy jesteś w środku, trudno zobaczyć wszystko.",
+        text: "My patrzymy z dystansu. Podpowiadamy, gdzie jest ryzyko, gdzie szansa i kiedy warto zmienić plan."
       },
       {
-        eyebrow: "Sygnały z boksu",
-        title: "Krótko, konkretnie, wtedy kiedy trzeba.",
-        points: [
-          "Kiedy przyspieszyć, a kiedy zdjąć nogę z gazu.",
-          "Który problem jest realnym ryzykiem, a który tylko hałasem.",
-          "Jak utrzymać tempo bez przepalania siebie i zespołu."
-        ]
+        eyebrow: "SYGNAŁY Z BOKSU",
+        title: "Widzimy zakręt, zanim w niego wjedziesz.",
+        text: "Mówimy krótko: \"hamuj\" albo \"dodaj gazu\".",
+        strong: "Ale kierownicę trzymasz Ty. Zawsze."
       }
     ]
   },
@@ -381,16 +383,19 @@ window.siteContent = {
     steps: [
       {
         number: "01",
+        label: "szybki pit-stop",
         title: "Rozmowa wstępna",
         text: "Sprawdzamy, gdzie jesteś teraz, z czym przychodzisz i czego realnie potrzebujesz."
       },
       {
         number: "02",
+        label: "programowanie nawigacji",
         title: "Ustalenie kierunku",
         text: "Porządkujemy cele, priorytety, blokady i obszary wymagające największej uwagi."
       },
       {
         number: "03",
+        label: "pełne tempo",
         title: "Praca 1:1",
         text: "Podczas spotkań przekładamy wnioski na konkretne decyzje, działania i zmianę."
       }
@@ -459,6 +464,7 @@ window.siteContent = {
       namePlaceholder: "Twoje imię",
       email: "E-mail",
       emailPlaceholder: "twoj@email.pl",
+      phonePlaceholder: "+48 123 456 789",
       message: "Wiadomość",
       messagePlaceholder: "Napisz, czego potrzebujesz...",
       consent: "Akceptuję kontakt zwrotny i zapoznałem/am się z informacją RODO.",

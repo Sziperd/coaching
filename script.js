@@ -255,6 +255,9 @@ function renderStories(storiesContent) {
     card.dataset.storyCard = String(index);
     card.style.setProperty("--i", index);
 
+    const header = document.createElement("div");
+    header.className = "storyCard__header";
+
     const avatar = document.createElement("div");
     avatar.className = "storyAvatar";
     avatar.setAttribute("aria-hidden", "true");
@@ -267,6 +270,21 @@ function renderStories(storiesContent) {
       avatar.appendChild(avatarImage);
     } else {
       avatar.textContent = (item.name || "?").slice(0, 1);
+    }
+
+    header.appendChild(avatar);
+
+    if (item.context) {
+      const context = document.createElement("span");
+      context.className = "storyCard__context";
+      const [contextLead, ...contextDetails] = item.context.split(",");
+      context.appendChild(document.createTextNode(contextLead.trim()));
+      if (contextDetails.length) {
+        const detail = document.createElement("span");
+        detail.textContent = contextDetails.join(",").trim();
+        context.appendChild(detail);
+      }
+      header.appendChild(context);
     }
 
     const name = document.createElement("h3");
@@ -289,9 +307,21 @@ function renderStories(storiesContent) {
       const recommendationPackage = document.createElement("strong");
       recommendationPackage.textContent = packageName;
       recommendation.appendChild(recommendationPackage);
+
+      if (item.packageDetail) {
+        const separator = document.createElement("span");
+        separator.className = "storyCard__packageSeparator";
+        separator.textContent = " · ";
+        recommendation.appendChild(separator);
+
+        const detail = document.createElement("span");
+        detail.className = "storyCard__packageDetail";
+        detail.textContent = item.packageDetail;
+        recommendation.appendChild(detail);
+      }
     }
 
-    card.appendChild(avatar);
+    card.appendChild(header);
     card.appendChild(name);
     card.appendChild(profile);
     card.appendChild(text);
@@ -334,13 +364,23 @@ function renderPackages(packagesContent) {
     step.textContent = item.step || String(index + 1).padStart(2, "0");
 
     const type = document.createElement("small");
-    type.textContent = item.type || "";
+    (item.type || "").split("|").forEach((part, partIndex) => {
+      if (partIndex > 0) {
+        type.appendChild(document.createElement("br"));
+      }
+      type.appendChild(document.createTextNode(part.trim()));
+    });
 
     meta.appendChild(step);
     meta.appendChild(type);
 
+    const heading = document.createElement("div");
+    heading.className = "packagePath__heading";
+
     const name = document.createElement("h3");
     name.textContent = item.name || "";
+
+    heading.appendChild(name);
 
     const tagline = document.createElement("p");
     tagline.className = "packagePath__tagline";
@@ -359,7 +399,14 @@ function renderPackages(packagesContent) {
     context.appendChild(contextText);
 
     const featureList = document.createElement("ul");
-    (item.focus || []).forEach((feature) => {
+    (item.focus || []).forEach((feature, featureIndex) => {
+      if (featureIndex === item.focusBreakBefore) {
+        const lineBreak = document.createElement("span");
+        lineBreak.className = "packagePath__tagBreak";
+        lineBreak.setAttribute("aria-hidden", "true");
+        featureList.appendChild(lineBreak);
+      }
+
       const li = document.createElement("li");
       li.textContent = feature;
       featureList.appendChild(li);
@@ -370,7 +417,7 @@ function renderPackages(packagesContent) {
     outcome.textContent = item.result || "";
 
     card.appendChild(meta);
-    card.appendChild(name);
+    card.appendChild(heading);
     card.appendChild(tagline);
     card.appendChild(context);
     card.appendChild(featureList);
@@ -523,16 +570,9 @@ function applySiteContent() {
 
   setText(".hero__title", content.hero?.title);
   setText(".hero__lead", content.hero?.lead);
-  setButtonText(".hero__actions .btn--primary", content.hero?.primaryCta);
   setText(".hero__actions .btn--text", content.hero?.secondaryCta);
 
-  setAttr("#o-mnie img", "alt", content.challenge?.imageAlt);
-  setText("#o-mnie .eyebrow", content.challenge?.eyebrow);
-  setText("#o-mnie h2", content.challenge?.title);
-  setList("#o-mnie .checkList", content.challenge?.items);
-  setText("#o-mnie .challengeNote span", content.challenge?.note);
-  setText("#o-mnie .challengeNote strong", content.challenge?.noteStrong);
-
+  setAttr("#sygnaly img", "alt", content.challenge?.imageAlt);
   setText("#sygnaly .eyebrow", content.signals?.eyebrow);
   setText("#sygnaly h2", content.signals?.title);
   setText("#sygnaly .signalsKicker", content.signals?.kicker);
@@ -543,17 +583,48 @@ function applySiteContent() {
   setText("#coaching h2", content.method?.title);
   setParagraphs("#coaching .section__copy", content.method?.paragraphs);
 
-  setText("#oferta .sectionHead .eyebrow", content.offer?.eyebrow);
-  setText("#oferta .sectionHead h2", content.offer?.title);
-  setText("#oferta .sectionHead > p:not(.eyebrow)", content.offer?.lead);
-
-  document.querySelectorAll("#oferta .offerCard").forEach((card, index) => {
+  document.querySelectorAll(".offerCards .offerCard").forEach((card, index) => {
     const item = content.offer?.cards?.[index];
     if (!item) return;
 
     setText(".offerCard__number", item.number, card);
     setText("h3", item.title, card);
-    setText("p", item.text, card);
+
+    let eyebrow = card.querySelector(".offerCard__eyebrow");
+    const number = card.querySelector(".offerCard__number");
+    if (!eyebrow) {
+      eyebrow = document.createElement("span");
+      eyebrow.className = "offerCard__eyebrow";
+      number?.after(eyebrow);
+    }
+    eyebrow.textContent = item.eyebrow || "";
+    eyebrow.hidden = !item.eyebrow;
+
+    const description = card.querySelector("p:not(.offerCard__result)");
+    if (description) description.textContent = item.text || "";
+
+    let tags = card.querySelector(".offerCard__tags");
+    if (!tags) {
+      tags = document.createElement("ul");
+      tags.className = "offerCard__tags";
+      description?.after(tags);
+    }
+    tags.innerHTML = "";
+    (item.tags || []).forEach((tag) => {
+      const tagItem = document.createElement("li");
+      tagItem.textContent = tag;
+      tags.appendChild(tagItem);
+    });
+    tags.hidden = !(item.tags || []).length;
+
+    let result = card.querySelector(".offerCard__result");
+    if (!result) {
+      result = document.createElement("p");
+      result.className = "offerCard__result";
+      tags.after(result);
+    }
+    result.textContent = item.result || "";
+    result.hidden = !item.result;
   });
 
   setText("#historie .sectionHead .eyebrow", content.stories?.eyebrow);
@@ -585,6 +656,11 @@ function applySiteContent() {
   setText("#formula .formulaRadioCard > span", content.formula?.teamLabel);
   setAttr("#formula .formula__image", "alt", content.formula?.imageAlt);
   setList("#formula [data-formula-points]", content.formula?.points);
+  const formulaRadioCard = document.querySelector("#formula .formulaRadioCard");
+  if (formulaRadioCard) {
+    const hasFormulaPoints = Array.isArray(content.formula?.points) && content.formula.points.length > 0;
+    formulaRadioCard.hidden = !content.formula?.teamLabel && !hasFormulaPoints;
+  }
   renderFormulaMobile(content.formula);
 
   setText(".section--navy .sectionHead .eyebrow", content.process?.eyebrow);
@@ -594,7 +670,30 @@ function applySiteContent() {
     const item = content.process?.steps?.[index];
     if (!item) return;
 
-    setText("span", item.number, step);
+    let meta = step.querySelector(".processStep__meta");
+    const number = step.querySelector(".processStep__number");
+    if (!meta && number) {
+      meta = document.createElement("div");
+      meta.className = "processStep__meta";
+      number.before(meta);
+    }
+
+    let label = step.querySelector(".processStep__label");
+    if (!label) {
+      label = document.createElement("span");
+      label.className = "processStep__label";
+      meta?.appendChild(label);
+    }
+    label.innerHTML = "";
+    if (number) {
+      number.textContent = item.number || "";
+      label.appendChild(number);
+    }
+    const labelText = document.createElement("span");
+    labelText.className = "processStep__labelText";
+    labelText.textContent = item.label || "";
+    label.appendChild(labelText);
+    label.hidden = !item.label;
     setText("h3", item.title, step);
     setText("p", item.text, step);
   });
