@@ -484,15 +484,9 @@ function renderFormulaMobile(formulaContent) {
   dots.innerHTML = "";
   track.style.setProperty("--formula-slide-count", String(slides.length));
 
-  const background = document.createElement("img");
+  const background = document.createElement("span");
   background.className = "formulaMobile__background";
   background.setAttribute("aria-hidden", "true");
-  background.alt = "";
-  background.decoding = "sync";
-  background.draggable = false;
-  background.fetchPriority = "high";
-  background.loading = "eager";
-  background.src = "pictures/f1-mobile-panorama.png";
   track.appendChild(background);
 
   slides.forEach((slide, index) => {
