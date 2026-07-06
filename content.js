@@ -78,27 +78,18 @@ window.siteContent = {
     cards: [
       {
         number: "01",
-        eyebrow: "Start | klasyczny coaching",
-        title: "Navigate",
-        text: "Gdy masz mętlik w głowie, natłok opcji i czujesz paraliż decyzyjny w celach osobistych lub zawodowych.",
-        tags: ["odcinanie szumu", "odkrywanie barier", "ramy decyzji"],
-        result: "Wypracowujesz własne odpowiedzi, zyskujesz pewność działania i jasny plan na najbliższe tygodnie."
+        title: "Klasyczny coaching",
+        text: "Skupia się na Twoich osobistych celach, barierach i odkrywaniu wewnętrznego potencjału. To proces, który uczy Cię głębszego rozumienia siebie, wzmacnia pewność działania i pozwala samodzielnie wypracować odpowiedzi na kluczowe pytania życiowe."
       },
       {
         number: "02",
-        eyebrow: "Regeneracja | work-life coaching",
-        title: "Elevate",
-        text: "Gdy biznes idzie świetnie, ale płacisz za to brakiem snu, stresem i utratą relacji z bliskimi.",
-        tags: ["osobisty dobrostan", "twarde granice", "odpoczynek bez winy"],
-        result: "Odzyskujesz wolne weekendy, zdrowie i kontrolę nad życiem bez straty dla Twoich projektów."
+        title: "Work-life coaching",
+        text: "Idealny wybór, gdy szukasz balansu między ambitną pracą a satysfakcjonującym życiem prywatnym. Pomaga postawić twarde granice i odbudować Twój osobisty dobrostan, dzięki czemu odzyskasz wolny czas oraz zdrowie bez straty dla rozwijanego biznesu."
       },
       {
         number: "03",
-        eyebrow: "Skalowanie | work-life mentoring",
-        title: "Relevate",
-        text: "Gdy uświadamiasz sobie, że jesteś największym wąskim gardłem w firmie i chcesz czerpać z wiedzy praktyków.",
-        tags: ["skalowanie biznesu", "delegowanie zadań", "gotowe strategie"],
-        result: "Przebudowujesz strukturę z pomocą doświadczonego mentora, by firma rosła bez Twojej ciągłej obecności."
+        title: "Work-life mentoring",
+        text: "Łączy psychologiczne wsparcie z twardym, biznesowym doświadczeniem praktyków, którzy przeszli już Twoją drogę. Obok zadawania pytań, dzielimy się tu gotowymi strategiami zarządzania, delegowania zadań i układania firmy tak, by przestała zależeć wyłącznie od Ciebie."
       }
     ]
   },

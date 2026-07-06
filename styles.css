@@ -1557,10 +1557,10 @@ img {
   position: relative;
   display: flex;
   overflow: hidden;
-  min-height: 430px;
+  min-height: 330px;
   flex-direction: column;
-  gap: 16px;
-  padding: 30px;
+  gap: 12px;
+  padding: 26px;
   border: 1px solid transparent;
   border-radius: var(--radius2);
   background:
@@ -1592,7 +1592,7 @@ img {
   height: 48px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 0;
   border-radius: 50%;
   background:
     linear-gradient(145deg, #132039 0%, #234869 68%, rgba(65, 107, 157, 0.92) 100%);
@@ -1612,6 +1612,12 @@ img {
   line-height: 1.28;
   white-space: nowrap;
   text-transform: uppercase;
+}
+
+.offerCard__eyebrow[hidden],
+.offerCard__tags[hidden],
+.offerCard__result[hidden] {
+  display: none !important;
 }
 
 .offerCard h3 {
@@ -3802,6 +3808,12 @@ img {
 
   .section {
     padding: 58px 0 76px;
+  }
+
+  .offerCard {
+    min-height: auto;
+    gap: 10px;
+    padding: 24px;
   }
 
   .hero__inner {
