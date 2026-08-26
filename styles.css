@@ -2880,7 +2880,7 @@ img {
   border-radius: var(--radius2);
   background:
     linear-gradient(145deg, #111b32, #19314f);
-  box-shadow: var(--shadow), 0 18px 46px rgba(65, 107, 157, 0.1);
+  box-shadow: none;
   color: var(--sand);
 }
 
@@ -3027,9 +3027,7 @@ img {
   border-radius: var(--radius2);
   background:
     linear-gradient(90deg, rgba(65, 107, 157, 0.32), rgba(189, 150, 87, 0.24), rgba(65, 107, 157, 0.24)) border-box;
-  box-shadow:
-    var(--shadowTint),
-    0 16px 44px rgba(189, 150, 87, 0.11);
+  box-shadow: none;
 }
 
 .expertStats article {
@@ -3187,10 +3185,8 @@ img {
 }
 
 .contactForm .contactConsent {
-  display: flex !important;
-  grid-template-columns: none;
+  display: grid;
   gap: 12px;
-  align-items: center;
   color: rgba(22, 33, 58, 0.68);
   font-size: 0.88rem;
   font-weight: 700;
@@ -3199,9 +3195,72 @@ img {
   text-transform: none;
 }
 
-.contactConsent span {
+.contactConsent__label,
+.modalConsent__label {
+  display: flex !important;
+  grid-template-columns: none;
+  gap: 12px;
+  align-items: flex-start;
+  color: inherit;
+  font: inherit;
+  letter-spacing: 0;
+  line-height: inherit;
+  text-transform: none;
+}
+
+.contactConsent__text,
+.modalConsent__label span {
   display: block;
   min-width: 0;
+}
+
+.consentDetails {
+  display: block;
+  padding-left: 32px;
+  color: rgba(22, 33, 58, 0.6);
+  font-size: 0.8rem;
+  font-weight: 640;
+  letter-spacing: 0;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.consentDetails summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  cursor: pointer;
+  color: rgba(22, 33, 58, 0.72);
+  font-weight: 820;
+  list-style: none;
+  text-decoration: none;
+}
+
+.consentDetails summary::-webkit-details-marker {
+  display: none;
+}
+
+.consentDetails summary::before {
+  content: "▸";
+  flex: 0 0 auto;
+  color: currentColor;
+  font-size: 1.15em;
+  line-height: 0.9;
+}
+
+.consentDetails[open] summary::before {
+  content: "▾";
+}
+
+.consentDetails__summaryText {
+  text-decoration: underline;
+  text-decoration-color: rgba(22, 33, 58, 0.22);
+  text-underline-offset: 3px;
+}
+
+.consentDetails p {
+  margin: 10px 0 0;
 }
 
 .contactForm input,
@@ -3365,6 +3424,7 @@ img {
   font-size: clamp(1rem, 1.35vw, 1.16rem);
   font-weight: 650;
   line-height: 1.55;
+  white-space: pre-line;
 }
 
 .siteModal__note {
@@ -3446,10 +3506,8 @@ img {
 }
 
 .modalConsent {
-  display: flex !important;
-  grid-template-columns: none;
+  display: grid;
   gap: 12px;
-  align-items: center;
   color: var(--muted);
   font-size: 0.92rem;
   font-weight: 700;
@@ -3461,15 +3519,19 @@ img {
 .modalConsent input {
   flex: 0 0 20px;
   width: 20px;
+  min-width: 20px;
+  max-width: 20px;
   min-height: 20px;
   height: 20px;
   margin: 0;
   padding: 0;
+  border-radius: 4px;
   accent-color: var(--navy);
+  appearance: auto;
+  -webkit-appearance: checkbox;
 }
 
 .modalConsent span {
-  display: block;
   color: var(--muted);
   letter-spacing: 0;
   text-transform: none;
@@ -3500,6 +3562,29 @@ img {
   color: var(--muted);
   font-weight: 560;
   line-height: 1.55;
+  white-space: pre-line;
+}
+
+.legalInlineLink {
+  display: inline;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--inkBlue);
+  font: inherit;
+  font-weight: 780;
+  letter-spacing: inherit;
+  text-align: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(65, 107, 157, 0.36);
+  text-underline-offset: 3px;
+}
+
+.legalInlineLink:hover,
+.legalInlineLink:focus-visible {
+  color: var(--navy);
+  text-decoration-color: currentColor;
 }
 
 .modalCta {
@@ -3775,9 +3860,7 @@ img {
   .expertStats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 18px;
-    box-shadow:
-      0 18px 46px rgba(22, 33, 58, 0.08),
-      0 12px 30px rgba(189, 150, 87, 0.06);
+    box-shadow: none;
   }
 
   .expertStats article {
@@ -4719,9 +4802,7 @@ img {
   .expertStats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 18px;
-    box-shadow:
-      0 18px 46px rgba(22, 33, 58, 0.08),
-      0 12px 30px rgba(189, 150, 87, 0.06);
+    box-shadow: none;
   }
 
   .expertStats article {
