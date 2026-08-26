@@ -745,7 +745,9 @@ function applySiteContent() {
   setAttr('input[name="email"]', "placeholder", content.contact?.fields?.emailPlaceholder);
   setAttr('input[name="phone"]', "placeholder", content.contact?.fields?.phonePlaceholder || "+48 000 000 000");
   setAttr('textarea[name="message"]', "placeholder", content.contact?.fields?.messagePlaceholder);
-  setText(".contactConsent span", content.contact?.fields?.consent);
+  setText(".contactConsent__text", content.contact?.fields?.consent);
+  setText(".contactConsent .consentDetails__summaryText", content.contact?.fields?.consentDetailsLabel);
+  setText(".contactConsent .consentDetails p", content.contact?.fields?.consentDetails);
   setButtonText(".contactForm .btn--primary", content.contact?.submit);
 
   const footerYear = document.getElementById("year");
@@ -757,12 +759,13 @@ function applySiteContent() {
 
   setText(".footer a", content.footer?.backToTop);
   const footerModalButtons = document.querySelectorAll(".footer__links button");
-  if (footerModalButtons[0] && content.footer?.faq) {
-    footerModalButtons[0].textContent = content.footer.faq;
-  }
-  if (footerModalButtons[1] && content.footer?.privacy) {
-    footerModalButtons[1].textContent = content.footer.privacy;
-  }
+  const footerModalLabels = ["faq", "terms", "privacy", "cookies", "rodo"];
+  footerModalButtons.forEach((button, index) => {
+    const labelKey = footerModalLabels[index];
+    if (labelKey && content.footer?.[labelKey]) {
+      button.textContent = content.footer[labelKey];
+    }
+  });
 }
 
 applySiteContent();
@@ -786,6 +789,45 @@ function initSiteModals(modalContent) {
     const element = document.createElement(tag);
     if (className) element.className = className;
     element.textContent = text || "";
+    return element;
+  }
+
+  function linkedTextEl(tag, className, text, links = []) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+
+    const activeLinks = Array.isArray(links) ? links.filter((link) => link?.label && link?.target) : [];
+    if (!text || activeLinks.length === 0) {
+      element.textContent = text || "";
+      return element;
+    }
+
+    let remaining = text;
+    while (remaining) {
+      const next = activeLinks
+        .map((link) => ({ ...link, index: remaining.indexOf(link.label) }))
+        .filter((link) => link.index >= 0)
+        .sort((a, b) => a.index - b.index || b.label.length - a.label.length)[0];
+
+      if (!next) {
+        element.append(remaining);
+        break;
+      }
+
+      if (next.index > 0) {
+        element.append(remaining.slice(0, next.index));
+      }
+
+      const button = document.createElement("button");
+      button.className = "legalInlineLink";
+      button.type = "button";
+      button.dataset.openModal = next.target;
+      button.textContent = next.label;
+      element.appendChild(button);
+
+      remaining = remaining.slice(next.index + next.label.length);
+    }
+
     return element;
   }
 
@@ -835,10 +877,16 @@ function initSiteModals(modalContent) {
         <textarea name="message" rows="6" placeholder="${fields.messagePlaceholder || ""}" required></textarea>
       </label>
       <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <label class="modalConsent modalForm__wide">
-        <input type="checkbox" name="consent" required>
-        <span>${data?.consent || ""}</span>
-      </label>
+      <div class="modalConsent modalForm__wide">
+        <label class="modalConsent__label">
+          <input type="checkbox" name="consent" required>
+          <span>${data?.consent || ""}</span>
+        </label>
+        <details class="consentDetails">
+          <summary><span class="consentDetails__summaryText">${data?.consentDetailsLabel || ""}</span></summary>
+          <p>${data?.consentDetails || ""}</p>
+        </details>
+      </div>
       <button class="btn btn--primary btn--wide modalForm__wide" type="submit" data-cooperation-submit disabled>
         ${data?.submit || "Wyślij"}
         <span class="btn__shine" aria-hidden="true"></span>
@@ -925,7 +973,7 @@ function initSiteModals(modalContent) {
     return fragment;
   }
 
-  function renderPrivacy(data) {
+  function renderLegal(data) {
     const fragment = document.createDocumentFragment();
     fragment.appendChild(renderHeader(data));
 
@@ -935,7 +983,10 @@ function initSiteModals(modalContent) {
       const article = document.createElement("article");
       article.className = "modalPrivacy__section";
       article.appendChild(textEl("h3", "", section.title));
-      article.appendChild(textEl("p", "", section.text));
+      const paragraphs = Array.isArray(section.paragraphs) ? section.paragraphs : [section.text];
+      paragraphs.filter(Boolean).forEach((paragraph) => {
+        article.appendChild(linkedTextEl("p", "", paragraph, section.links));
+      });
       list.appendChild(article);
     });
     fragment.appendChild(list);
@@ -952,8 +1003,8 @@ function initSiteModals(modalContent) {
       content.appendChild(renderCooperation(data));
     } else if (type === "faq") {
       content.appendChild(renderFaq(data));
-    } else if (type === "privacy") {
-      content.appendChild(renderPrivacy(data));
+    } else if (data?.sections) {
+      content.appendChild(renderLegal(data));
     }
 
     return true;
@@ -988,6 +1039,13 @@ function initSiteModals(modalContent) {
       if (typeof setDrawer === "function") setDrawer(false);
       openModal(type);
     });
+  });
+
+  content.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-open-modal]");
+    if (!button || !content.contains(button)) return;
+    event.preventDefault();
+    openModal(button.getAttribute("data-open-modal"));
   });
 
   document.addEventListener("keydown", (event) => {

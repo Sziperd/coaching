@@ -341,10 +341,16 @@
 
           <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-          <label class="contactConsent">
-            <input type="checkbox" name="privacyConsent" required />
-            <span></span>
-          </label>
+          <div class="contactConsent">
+            <label class="contactConsent__label">
+              <input type="checkbox" name="privacyConsent" required />
+              <span class="contactConsent__text"></span>
+            </label>
+            <details class="consentDetails">
+              <summary><span class="consentDetails__summaryText"></span></summary>
+              <p></p>
+            </details>
+          </div>
 
           <button class="btn btn--primary btn--wide" type="submit" data-contact-submit data-magnetic disabled>
             <span class="btn__shine" aria-hidden="true"></span>
@@ -361,7 +367,10 @@
       <p>© <span id="year"></span></p>
       <div class="footer__links">
         <button type="button" data-open-modal="faq"></button>
+        <button type="button" data-open-modal="terms"></button>
         <button type="button" data-open-modal="privacy"></button>
+        <button type="button" data-open-modal="cookies"></button>
+        <button type="button" data-open-modal="rodo"></button>
         <a href="#home"></a>
       </div>
     </div>
