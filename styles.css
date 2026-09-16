@@ -1557,10 +1557,10 @@ img {
   position: relative;
   display: flex;
   overflow: hidden;
-  min-height: 330px;
+  min-height: 430px;
   flex-direction: column;
-  gap: 12px;
-  padding: 26px;
+  gap: 16px;
+  padding: 30px;
   border: 1px solid transparent;
   border-radius: var(--radius2);
   background:
@@ -1592,7 +1592,7 @@ img {
   height: 48px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0;
+  margin-bottom: 8px;
   border-radius: 50%;
   background:
     linear-gradient(145deg, #132039 0%, #234869 68%, rgba(65, 107, 157, 0.92) 100%);
@@ -1612,12 +1612,6 @@ img {
   line-height: 1.28;
   white-space: nowrap;
   text-transform: uppercase;
-}
-
-.offerCard__eyebrow[hidden],
-.offerCard__tags[hidden],
-.offerCard__result[hidden] {
-  display: none !important;
 }
 
 .offerCard h3 {
@@ -2802,7 +2796,7 @@ img {
   gap: 24px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 4px 0 44px;
+  padding: 4px 0 58px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -2880,7 +2874,7 @@ img {
   border-radius: var(--radius2);
   background:
     linear-gradient(145deg, #111b32, #19314f);
-  box-shadow: none;
+  box-shadow: 0 24px 72px rgba(22, 33, 58, 0.08), 0 18px 54px rgba(65, 107, 157, 0.06);
   color: var(--sand);
 }
 
@@ -3027,7 +3021,9 @@ img {
   border-radius: var(--radius2);
   background:
     linear-gradient(90deg, rgba(65, 107, 157, 0.32), rgba(189, 150, 87, 0.24), rgba(65, 107, 157, 0.24)) border-box;
-  box-shadow: none;
+  box-shadow:
+    0 34px 110px rgba(22, 33, 58, 0.055),
+    0 28px 96px rgba(189, 150, 87, 0.045);
 }
 
 .expertStats article {
@@ -3185,8 +3181,10 @@ img {
 }
 
 .contactForm .contactConsent {
-  display: grid;
+  display: flex !important;
+  grid-template-columns: none;
   gap: 12px;
+  align-items: center;
   color: rgba(22, 33, 58, 0.68);
   font-size: 0.88rem;
   font-weight: 700;
@@ -3195,72 +3193,9 @@ img {
   text-transform: none;
 }
 
-.contactConsent__label,
-.modalConsent__label {
-  display: flex !important;
-  grid-template-columns: none;
-  gap: 12px;
-  align-items: flex-start;
-  color: inherit;
-  font: inherit;
-  letter-spacing: 0;
-  line-height: inherit;
-  text-transform: none;
-}
-
-.contactConsent__text,
-.modalConsent__label span {
+.contactConsent span {
   display: block;
   min-width: 0;
-}
-
-.consentDetails {
-  display: block;
-  padding-left: 32px;
-  color: rgba(22, 33, 58, 0.6);
-  font-size: 0.8rem;
-  font-weight: 640;
-  letter-spacing: 0;
-  line-height: 1.5;
-  text-transform: none;
-}
-
-.consentDetails summary {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  cursor: pointer;
-  color: rgba(22, 33, 58, 0.72);
-  font-weight: 820;
-  list-style: none;
-  text-decoration: none;
-}
-
-.consentDetails summary::-webkit-details-marker {
-  display: none;
-}
-
-.consentDetails summary::before {
-  content: "▸";
-  flex: 0 0 auto;
-  color: currentColor;
-  font-size: 1.15em;
-  line-height: 0.9;
-}
-
-.consentDetails[open] summary::before {
-  content: "▾";
-}
-
-.consentDetails__summaryText {
-  text-decoration: underline;
-  text-decoration-color: rgba(22, 33, 58, 0.22);
-  text-underline-offset: 3px;
-}
-
-.consentDetails p {
-  margin: 10px 0 0;
 }
 
 .contactForm input,
@@ -3424,7 +3359,6 @@ img {
   font-size: clamp(1rem, 1.35vw, 1.16rem);
   font-weight: 650;
   line-height: 1.55;
-  white-space: pre-line;
 }
 
 .siteModal__note {
@@ -3506,8 +3440,10 @@ img {
 }
 
 .modalConsent {
-  display: grid;
+  display: flex !important;
+  grid-template-columns: none;
   gap: 12px;
+  align-items: center;
   color: var(--muted);
   font-size: 0.92rem;
   font-weight: 700;
@@ -3519,19 +3455,15 @@ img {
 .modalConsent input {
   flex: 0 0 20px;
   width: 20px;
-  min-width: 20px;
-  max-width: 20px;
   min-height: 20px;
   height: 20px;
   margin: 0;
   padding: 0;
-  border-radius: 4px;
   accent-color: var(--navy);
-  appearance: auto;
-  -webkit-appearance: checkbox;
 }
 
 .modalConsent span {
+  display: block;
   color: var(--muted);
   letter-spacing: 0;
   text-transform: none;
@@ -3562,29 +3494,6 @@ img {
   color: var(--muted);
   font-weight: 560;
   line-height: 1.55;
-  white-space: pre-line;
-}
-
-.legalInlineLink {
-  display: inline;
-  padding: 0;
-  border: 0;
-  cursor: pointer;
-  background: transparent;
-  color: var(--inkBlue);
-  font: inherit;
-  font-weight: 780;
-  letter-spacing: inherit;
-  text-align: inherit;
-  text-decoration: underline;
-  text-decoration-color: rgba(65, 107, 157, 0.36);
-  text-underline-offset: 3px;
-}
-
-.legalInlineLink:hover,
-.legalInlineLink:focus-visible {
-  color: var(--navy);
-  text-decoration-color: currentColor;
 }
 
 .modalCta {
@@ -3795,7 +3704,7 @@ img {
 
   .expertsTrack {
     gap: 14px;
-    padding-bottom: 34px;
+    padding-bottom: 56px;
   }
 
   .expertsDots {
@@ -3860,7 +3769,9 @@ img {
   .expertStats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 18px;
-    box-shadow: none;
+    box-shadow:
+      0 28px 86px rgba(22, 33, 58, 0.05),
+      0 22px 70px rgba(189, 150, 87, 0.04);
   }
 
   .expertStats article {
@@ -3891,12 +3802,6 @@ img {
 
   .section {
     padding: 58px 0 76px;
-  }
-
-  .offerCard {
-    min-height: auto;
-    gap: 10px;
-    padding: 24px;
   }
 
   .hero__inner {
@@ -4522,6 +4427,9 @@ img {
     -webkit-overflow-scrolling: touch;
     isolation: isolate;
     background: #07101f;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .formulaMobile__track::before {
@@ -4572,11 +4480,16 @@ img {
     z-index: 0;
     display: block;
     width: calc(100% * var(--formula-slide-count, 3));
+    height: 100%;
     min-width: 100%;
     pointer-events: none;
-    background: url("pictures/f1-mobile-panorama.png") center / cover no-repeat;
+    object-fit: cover;
+    object-position: center;
     filter: saturate(0.88) contrast(1.08) brightness(0.9);
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
   }
 
   .formulaMobile__track::-webkit-scrollbar {
@@ -4727,7 +4640,7 @@ img {
 
   .expertsTrack {
     gap: 14px;
-    padding-bottom: 34px;
+    padding-bottom: 56px;
   }
 
   .expertsDots {
@@ -4802,7 +4715,9 @@ img {
   .expertStats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 18px;
-    box-shadow: none;
+    box-shadow:
+      0 28px 86px rgba(22, 33, 58, 0.05),
+      0 22px 70px rgba(189, 150, 87, 0.04);
   }
 
   .expertStats article {
