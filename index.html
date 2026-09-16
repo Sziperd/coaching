@@ -13,9 +13,16 @@
     content="Coaching i mentoring biznesowo-życiowy dla osób, które chcą rozwijać firmę bez tracenia życia. Praca 1:1, konkretna mapa i decyzje dopasowane do Twojej sytuacji."
   />
 
-  <link rel="preload" href="styles.css?v=formula-mobile-image-v1" as="style" />
-  <link rel="preload" href="pictures/f1-mobile-panorama.png" as="image" fetchpriority="high" />
-  <link rel="stylesheet" href="styles.css?v=formula-mobile-image-v1" />
+  <link rel="preload" href="styles.css?v=offer-dropdown-v1" as="style" />
+  <link rel="stylesheet" href="styles.css?v=offer-dropdown-v1" />
+
+  <script>
+    window.GA_MEASUREMENT_IDS = {
+      "sziperd.github.io": "G-4B11GWL714",
+      "relevateme.pl": "G-EWMV19MZQ7",
+      "www.relevateme.pl": "G-EWMV19MZQ7"
+    };
+  </script>
 </head>
 
 <body>
@@ -32,12 +39,31 @@
       </a>
 
       <nav class="nav__links" aria-label="">
-        <a href="#home"></a>
-        <a href="#pakiety"></a>
-        <a href="#formula"></a>
-        <a href="#eksperci"></a>
-        <a href="#pakiety" data-open-quiz></a>
-        <a href="#wspolpraca" data-open-modal="cooperation"></a>
+        <a href="#home" data-nav-key="home"></a>
+        <div class="navDropdown" data-offer-dropdown>
+          <button class="navDropdown__trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="offerDropdownMenu" data-nav-key="offer" data-offer-dropdown-trigger></button>
+          <div class="navDropdown__menu" id="offerDropdownMenu">
+            <a href="pakiet-navigate.html">
+              <span>01</span>
+              <strong>Navigate</strong>
+              <small>klasyczny coaching</small>
+            </a>
+            <a href="pakiet-elevate.html">
+              <span>02</span>
+              <strong>Elevate</strong>
+              <small>work-life coaching</small>
+            </a>
+            <a href="pakiet-relevate.html">
+              <span>03</span>
+              <strong>Relevate</strong>
+              <small>work-life mentoring</small>
+            </a>
+          </div>
+        </div>
+        <a href="#formula" data-nav-key="formula"></a>
+        <a href="#eksperci" data-nav-key="experts"></a>
+        <a href="#pakiety" data-nav-key="quiz" data-open-quiz></a>
+        <a href="#wspolpraca" data-nav-key="cooperation" data-open-modal="cooperation"></a>
       </nav>
 
       <div class="nav__actions">
@@ -55,12 +81,19 @@
       <button class="drawer__backdrop" id="drawerBackdrop" type="button" aria-label=""></button>
 
       <div class="drawer__panel">
-        <a href="#home" class="drawer__link"></a>
-        <a href="#pakiety" class="drawer__link"></a>
-        <a href="#formula" class="drawer__link"></a>
-        <a href="#eksperci" class="drawer__link"></a>
-        <a href="#pakiety" class="drawer__link" data-open-quiz></a>
-        <a href="#wspolpraca" class="drawer__link" data-open-modal="cooperation"></a>
+        <a href="#home" class="drawer__link" data-nav-key="home"></a>
+        <div class="drawerOffer">
+          <a href="#pakiety" class="drawer__link" data-nav-key="offer"></a>
+          <div class="drawerOffer__list">
+            <a href="pakiet-navigate.html">01 | Navigate</a>
+            <a href="pakiet-elevate.html">02 | Elevate</a>
+            <a href="pakiet-relevate.html">03 | Relevate</a>
+          </div>
+        </div>
+        <a href="#formula" class="drawer__link" data-nav-key="formula"></a>
+        <a href="#eksperci" class="drawer__link" data-nav-key="experts"></a>
+        <a href="#pakiety" class="drawer__link" data-nav-key="quiz" data-open-quiz></a>
+        <a href="#wspolpraca" class="drawer__link" data-nav-key="cooperation" data-open-modal="cooperation"></a>
         <a href="#kontakt" class="btn btn--primary btn--wide"></a>
       </div>
     </div>
@@ -342,10 +375,16 @@
 
           <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-          <label class="contactConsent">
-            <input type="checkbox" name="privacyConsent" required />
-            <span></span>
-          </label>
+          <div class="contactConsent">
+            <label class="contactConsent__label">
+              <input type="checkbox" name="privacyConsent" required />
+              <span class="contactConsent__text"></span>
+            </label>
+            <details class="consentDetails">
+              <summary><span class="consentDetails__summaryText"></span></summary>
+              <p></p>
+            </details>
+          </div>
 
           <button class="btn btn--primary btn--wide" type="submit" data-contact-submit data-magnetic disabled>
             <span class="btn__shine" aria-hidden="true"></span>
@@ -362,7 +401,10 @@
       <p>© <span id="year"></span></p>
       <div class="footer__links">
         <button type="button" data-open-modal="faq"></button>
+        <button type="button" data-open-modal="terms"></button>
         <button type="button" data-open-modal="privacy"></button>
+        <button type="button" data-open-modal="cookies"></button>
+        <button type="button" data-open-modal="rodo"></button>
         <a href="#home"></a>
       </div>
     </div>
@@ -396,7 +438,7 @@
     </section>
   </div>
 
-  <script src="content.js?v=formula-mobile-image-v1"></script>
-  <script src="script.js?v=formula-mobile-image-v1"></script>
+  <script src="content.js?v=offer-dropdown-v1"></script>
+  <script src="script.js?v=offer-dropdown-v1"></script>
 </body>
 </html>

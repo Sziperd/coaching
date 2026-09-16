@@ -1,3 +1,5 @@
+const rodoClauseText = "Zgodnie z rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (ogólne rozporządzenie o ochronie danych, dalej „RODO”), Miłosz Stawecki Pro Futuro informuje, iż:\n\n1) Administratorem Pani/Pana danych osobowych jest: Miłosz Stawecki Pro Futuro z siedzibą w Katowicach, adres ulica Rybnicka 10/8, 40-038 Katowice, wpisana do Centralnej Ewidencji i Informacji o Działalności Gospodarczej, NIP: 6341408171, REGON: 387628336.\n\n2) Z Administratorem można się kontaktować w następujący sposób: listownie na adres: ulica Rybnicka 10/8, 40-038 Katowice telefonie pod numerem 602366066 lub elektronicznie na e-mail: kontakt@relevateme.pl;\n\n3) Zakres przetwarzanych danych osobowych: imię, nazwisko, dane kontaktowe (telefon i adres e-mail) podane w wypełnionym przez Panią/Pana formularzu kontaktowym,\n\n4) Będziemy przetwarzać Pani/Pana dane osobowe w celu rozpatrzenia otrzymanej wiadomości przesłanej do nas za pośrednictwem udostępnionego na stronie internetowej formularza kontaktowego online i udzielić Pani/Panu odpowiedzi na tą wiadomość / zrealizować zamówiony kontakt; Archiwizować Pani/Pana dane zgodnie z obowiązującymi przepisami prawa;\n\n5) Pani/Pana dane osobowe są przetwarzane przez Administratora na podstawie: art. 6 ust. 1 lit. a) RODO (jeśli doszło do wyrażenia zgody na przetwarzanie danych osobowych); art. 6 ust. 1 lit. b) RODO (przetwarzanie jest niezbędne do wykonania umowy, której stroną jest osoba, której dane dotyczą, lub do podjęcia działań na żądanie osoby, której dane dotyczą, przed zawarciem umowy); art. 6 ust. 1 lit. f RODO - np. kontakt w sprawie zawarcia/wykonania umowy. Dane ww. osób mogą być przetwarzane dla ewentualnego dochodzenia lub odpierania roszczeń wynikających z umowy (art. 6 ust. 1 lit. f RODO).\n\n6) W celu skorzystania z formularza kontaktowego online podanie danych osobowych jest dobrowolne, lecz jest ono konieczne do rozpatrzenia Pani/Pana wiadomości i udzielenia Pani/Panu odpowiedzi bądź w celu realizacji zamówionego kontaktu.\n\n7) Administrator nie przetwarza Pani/Pana danych osobowych w sposób zautomatyzowany, w tym dane osobowe nie podlegają profilowaniu.\n\n8) Pani/Pana dane osobowe będą przechowywane przez okres niezbędny do rozpatrzenia wiadomości i udzielenia odpowiedzi lub realizacji zamówionego kontaktu, a następnie przez okres wynikający z obowiązujących przepisów prawa lub do czasu przedawnienia ewentualnych roszczeń.\n\n9) Odbiorcami Pani/Pana danych osobowych mogą być upoważnieni pracownicy i współpracownicy Administratora odpowiedzialni za obsługę wiadomości i kontakt z osobami korzystającymi z formularza, a także podmioty świadczące na rzecz Administratora usługi związane z funkcjonowaniem strony internetowej i formularza kontaktowego, w szczególności dostawca hostingu, dostawca usług poczty elektronicznej oraz dostawca systemu obsługującego formularz kontaktowy.\n\n10) Administrator nie przekazuje danych osobowych do państw trzecich (poza Unię Europejską) lub organizacji międzynarodowych. W przypadku gdyby taki zamiar powstał Administrator będzie czynił starania, aby w razie konieczności przekazania danych do państwa trzeciego lub organizacji międzynarodowej było to państwo lub organizacja, wobec których Komisja Europejska (zgodnie z ogólnym rozporządzeniem o ochronie danych) stwierdziła odpowiedni stopień ochrony. W innym przypadku Administrator będzie mógł przekazać dane osobowe do państwa trzeciego lub organizacji międzynarodowej wyłącznie pod warunkiem zapewnienia odpowiednich zabezpieczeń i pod warunkiem obowiązywania egzekwowalnych praw osób, których dane dotyczą i skutecznych środków ochrony prawnej, o których mowa w ogólnym rozporządzeniu o ochronie danych oraz z uwzględnieniem przekazania Pani/Panu informacji o możliwościach uzyskania kopii danych lub o miejscu udostępnienia danych.\n\n11) W związku z przetwarzaniem przez Administratora Pani/Pana danych osobowych przysługuje Pani/Panu: a) prawo dostępu do treści danych, na podstawie art. 15 RODO; b) prawo do sprostowania danych, na podstawie art. 16 RODO; c) prawo do usunięcia danych, na podstawie art. 17 RODO; d) prawo do ograniczenia przetwarzania danych, na podstawie art. 18 RODO; e) prawo do wniesienia sprzeciwu wobec przetwarzania danych, na podstawie art. 21 RODO; f) prawo do przenoszenia danych, na podstawie art. 20 RODO;\n\n12) Jeżeli przetwarzanie Pani/Pana danych osobowych odbywa się na podstawie zgody na przetwarzanie danych osobowych, przysługuje Pani/Panu prawo do cofnięcia tej zgody w dowolnym momencie, bez wpływu na zgodność z prawem przetwarzania, którego dokonano na podstawie zgody przed jej cofnięciem.\n\n13) W przypadku uznania, że przetwarzanie przez Administratora danych osobowych narusza przepisy RODO, przysługuje Pani/Panu prawo do wniesienia skargi do organu nadzorczego w rozumieniu RODO - do Prezesa Urzędu Ochrony Danych Osobowych, ul. Stanisława Moniuszki 1A, 00-014 Warszawa.";
+
 window.siteContent = {
   meta: {
     title: "Relevateme — coaching i mentoring biznesowo-życiowy",
@@ -17,12 +19,12 @@ window.siteContent = {
 
   nav: {
     links: [
-      { href: "#home", label: "O nas" },
-      { href: "#pakiety", label: "Oferta" },
-      { href: "#formula", label: "Jak działamy" },
-      { href: "#eksperci", label: "Eksperci" },
-      { href: "#pakiety", label: "Ankieta dopasowania" },
-      { href: "#wspolpraca", label: "Współpraca" }
+      { key: "home", href: "#home", label: "O nas" },
+      { key: "offer", href: "#pakiety", label: "Oferta" },
+      { key: "formula", href: "#formula", label: "Jak działamy" },
+      { key: "experts", href: "#eksperci", label: "Eksperci" },
+      { key: "quiz", href: "#pakiety", label: "Ankieta dopasowania" },
+      { key: "cooperation", href: "#wspolpraca", label: "Współpraca" }
     ],
     cta: "Umów bezpłatną konsultację"
   },
@@ -78,27 +80,18 @@ window.siteContent = {
     cards: [
       {
         number: "01",
-        eyebrow: "Start | klasyczny coaching",
-        title: "Navigate",
-        text: "Gdy masz mętlik w głowie, natłok opcji i czujesz paraliż decyzyjny w celach osobistych lub zawodowych.",
-        tags: ["odcinanie szumu", "odkrywanie barier", "ramy decyzji"],
-        result: "Wypracowujesz własne odpowiedzi, zyskujesz pewność działania i jasny plan na najbliższe tygodnie."
+        title: "Klasyczny coaching",
+        text: "Skupia się na Twoich osobistych celach, barierach i odkrywaniu wewnętrznego potencjału. To proces, który uczy Cię głębszego rozumienia siebie, wzmacnia pewność działania i pozwala samodzielnie wypracować odpowiedzi na kluczowe pytania życiowe."
       },
       {
         number: "02",
-        eyebrow: "Regeneracja | work-life coaching",
-        title: "Elevate",
-        text: "Gdy biznes idzie świetnie, ale płacisz za to brakiem snu, stresem i utratą relacji z bliskimi.",
-        tags: ["osobisty dobrostan", "twarde granice", "odpoczynek bez winy"],
-        result: "Odzyskujesz wolne weekendy, zdrowie i kontrolę nad życiem bez straty dla Twoich projektów."
+        title: "Work-life coaching",
+        text: "Idealny wybór, gdy szukasz balansu między ambitną pracą a satysfakcjonującym życiem prywatnym. Pomaga postawić twarde granice i odbudować Twój osobisty dobrostan, dzięki czemu odzyskasz wolny czas oraz zdrowie bez straty dla rozwijanego biznesu."
       },
       {
         number: "03",
-        eyebrow: "Skalowanie | work-life mentoring",
-        title: "Relevate",
-        text: "Gdy uświadamiasz sobie, że jesteś największym wąskim gardłem w firmie i chcesz czerpać z wiedzy praktyków.",
-        tags: ["skalowanie biznesu", "delegowanie zadań", "gotowe strategie"],
-        result: "Przebudowujesz strukturę z pomocą doświadczonego mentora, by firma rosła bez Twojej ciągłej obecności."
+        title: "Work-life mentoring",
+        text: "Łączy psychologiczne wsparcie z twardym, biznesowym doświadczeniem praktyków, którzy przeszli już Twoją drogę. Obok zadawania pytań, dzielimy się tu gotowymi strategiami zarządzania, delegowania zadań i układania firmy tak, by przestała zależeć wyłącznie od Ciebie."
       }
     ]
   },
@@ -166,6 +159,7 @@ window.siteContent = {
         type: "Start | klasyczny coaching",
         name: "Navigate",
         detail: "coaching",
+        landingHref: "pakiet-navigate.html",
         tagline: "Gdy masz mętlik w głowie, natłok opcji i czujesz paraliż decyzyjny w celach osobistych lub zawodowych.",
         contextLabel: "Punkt startu",
         context: "Odcinamy szum, odkrywamy bariery i ustawiamy ramy decyzji, żeby łatwiej było ruszyć z miejsca.",
@@ -178,6 +172,7 @@ window.siteContent = {
         type: "Regeneracja | work-life coaching",
         name: "Elevate",
         detail: "work-life coaching",
+        landingHref: "pakiet-elevate.html",
         tagline: "Gdy biznes idzie świetnie, ale płacisz za to brakiem snu, stresem i utratą relacji z bliskimi.",
         contextLabel: "Napięcie",
         context: "Pracujemy nad osobistym dobrostanem, twardymi granicami i odpoczynkiem bez poczucia winy.",
@@ -189,6 +184,7 @@ window.siteContent = {
         type: "Skalowanie | work-life mentoring",
         name: "Relevate",
         detail: "work-life mentoring",
+        landingHref: "pakiet-relevate.html",
         tagline: "Gdy uświadamiasz sobie, że jesteś największym wąskim gardłem w firmie i chcesz czerpać z wiedzy praktyków.",
         contextLabel: "Próg decyzji",
         context: "Łączymy skalowanie biznesu, delegowanie zadań i gotowe strategie sprawdzone w praktyce.",
@@ -450,7 +446,7 @@ window.siteContent = {
     title: "Umów rozmowę",
     lead: "Napisz kilka słów o tym, z czym przychodzisz. Odpowiem i zaproponuję termin rozmowy wstępnej.",
     emailLabel: "E-mail",
-    email: "kontakt@twojadomena.pl",
+    email: "kontakt@relevateme.pl",
     phoneLabel: "Telefon",
     phone: "+48 123 456 789",
     phoneHref: "+48123456789",
@@ -458,7 +454,7 @@ window.siteContent = {
     linkedinText: "LinkedIn",
     linkedinHref: "https://www.linkedin.com/",
     faqButton: "Zobacz FAQ",
-    formEmail: "kontakt@twojadomena.pl",
+    formEmail: "kontakt@relevateme.pl",
     fields: {
       name: "Imię",
       namePlaceholder: "Twoje imię",
@@ -468,6 +464,8 @@ window.siteContent = {
       message: "Wiadomość",
       messagePlaceholder: "Napisz, czego potrzebujesz...",
       consent: "Akceptuję kontakt zwrotny i zapoznałem/am się z informacją RODO.",
+      consentDetailsLabel: "Pokaż pełną treść zgody RODO",
+      consentDetails: rodoClauseText,
       consentMailLabel: "Zgoda RODO"
     },
     submit: "Wyślij wiadomość",
@@ -488,9 +486,11 @@ window.siteContent = {
       title: "Porozmawiajmy o współpracy",
       lead: "Jeśli chcesz dołączyć do Relevateme jako ekspert, partner lub masz pomysł na wspólne działanie, zostaw krótką wiadomość. Oddzielamy te zapytania od konsultacji klientów, żeby szybciej trafiły we właściwe miejsce.",
       secureNote: "Twoje dane wykorzystamy wyłącznie do odpowiedzi na zapytanie o współpracę.",
-      formEmail: "wspolpraca@twojadomena.pl",
+      formEmail: "wspolpraca@relevateme.pl",
       submit: "Wyślij zapytanie",
-      consent: "Akceptuję kontakt zwrotny w sprawie mojego zapytania o współpracę.",
+      consent: "Akceptuję kontakt zwrotny i zapoznałem/am się z informacją RODO.",
+      consentDetailsLabel: "Pokaż pełną treść zgody RODO",
+      consentDetails: rodoClauseText,
       fields: {
         name: "Imię i nazwisko",
         namePlaceholder: "Jak mamy się do Ciebie zwracać?",
@@ -505,7 +505,7 @@ window.siteContent = {
         missingFields: "Uzupełnij wymagane pola i zaznacz zgodę na kontakt.",
         sending: "Wysyłam zapytanie...",
         success: "Dziękujemy. Zapytanie zostało wysłane.",
-        error: "Nie udało się wysłać zapytania. Spróbuj ponownie albo napisz bezpośrednio na wspolpraca@twojadomena.pl.",
+        error: "Nie udało się wysłać zapytania. Spróbuj ponownie albo napisz bezpośrednio na wspolpraca@relevateme.pl.",
         localOnly: "Wysyłka formularza zadziała po uruchomieniu strony na hostingu CyberFolks.",
         subjectPrefix: "Zapytanie o współpracę"
       }
@@ -560,44 +560,150 @@ window.siteContent = {
         }
       ]
     },
-    privacy: {
-      eyebrow: "RODO",
-      title: "Polityka prywatności",
-      lead: "Poniżej znajdziesz najważniejsze informacje o tym, jak przetwarzamy dane na tej stronie i w formularzach kontaktowych.",
+    terms: {
+      eyebrow: "Regulamin",
+      title: "Regulamin świadczenia usług drogą elektroniczną",
+      lead: "Data wejścia w życie: 01 września 2026 roku.\n\nNiniejszy Regulamin określa zasady korzystania ze strony internetowej działającej pod adresem www.relevateme.pl (dalej: “Serwis”) oraz zasady świadczenia usług drogą elektroniczną. Właścicielem Serwisu jest Usługodawca.",
       sections: [
         {
-          title: "Administrator danych",
-          text: "Administratorem danych jest Relevateme. W sprawach dotyczących danych osobowych możesz napisać na kontakt@twojadomena.pl."
+          title: "1. Definicje",
+          text: "Usługodawca - Miłosz Stawecki Pro Futuro z siedzibą w Katowicach, adres ulica Rybnicka 10/8, 40-038 Katowice, wpisana do Centralnej Ewidencji i Informacji o Działalności Gospodarczej, NIP: 6341408171, REGON: 387628336.\n\nSerwis - strona internetowa pod adresem www.relevateme.pl\n\nUżytkownik - każda osoba korzystająca z Serwisu.\n\nUsługa elektroniczna - usługa świadczona przez Usługodawcę na rzecz Użytkownika za pośrednictwem Serwisu (np. udostępnianie treści, formularz kontaktowy).\n\nKonsultacja - jednorazowa bezpłatna, niezobowiązująca rozmowa wstępna umawiana za pośrednictwem formularza w Serwisie."
         },
         {
-          title: "Zakres danych",
-          text: "W formularzach prosimy o dane potrzebne do kontaktu: imię, adres e-mail, opcjonalnie telefon oraz treść wiadomości. Formularz współpracy służy wyłącznie do obsługi zapytań partnerskich."
+          title: "2. Postanowienia ogólne",
+          text: "1. Regulamin określa zasady korzystania z Serwisu oraz rodzaje i zakres usług świadczonych drogą elektroniczną.\n\n2. Korzystanie z Serwisu jest dobrowolne i nieodpłatne. Serwis umożliwia skorzystanie przez Użytkownika z dalszych usług świadczonych przez Usługodawcę, które są płatne.\n\n3. Użytkownik zobowiązany jest do korzystania z Serwisu zgodnie z prawem, dobrymi obyczajami oraz niniejszym Regulaminem."
         },
         {
-          title: "Cel i podstawa przetwarzania",
-          text: "Dane przetwarzamy po to, aby odpowiedzieć na wiadomość, umówić konsultację, przygotować propozycję współpracy albo obsłużyć zapytanie o partnerstwo. Podstawą jest podjęcie działań przed zawarciem umowy, prawnie uzasadniony interes administratora oraz zgoda tam, gdzie jest wymagana."
+          title: "3. Rodzaj i zakres usług świadczonych drogą elektroniczną",
+          text: "Usługodawca świadczy w Serwisie następujące usługi:\n\n1. Udostępnianie treści informacyjnych - przeglądanie informacji o ofercie, ekspertach i sposobie współpracy.\n\n2. Formularz kontaktowy / umówienie bezpłatnej konsultacji - umożliwia Użytkownikowi wysłanie zapytania i umówienie rozmowy wstępnej poprzez podanie imienia, telefonu, adresu e-mail i wiadomości wstępnej.\n\n3. Wypełnienie formularza nie zobowiązuje Użytkownika do zawarcia jakiejkolwiek umowy ani do skorzystania z płatnych usług Usługodawcy.\n\n4. Przesłanie formularza kontaktowego jest możliwe po wyrażeniu przez Użytkownika zgody na przetwarzanie podanych danych osobowych w celu obsługi zapytania i kontaktu w związku z przesłanym zgłoszeniem. Zasady przetwarzania danych osobowych określa Polityka prywatności.",
+          links: [
+            { label: "Polityka prywatności", target: "privacy" }
+          ]
         },
         {
-          title: "Mailto i dostawcy poczty",
-          text: "Formularze otwierają Twojego klienta pocztowego z przygotowaną wiadomością. Wysłanie wiadomości odbywa się przez dostawcę poczty, z którego korzystasz."
+          title: "4. Warunki świadczenia usług (wymagania techniczne)",
+          text: "Do korzystania z Serwisu niezbędne są:\n\n• urządzenie z dostępem do Internetu,\n• aktualna przeglądarka internetowa,\n• aktywny adres e-mail (w przypadku korzystania z formularza).\n\nUsługodawca dokłada wszelkich starań, aby Serwis działał nieprzerwanie, jednakże nie gwarantuje braku możliwych przerw spowodowanych: niezbędną konserwacją, modernizacją Serwisu, jego awarią."
         },
         {
-          title: "Cookies i dane techniczne",
-          text: "Strona nie wymaga cookies marketingowych do działania. Przeglądarka może przetwarzać standardowe dane techniczne potrzebne do wyświetlenia strony. Jeśli w przyszłości dodamy analitykę lub narzędzia marketingowe, polityka zostanie zaktualizowana."
+          title: "5. Charakter bezpłatnej konsultacji",
+          text: "1. Konsultacja wstępna jest bezpłatna i ma charakter informacyjny oraz zapoznawczy.\n\n2. Umówienie konsultacji nie jest równoznaczne z zawarciem umowy o świadczenie usług coachingowych, mentoringowych lub doradczych.\n\n3. Warunki ewentualnej dalszej, płatnej współpracy (coaching, business life mentoring, business life coaching) ustalane są indywidualnie i regulowane odrębną umową zawieraną poza Serwisem."
         },
         {
-          title: "Czas przechowywania",
-          text: "Dane z korespondencji przechowujemy przez okres potrzebny do obsługi sprawy, a następnie przez czas wymagany do ochrony ewentualnych roszczeń lub spełnienia obowiązków prawnych."
+          title: "6. Zasady korzystania z Serwisu",
+          text: "1. Użytkownik zobowiązuje się nie dostarczać treści o charakterze bezprawnym.\n\n2. Zakazane jest korzystanie z Serwisu w sposób zakłócający jego funkcjonowanie lub uciążliwy dla innych Użytkowników.\n\n3. Zakazane jest podszywanie się przez Użytkowników pod inne osoby, przesyłanie spamu, treści obraźliwych, jak i wykorzystywanie Serwisu do celów sprzecznych z prawem."
         },
         {
-          title: "Twoje prawa",
-          text: "Masz prawo dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, sprzeciwu, przenoszenia danych oraz wniesienia skargi do Prezesa UODO."
+          title: "7. Reklamacje dotyczące usług elektronicznych",
+          text: "1. Użytkownik może zgłaszać reklamacje dotyczące działania Serwisu i usług świadczonych drogą elektroniczną.\n\n2. Reklamację należy zgłosić na adres e-mail: kontakt@relevateme.pl, podając opis problemu oraz dane kontaktowe.\n\n3. Usługodawca rozpatruje reklamację w terminie do 14 dni od jej otrzymania i przekazuje odpowiedź na adres e-mail Użytkownika.\n\nUwaga: reklamacje dotyczące płatnych usług coachingowych / mentoringowych / doradczych podlegają zasadom określonym w umowie zawartej z Klientem oraz w odrębnej Procedurze reklamacyjnej (jeśli Usługodawca ją stosuje), a nie niniejszemu Regulaminowi."
         },
         {
-          title: "Dobrowolność podania danych",
-          text: "Podanie danych jest dobrowolne, ale bez adresu e-mail lub telefonu nie będziemy mogli odpowiedzieć na wiadomość."
+          title: "8. Dane osobowe",
+          text: "Zasady przetwarzania danych osobowych opisuje Polityka prywatności, a zasady stosowania cookies - Polityka cookies.",
+          links: [
+            { label: "Polityka prywatności", target: "privacy" },
+            { label: "Polityka cookies", target: "cookies" }
+          ]
+        },
+        {
+          title: "9. Postanowienia końcowe",
+          text: "1. W sprawach nieuregulowanych Regulaminem zastosowanie mają przepisy prawa polskiego, w szczególności RODO, ustawy o świadczeniu usług drogą elektroniczną oraz - w zakresie, w jakim mają zastosowanie - ustawy o prawach konsumenta.\n\n2. Usługodawca zastrzega sobie prawo do zmiany Regulaminu z ważnych przyczyn. Aktualna wersja jest zawsze dostępna w Serwisie.\n\n3. Regulamin obowiązuje od daty wskazanej na początku dokumentu.\n\n4. Cała zawartość Serwisu, w tym logo, grafiki, teksty stanowi własność Usługodawcy lub podmiotów z nim współpracujących i podlega ochronie prawnej. Zabrania się kopiowania, rozpowszechniania i wykorzystywania materiałów bez uprzedniej zgody właściciela praw.\n\n5. Informacja zawarte na stronie internetowej mają charakter informacyjny i nie stanowią oferty w rozumieniu Kodeksu Cywilnego, chyba że wyraźnie wskazano inaczej."
         }
       ]
+    },
+    privacy: {
+      eyebrow: "Prywatność",
+      title: "Polityka prywatności",
+      lead: "Data wejścia w życie: 01 września 2026 roku.\n\nNiniejsza Polityka prywatności opisuje, w jaki sposób przetwarzamy dane osobowe osób korzystających ze strony internetowej działającej pod adresem www.relevateme.pl (dalej: “Serwis” lub “Strona”).\n\nZależy nam na ochronie Twojej prywatności. Dane przetwarzamy zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (dalej: “RODO”) oraz innymi obowiązującymi przepisami prawa.",
+      sections: [
+        {
+          title: "1. Administrator danych osobowych",
+          text: "Administratorem Twoich danych osobowych jest: Miłosz Stawecki Pro Futuro z siedzibą w Katowicach, adres ulica Rybnicka 10/8, 40-038 Katowice, wpisana do Centralnej Ewidencji i Informacji o Działalności Gospodarczej, NIP: 6341408171, REGON: 387628336.\n\nKontakt w sprawach danych osobowych: adres e-mail: kontakt@relevateme.pl"
+        },
+        {
+          title: "2. Jakie dane zbieramy",
+          text: "Dane osobowe zbieramy w dwóch sytuacjach:\n\na) Dane, które podajesz nam sam (aktywnie)\n\nKorzystając z formularza kontaktowego / formularza umówienia bezpłatnej konsultacji podajesz nam: imię, adres e-mail, telefon kontaktowy, treść wiadomości.\n\nPodanie tych danych jest dobrowolne, ale niezbędne, żebyśmy mogli odpowiedzieć na Twoje zapytanie i umówić rozmowę.\n\nb) Dane zbierane automatycznie (biernie)\n\nPodczas korzystania z Serwisu mogą być automatycznie zbierane dane techniczne związane z korzystaniem ze Strony, takie jak adres IP, data i czas wizyty, informacje o przeglądarce internetowej oraz informacje o żądaniach kierowanych do serwera. Dane te są przetwarzane w szczególności w celu zapewnienia prawidłowego funkcjonowania, bezpieczeństwa i administrowania Serwisem oraz mogą być zapisywane w logach serwera."
+        },
+        {
+          title: "3. Cele i podstawy prawne przetwarzania",
+          text: "Odpowiedź na zapytanie wysłane przez formularz i umówienie bezpłatnej konsultacji - art. 6 ust. 1 lit. b RODO (działania przed zawarciem umowy) oraz art. 6 ust. 1 lit. f RODO (nasz prawnie uzasadniony interes - obsługa kontaktu).\n\nKontakt telefoniczny lub mailowy w odpowiedzi na zgłoszenie - art. 6 ust. 1 lit. f RODO.\n\nUstalenie, dochodzenie lub obrona przed roszczeniami - art. 6 ust. 1 lit. f RODO."
+        },
+        {
+          title: "4. Jak długo przechowujemy dane",
+          text: "Dane z formularza kontaktowego przechowujemy przez okres niezbędny do obsługi zapytania i udzielenia odpowiedzi, a następnie przez okres niezbędny do ustalenia, dochodzenia lub obrony przed ewentualnymi roszczeniami, zgodnie z obowiązującymi przepisami prawa."
+        },
+        {
+          title: "5. Odbiorcy danych",
+          text: "Twoje dane mogą być przekazywane podmiotom, które wspierają nas w prowadzeniu Serwisu, w tym: Cyber_Folks S.A. - dostawca hostingu, poczty elektronicznej oraz infrastruktury wykorzystywanej do funkcjonowania Serwisu i formularza kontaktowego."
+        },
+        {
+          title: "6. Przekazywanie danych do państw trzecich",
+          text: "Dane osobowe nie są przekazywane do państw trzecich ani organizacji międzynarodowych, z zastrzeżeniem sytuacji, w których korzystanie z usług naszych dostawców lub ich podwykonawców wiązałoby się z takim przekazaniem. W takim przypadku zapewniamy odpowiednią podstawę prawną i zabezpieczenia wymagane przez RODO."
+        },
+        {
+          title: "7. Twoje prawa",
+          text: "W związku z przetwarzaniem danych przysługuje Ci prawo do:\n\n• dostępu do swoich danych oraz otrzymania ich kopii,\n• sprostowania (poprawienia) danych,\n• usunięcia danych,\n• ograniczenia przetwarzania,\n• przenoszenia danych,\n• wniesienia sprzeciwu wobec przetwarzania,\n• cofnięcia zgody w dowolnym momencie (bez wpływu na zgodność z prawem przetwarzania przed cofnięciem),\n• wniesienia skargi do organu nadzorczego - Prezesa Urzędu Ochrony Danych Osobowych (ul. Stanisława Moniuszki 1A, 00-014 Warszawa).\n\nAby skorzystać z tych praw, napisz na: kontakt@relevateme.pl"
+        },
+        {
+          title: "8. Dobrowolność podania danych",
+          text: "Podanie danych jest dobrowolne. Niepodanie danych w formularzu uniemożliwi nam jednak odpowiedź na zapytanie lub umówienie konsultacji."
+        },
+        {
+          title: "9. Profilowanie i automatyczne podejmowanie decyzji",
+          text: "Nie podejmujemy wobec Ciebie decyzji opartych wyłącznie na zautomatyzowanym przetwarzaniu (w tym profilowaniu), które wywoływałyby skutki prawne lub w podobny sposób istotnie na Ciebie wpływały."
+        },
+        {
+          title: "10. Pliki cookies",
+          text: "Serwis korzysta z plików cookies. Szczegółowe zasady opisuje osobny dokument: Polityka cookies.",
+          links: [
+            { label: "Polityka cookies", target: "cookies" }
+          ]
+        },
+        {
+          title: "11. Zmiany Polityki prywatności",
+          text: "Możemy aktualizować niniejszą Politykę, np. w związku ze zmianą przepisów lub sposobu działania Serwisu. Aktualna wersja jest zawsze dostępna na tej stronie. Data ostatniej aktualizacji znajduje się na początku dokumentu."
+        },
+        {
+          title: "12. Kontakt",
+          text: "W sprawach związanych z ochroną danych osobowych skontaktuj się z nami: kontakt@relevateme.pl"
+        }
+      ]
+    },
+    cookies: {
+      eyebrow: "Cookies",
+      title: "Polityka cookies",
+      lead: "Data wejścia w życie: 01 września 2026 roku.\n\nNiniejsza Polityka cookies opisuje, w jaki sposób strona internetowa działająca pod adresem www.relevateme.pl (dalej: “Serwis”) korzysta z plików cookies i podobnych technologii.",
+      sections: [
+        {
+          title: "1. Czym są pliki cookies",
+          text: "Pliki cookies (tzw. “ciasteczka”) to małe pliki tekstowe zapisywane na Twoim urządzeniu (komputerze, telefonie, tablecie) podczas przeglądania stron internetowych. Zazwyczaj zawierają nazwę strony, z której pochodzą, czas przechowywania oraz unikalny numer."
+        },
+        {
+          title: "2. Kto zamieszcza cookies",
+          text: "Podmiotem zamieszczającym pliki cookies na Twoim urządzeniu oraz uzyskującym do nich dostęp jest: Miłosz Stawecki Pro Futuro z siedzibą w Katowicach, adres ulica Rybnicka 10/8, 40-038 Katowice, wpisana do Centralnej Ewidencji i Informacji o Działalności Gospodarczej, NIP: 6341408171, REGON: 387628336."
+        },
+        {
+          title: "3. W jakim celu używamy cookies",
+          text: "Pliki cookies wykorzystujemy w celu zapewnienia prawidłowego działania Serwisu (cookies niezbędne)."
+        },
+        {
+          title: "4. Rodzaje stosowanych cookies",
+          text: "Cookies niezbędne - konieczne do prawidłowego funkcjonowania Serwisu. Nie wymagają Twojej zgody."
+        },
+        {
+          title: "5. Zarządzanie cookies w przeglądarce",
+          text: "Możesz samodzielnie zarządzać plikami cookies w ustawieniach swojej przeglądarki - zablokować je, usunąć lub ustawić powiadamianie o ich zapisywaniu. Szczegółowe instrukcje znajdziesz w pomocy swojej przeglądarki (Chrome, Firefox, Safari, Edge).\n\nPamiętaj, że ograniczenie cookies może wpłynąć na niektóre funkcje Serwisu."
+        },
+        {
+          title: "6. Zmiany Polityki cookies",
+          text: "Możemy aktualizować niniejszą Politykę. Aktualna wersja jest zawsze dostępna na tej stronie.\n\nWięcej informacji na temat plików cookies dostępnych jest pod adresem http://wszystkoociasteczkach.pl lub w sekcji „Pomoc” w menu przeglądarki internetowej."
+        }
+      ]
+    },
+    rodo: {
+      eyebrow: "RODO",
+      title: "Klauzula informacyjna dotycząca przetwarzania danych osobowych",
+      lead: rodoClauseText,
+      sections: []
     }
   },
 
@@ -606,6 +712,9 @@ window.siteContent = {
     rights: "Wszystkie prawa zastrzeżone.",
     backToTop: "Wróć na górę",
     faq: "FAQ",
-    privacy: "RODO"
+    terms: "Regulamin",
+    privacy: "Polityka prywatności",
+    cookies: "Polityka cookies",
+    rodo: "RODO"
   }
 };

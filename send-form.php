@@ -9,19 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $forms = [
     'contact' => [
-        'to' => 'kontakt@twojadomena.pl',
+        'to' => 'kontakt@relevateme.pl',
         'subject' => 'Rozmowa coachingowa',
         'required' => ['name', 'email', 'message', 'consent'],
     ],
     'cooperation' => [
-        'to' => 'wspolpraca@twojadomena.pl',
+        'to' => 'wspolpraca@relevateme.pl',
         'subject' => 'Zapytanie o współpracę',
         'required' => ['name', 'email', 'message', 'consent'],
     ],
 ];
 
 // Use an address from the same domain as the website mailbox.
-$fromEmail = 'kontakt@twojadomena.pl';
+$fromEmail = 'kontakt@relevateme.pl';
 $fromName = 'Relevateme';
 
 $rawBody = file_get_contents('php://input') ?: '';
@@ -62,6 +62,7 @@ $mailBody = buildBody($type, $name, $email, $phone, $message);
 $headers = [
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
+    'Content-Transfer-Encoding: 8bit',
     'From: ' . formatMailbox($fromName, $fromEmail),
     'Reply-To: ' . formatMailbox($name, $email),
     'X-Mailer: PHP/' . phpversion(),
