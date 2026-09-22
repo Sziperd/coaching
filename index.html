@@ -13,8 +13,8 @@
     content="Coaching i mentoring biznesowo-życiowy dla osób, które chcą rozwijać firmę bez tracenia życia. Praca 1:1, konkretna mapa i decyzje dopasowane do Twojej sytuacji."
   />
 
-  <link rel="preload" href="styles.css?v=offer-dropdown-v1" as="style" />
-  <link rel="stylesheet" href="styles.css?v=offer-dropdown-v1" />
+  <link rel="preload" href="styles.css?v=animated-mobile-offer-v1" as="style" />
+  <link rel="stylesheet" href="styles.css?v=animated-mobile-offer-v1" />
 
   <script>
     window.GA_MEASUREMENT_IDS = {
@@ -83,12 +83,12 @@
       <div class="drawer__panel">
         <a href="#home" class="drawer__link" data-nav-key="home"></a>
         <div class="drawerOffer">
-          <a href="#pakiety" class="drawer__link" data-nav-key="offer"></a>
-          <div class="drawerOffer__list">
+          <button class="drawer__link drawerOffer__trigger" type="button" aria-expanded="false" aria-controls="drawerOfferList" data-nav-key="offer" data-drawer-offer-trigger></button>
+          <div class="drawerOffer__list" id="drawerOfferList" aria-hidden="true" inert><div class="drawerOffer__items">
             <a href="pakiet-navigate.html">01 | Navigate</a>
             <a href="pakiet-elevate.html">02 | Elevate</a>
             <a href="pakiet-relevate.html">03 | Relevate</a>
-          </div>
+          </div></div>
         </div>
         <a href="#formula" class="drawer__link" data-nav-key="formula"></a>
         <a href="#eksperci" class="drawer__link" data-nav-key="experts"></a>
@@ -439,6 +439,6 @@
   </div>
 
   <script src="content.js?v=offer-dropdown-v1"></script>
-  <script src="script.js?v=offer-dropdown-v1"></script>
+  <script src="script.js?v=animated-mobile-offer-v1"></script>
 </body>
 </html>

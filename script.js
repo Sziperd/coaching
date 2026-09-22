@@ -2,6 +2,55 @@
 
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const siteContent = window.siteContent || {};
+
+// Shared availability: edit availableMentors in mentor-availability.js.
+function formatMentorAvailability(count) {
+  if (count === 0) return "Aktualnie brak wolnych mentorów";
+  if (count === 1) return "Aktualnie 1 wolny mentor";
+  return `Aktualnie ${count} wolnych mentorów`;
+}
+
+function initMentorAvailability() {
+  const indicators = Array.from(document.querySelectorAll("[data-mentor-availability]"));
+  if (!indicators.length) return;
+
+  function render() {
+    const count = window.mentorAvailability?.availableMentors;
+    const valid = Number.isSafeInteger(count) && count >= 0;
+    indicators.forEach((indicator) => {
+      indicator.hidden = !valid;
+      if (!valid) return;
+      indicator.querySelector("[data-mentor-availability-text]").textContent = formatMentorAvailability(count);
+      indicator.classList.toggle("is-unavailable", count === 0);
+    });
+  }
+
+  render();
+  // Local previews use the configuration loaded by the page, without fetch.
+  if (window.location.protocol === "file:") return;
+
+  let refreshing = false;
+  function refresh() {
+    if (document.hidden || refreshing) return;
+    refreshing = true;
+    const config = document.createElement("script");
+    config.src = `mentor-availability.js?v=${Date.now()}`;
+    config.onload = () => { render(); cleanup(); };
+    config.onerror = cleanup;
+    const timeout = window.setTimeout(cleanup, 10000);
+    function cleanup() {
+      window.clearTimeout(timeout);
+      config.remove();
+      refreshing = false;
+    }
+    document.head.appendChild(config);
+  }
+  window.setInterval(refresh, 60000);
+  document.addEventListener("visibilitychange", refresh);
+}
+
+initMentorAvailability();
+
 const GA_MEASUREMENT_IDS = window.GA_MEASUREMENT_IDS || {};
 const GA_MEASUREMENT_ID = String(
   window.GA_MEASUREMENT_ID || GA_MEASUREMENT_IDS[window.location.hostname] || ""
@@ -1918,6 +1967,8 @@ window.addEventListener("scroll", updateHeaderState, { passive: true });
 const navToggle = document.getElementById("navToggle");
 const drawer = document.getElementById("drawer");
 const drawerBackdrop = document.getElementById("drawerBackdrop");
+const drawerOfferTrigger = document.querySelector("[data-drawer-offer-trigger]");
+const drawerOfferList = document.getElementById("drawerOfferList");
 const offerDropdown = document.querySelector("[data-offer-dropdown]");
 const offerDropdownTrigger = document.querySelector("[data-offer-dropdown-trigger]");
 
@@ -1926,6 +1977,16 @@ function setDrawer(open) {
   drawer?.classList.toggle("is-open", open);
   drawer?.setAttribute("aria-hidden", open ? "false" : "true");
   document.body.classList.toggle("drawer-open", open);
+  if (!open) setDrawerOffer(false);
+}
+
+function setDrawerOffer(open) {
+  if (!drawerOfferTrigger || !drawerOfferList) return;
+
+  drawerOfferTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+  drawerOfferList.classList.toggle("is-open", open);
+  drawerOfferList.setAttribute("aria-hidden", open ? "false" : "true");
+  drawerOfferList.inert = !open;
 }
 
 function setOfferDropdown(open) {
@@ -1942,6 +2003,10 @@ navToggle?.addEventListener("click", () => {
 
 offerDropdownTrigger?.addEventListener("click", () => {
   setOfferDropdown(!offerDropdown?.classList.contains("is-open"));
+});
+
+drawerOfferTrigger?.addEventListener("click", () => {
+  setDrawerOffer(drawerOfferTrigger.getAttribute("aria-expanded") !== "true");
 });
 
 offerDropdown?.querySelectorAll("a").forEach((link) => {

@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="preload" href="styles.css?v=program-pages-v7" as="style" />
-  <link rel="stylesheet" href="styles.css?v=program-pages-v7" />
+  <link rel="preload" href="styles.css?v=mentor-cta-placement-v1" as="style" />
+  <link rel="stylesheet" href="styles.css?v=mentor-cta-placement-v1" />
   <script>
     window.GA_MEASUREMENT_IDS = {
       "sziperd.github.io": "G-4B11GWL714",
@@ -46,7 +46,7 @@
       <button class="drawer__backdrop" id="drawerBackdrop" type="button" aria-label=""></button>
       <div class="drawer__panel">
         <a href="index.html#home" class="drawer__link" data-nav-key="home"></a>
-        <div class="drawerOffer"><a href="index.html#pakiety" class="drawer__link" data-nav-key="offer"></a><div class="drawerOffer__list"><a href="pakiet-navigate.html">01 | Navigate</a><a href="pakiet-elevate.html">02 | Elevate</a><a href="pakiet-relevate.html">03 | Relevate</a></div></div>
+        <div class="drawerOffer"><button class="drawer__link drawerOffer__trigger" type="button" aria-expanded="false" aria-controls="drawerOfferList" data-nav-key="offer" data-drawer-offer-trigger></button><div class="drawerOffer__list" id="drawerOfferList" aria-hidden="true" inert><div class="drawerOffer__items"><a href="pakiet-navigate.html">01 | Navigate</a><a href="pakiet-elevate.html">02 | Elevate</a><a href="pakiet-relevate.html">03 | Relevate</a></div></div></div>
         <a href="index.html#formula" class="drawer__link" data-nav-key="formula"></a>
         <a href="index.html#eksperci" class="drawer__link" data-nav-key="experts"></a>
         <a href="index.html#pakiety" class="drawer__link" data-nav-key="quiz" data-open-quiz></a>
@@ -64,9 +64,15 @@
           <h1>Relevate</h1>
           <p class="programHero__promise">Firma, która rośnie.<br />Nie Twoim kosztem.</p>
           <p class="programHero__lead">Mentoring dla właścicieli i liderów gotowych zbudować organizację, która potrafi podejmować decyzje również bez nich.</p>
-          <div class="programHero__actions">
-            <a class="programButton programButton--primary" href="index.html#kontakt">Umów bezpłatną konsultację <span aria-hidden="true">↗</span></a>
-            <a class="programButton programButton--text" href="#proces">Zobacz, jak pracujemy <span aria-hidden="true">↓</span></a>
+          <div class="programHero__conversion">
+            <p class="mentorAvailability" data-mentor-availability role="status" hidden>
+              <span class="mentorAvailability__dot" aria-hidden="true"></span>
+              <span data-mentor-availability-text></span>
+            </p>
+            <div class="programHero__actions">
+              <a class="programButton programButton--primary" href="index.html#kontakt">Umów bezpłatną konsultację <span aria-hidden="true">↗</span></a>
+              <a class="programButton programButton--text" href="#proces">Zobacz, jak pracujemy <span aria-hidden="true">↓</span></a>
+            </div>
           </div>
         </div>
         <aside class="programSnapshot" aria-label="Kiedy wybrać Relevate">
@@ -158,6 +164,7 @@
   <footer class="footer"><div class="container footer__inner"><p>© <span id="year"></span></p><div class="footer__links"><button type="button" data-open-modal="faq"></button><button type="button" data-open-modal="terms"></button><button type="button" data-open-modal="privacy"></button><button type="button" data-open-modal="cookies"></button><button type="button" data-open-modal="rodo"></button><a href="index.html#home"></a></div></div></footer>
   <div class="siteModal" data-site-modal aria-hidden="true"><button class="siteModal__backdrop" type="button" data-modal-close aria-label=""></button><section class="siteModal__panel" role="dialog" aria-modal="true" aria-labelledby="siteModalTitle"><button class="siteModal__close" type="button" data-modal-close aria-label="">x</button><div class="siteModal__content" data-modal-content></div></section></div>
   <script src="content.js?v=program-pages-v2"></script>
-  <script src="script.js?v=program-pages-v2"></script>
+  <script src="mentor-availability.js?v=1"></script>
+  <script src="script.js?v=mentor-local-fix-v1"></script>
 </body>
 </html>
