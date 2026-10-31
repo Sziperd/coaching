@@ -14,17 +14,6 @@
     analytics_consent_updated: ["analytics", "replay", "notice_version"],
     referral_landing: []
   };
-  const safeSdkKeys = new Set([
-    "token", "distinct_id", "$device_id", "$session_id", "$window_id", "$insert_id", "$time",
-    "$lib", "$lib_version", "$browser", "$browser_version", "$os", "$os_version",
-    "$device_type", "$screen_height", "$screen_width", "$viewport_height", "$viewport_width",
-    "$session_entry_timestamp", "$session_entry_pathname", "$session_entry_host", "$host",
-    "$pageview_id", "$prev_pageview_id", "$prev_pageview_duration", "$prev_pageview_last_scroll",
-    "$prev_pageview_last_scroll_percentage", "$prev_pageview_max_scroll", "$prev_pageview_max_scroll_percentage",
-    "$prev_pageview_last_content", "$prev_pageview_last_content_percentage", "$prev_pageview_max_content",
-    "$prev_pageview_max_content_percentage", "$is_identified", "$config_defaults",
-    "$sdk_debug_replay_internal_buffer_length", "$snapshot_bytes", "$snapshot_data", "$snapshot_source"
-  ]);
   const knownSections = new Set([
     "home", "sygnaly", "historie", "pakiety", "kazdy-pakiet", "jak-zaczynamy",
     "eksperci", "o-nas", "formula", "kontakt", "faq", "top", "konsultacja", "faq-pakietu",
@@ -37,24 +26,14 @@
   const configured = config.enabled === true && /^phc_[a-zA-Z0-9_-]+$/.test(config.projectToken || "") &&
     ["https://eu.i.posthog.com", "https://us.i.posthog.com"].includes(config.apiHost) &&
     /^https?:$/.test(location.protocol) && hostAllowed;
-  let consent = readConsent();
-  let initialized = false, loaded = false, error = "", dialog, returnFocus;
+  let initialized = false, loaded = false, error = "";
   let pageCaptured = false, observers = [], timers = new Set();
   const pendingSections = new Map();
   let observedSections = new Set(), observedSlides = new Set(), depths = new Set();
   const startedForms = new WeakSet();
 
-  function readConsent() {
-    try {
-      const value = JSON.parse(localStorage.getItem(storageKey));
-      if (value?.version !== config.consentVersion || !Number.isFinite(value.savedAt) ||
-          value.savedAt > Date.now() || Date.now() - value.savedAt > (config.consentMaxAgeDays || 180) * 86400000) return null;
-      if (typeof value.analytics !== "boolean" || typeof value.replay !== "boolean") return null;
-      return { ...value, replay: value.analytics && value.replay };
-    } catch { return null; }
-  }
-  function allowed() { return configured && consent?.analytics === true && !protectedBrowser(); }
-  function replayAllowed() { return allowed() && config.sessionReplay === true && consent?.replay === true; }
+  function allowed() { return configured && config.mode === "cookieless" && !protectedBrowser(); }
+  function replayAllowed() { return false; }
   function page() { return document.body?.dataset.page === "contact" ? "contact" : packages.includes(document.body?.dataset.package) ? document.body.dataset.package : "home"; }
   function cleanUrl(value) {
     try { const url = new URL(value, location.href); return url.origin + url.pathname; }
@@ -76,15 +55,15 @@
   }
   function beforeSend(event) {
     if (!event || !allowed()) return null;
-    const snapshot = event.event === "$snapshot";
-    if (snapshot && !replayAllowed()) return null;
-    if (!snapshot && !["$pageview", "$pageleave", ...Object.keys(events)].includes(event.event)) return null;
+    if (!["$pageview", "$pageleave", ...Object.keys(events)].includes(event.event) || event.event === "analytics_consent_updated") return null;
     const properties = cleanProperties(event.event, event.properties);
     for (const [key, value] of Object.entries(event.properties || {})) {
-      if (safeSdkKeys.has(key)) properties[key] = value;
+      if (["token", "$lib", "$lib_version", "$insert_id", "$time"].includes(key)) properties[key] = value;
     }
-    properties.$current_url = cleanUrl(location.href);
-    properties.$pathname = location.pathname;
+    properties.distinct_id = "$posthog_cookieless";
+    properties.$cookieless_mode = true;
+    properties.$pathname = "/" + (page() === "home" ? "index" : page() === "contact" ? "kontakt" : page()) + ".html";
+    properties.$current_url = location.origin + properties.$pathname;
     properties.$referrer = referrer();
     properties.$referring_domain = referrer() ? new URL(referrer()).hostname : "";
     properties.$geoip_disable = true;
@@ -109,27 +88,20 @@
     const referral = window.SiteReferral?.getContext();
     if (referral?.sourceId || referral?.mentorId) track("referral_landing");
   }
-  function syncReplay() {
-    if (!loaded) return;
-    window.posthog.set_config({ disable_session_recording: !replayAllowed() });
-    if (replayAllowed()) window.posthog.startSessionRecording();
-    else window.posthog.stopSessionRecording();
-  }
   function initSdk() {
     if (!allowed()) return;
     if (initialized) {
-      if (loaded) { window.posthog.opt_in_capturing({ captureEventName: false }); syncReplay(); }
       capturePage();
       return;
     }
     if (window.posthog) { error = "existing_sdk"; return; }
-    // Official array.js queue protocol; the vendor SDK is requested only after consent.
+    // Official queue protocol; cookieless mode also requires the project setting.
     const sdk = [];
     sdk.people = [];
     sdk.toString = () => "posthog (stub)";
     sdk._i = []; sdk.__SV = 1;
     sdk.init = (token, options) => {
-      for (const name of ["capture", "opt_in_capturing", "opt_out_capturing", "set_config", "startSessionRecording", "stopSessionRecording"]) {
+      for (const name of ["capture"]) {
         sdk[name] = (...args) => sdk.push([name, ...args]);
       }
       sdk._i.push([token, options, "posthog"]);
@@ -150,10 +122,11 @@
       person_profiles: "never", respect_dnt: true, ip: false,
       internal_or_test_user_hostname: null, capture_webmcp: false, opt_in_site_apps: false,
       disable_capture_url_hashes: true,
-      persistence: "localStorage", persistence_name: "relevateme_posthog",
+      cookieless_mode: "always",
+      persistence: "memory", disable_persistence: true, persistence_name: "relevateme_posthog",
       consent_persistence_name: "relevateme_posthog_consent",
       cross_subdomain_cookie: false, cookie_expiration: 180,
-      opt_out_capturing_by_default: true, opt_out_persistence_by_default: true,
+      opt_out_capturing_by_default: false, opt_out_persistence_by_default: true,
       disable_session_recording: true,
       session_recording: {
         maskAllInputs: true, maskTextSelector: "*",
@@ -165,11 +138,8 @@
       before_send: beforeSend,
       loaded: instance => {
         loaded = true;
-        if (!allowed()) { instance.stopSessionRecording(); instance.opt_out_capturing(); return; }
-        instance.opt_in_capturing({ captureEventName: false });
-        syncReplay();
+        if (!allowed()) return;
         capturePage();
-        track("analytics_consent_updated", { analytics: true, replay: replayAllowed(), notice_version: config.consentVersion });
         startObservation();
       }
     });
@@ -189,28 +159,9 @@
     for (const name of ["localStorage", "sessionStorage"]) {
       try {
         const storage = window[name];
-        for (const key of Object.keys(storage)) if (key.includes("relevateme_posthog")) storage.removeItem(key);
+        for (const key of Object.keys(storage)) if (key === storageKey || key.includes("relevateme_posthog")) storage.removeItem(key);
       } catch { /* Storage can be unavailable in private or restricted contexts. */ }
     }
-  }
-  function setConsent(analytics, replay) {
-    const previous = allowed();
-    consent = { version: config.consentVersion, savedAt: Date.now(), analytics: Boolean(analytics) && !protectedBrowser(), replay: Boolean(analytics && replay && config.sessionReplay) && !protectedBrowser() };
-    try { localStorage.setItem(storageKey, JSON.stringify(consent)); } catch { /* Keep this visit's choice in memory. */ }
-    if (allowed()) {
-      initSdk();
-      if (!previous) startObservation();
-      track("analytics_consent_updated", { analytics: true, replay: consent.replay, notice_version: config.consentVersion });
-    } else {
-      stopObservation(); pageCaptured = false;
-      observedSections.clear(); observedSlides.clear(); depths.clear();
-      if (initialized) {
-        window.posthog.stopSessionRecording();
-        window.posthog.opt_out_capturing({ clear_persistence: true });
-      }
-      clearAnalyticsStorage();
-    }
-    dialog?.close();
   }
   function placement(element) {
     if (element.closest("header, .drawer")) return "header";
@@ -265,51 +216,11 @@
     document.querySelectorAll("[data-story-card], .packagePath, .expertSlide, .formulaMobileSlide").forEach(el => slideObserver.observe(el));
     observers.push(sectionObserver, slideObserver);
   }
-  function buildConsentDialog() {
-    dialog = document.createElement("dialog");
-    dialog.className = "analyticsConsent ph-no-capture";
-    dialog.setAttribute("aria-labelledby", "analyticsConsentTitle");
-    dialog.innerHTML = `<h2 id="analyticsConsentTitle">Twoja prywatność</h2>
-      <p>Za Twoją zgodą korzystamy z PostHog, żeby sprawdzać, które części strony są pomocne i gdzie pojawiają się trudności.</p>
-      <label class="analyticsConsent__option"><input type="checkbox" name="analytics"><span><strong>Statystyki korzystania ze strony</strong><small>Odsłony, przewijanie i kliknięcia. Bez danych wpisanych do formularzy i bez odpowiedzi ankiety.</small></span></label>
-      <label class="analyticsConsent__option"><input type="checkbox" name="replay"><span><strong>Odtwarzanie wizyt</strong><small>Przewijanie i ruchy kursora. Teksty są maskowane, a formularze i ankieta wyłączone z nagrania.</small></span></label>
-      <p class="analyticsConsent__note" role="status"></p>
-      <p class="analyticsConsent__legal">Wybór jest dobrowolny. Możesz go zmienić w stopce przez „Ustawienia prywatności”.</p>
-      <details class="analyticsConsent__policy"><summary>Polityka prywatności</summary><div></div></details>
-      <div class="analyticsConsent__actions"><button type="button" data-consent-reject>Odrzuć opcjonalne</button><button type="button" data-consent-save>Zapisz wybór</button><button type="button" data-consent-all>Zaakceptuj wszystkie</button></div>`;
-    const policy = dialog.querySelector(".analyticsConsent__policy div");
-    for (const section of window.siteContent?.modals?.privacy?.sections || []) {
-      const heading = document.createElement("h3"); heading.textContent = section.title;
-      const paragraph = document.createElement("p"); paragraph.textContent = section.text;
-      policy.append(heading); policy.append(paragraph);
-    }
-    document.body.append(dialog);
-    const analytics = dialog.querySelector('[name="analytics"]');
-    const replay = dialog.querySelector('[name="replay"]');
-    analytics.addEventListener("change", () => { if (!analytics.checked) replay.checked = false; replay.disabled = !analytics.checked || !config.sessionReplay; });
-    dialog.querySelector("[data-consent-reject]").addEventListener("click", () => setConsent(false, false));
-    dialog.querySelector("[data-consent-save]").addEventListener("click", () => setConsent(analytics.checked, replay.checked));
-    dialog.querySelector("[data-consent-all]").addEventListener("click", () => setConsent(true, true));
-    dialog.addEventListener("cancel", event => { event.preventDefault(); setConsent(false, false); });
-    dialog.addEventListener("close", () => returnFocus?.focus({ preventScroll: true }));
-  }
-  function openPreferences() {
-    if (!dialog) return;
-    returnFocus = document.activeElement;
-    const analytics = dialog.querySelector('[name="analytics"]');
-    const replay = dialog.querySelector('[name="replay"]');
-    analytics.checked = allowed(); analytics.disabled = !configured || protectedBrowser();
-    replay.checked = replayAllowed(); replay.disabled = !allowed() || !config.sessionReplay;
-    dialog.querySelector("[data-consent-all]").disabled = !configured || protectedBrowser();
-    dialog.querySelector(".analyticsConsent__note").textContent = !configured ? "Analityka nie jest aktywna na tym adresie. Żadne dane nie są wysyłane do PostHog." : protectedBrowser() ? "Respektujemy ustawienie Do Not Track / Global Privacy Control Twojej przeglądarki. Analityka i nagrywanie są wyłączone." : "Dane analityczne są łączone z losowym identyfikatorem przeglądarki, zapisywanym dopiero po zgodzie.";
-    dialog.showModal();
-  }
   function init() {
-    if (!allowed()) clearAnalyticsStorage();
-    buildConsentDialog();
+    clearAnalyticsStorage();
     document.addEventListener("click", event => {
       if (!(event.target instanceof Element)) return;
-      if (event.target.closest("[data-analytics-preferences]")) { openPreferences(); return; }
+      if (event.target.closest("[data-analytics-preferences]")) return;
       const summary = event.target.closest(".faqList summary");
       if (summary && !summary.parentElement.open) {
         const item = summary.parentElement;
@@ -345,22 +256,12 @@
     }, { passive: true });
     window.addEventListener("pagehide", () => { if (allowed() && loaded) window.posthog.capture("$pageleave"); });
     window.addEventListener("pageshow", event => {
-      if (!event.persisted) return;
-      consent = readConsent(); pageCaptured = false;
-      if (allowed()) { initSdk(); startObservation(); }
-      else { stopObservation(); if (loaded) { window.posthog.stopSessionRecording(); window.posthog.opt_out_capturing({ clear_persistence: true }); } }
-    });
-    window.addEventListener("storage", event => {
-      if (event.key !== storageKey && event.key !== null) return;
-      consent = readConsent();
-      if (allowed()) { initSdk(); startObservation(); }
-      else { stopObservation(); pageCaptured = false; if (initialized) { window.posthog.stopSessionRecording(); window.posthog.opt_out_capturing({ clear_persistence: true }); } clearAnalyticsStorage(); }
+      if (event.persisted && allowed()) { pageCaptured = false; initSdk(); startObservation(); }
     });
     if (allowed()) { initSdk(); startObservation(); }
-    else if (configured && !consent && !protectedBrowser()) openPreferences();
   }
   window.SiteAnalytics = Object.freeze({
-    track, openPreferences,
+    track,
     getStatus: () => ({ configured, sdkLoaded: loaded, analytics: allowed(), replay: replayAllowed(), browserProtection: protectedBrowser(), error })
   });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });

@@ -3,153 +3,6 @@
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const siteContent = window.siteContent || {};
 
-// Shared availability: edit availableMentors in mentor-availability.js.
-function formatMentorAvailability(count) {
-  if (count === 0) return "Aktualnie brak wolnych mentorów";
-  if (count === 1) return "Aktualnie 1 wolny mentor";
-  return `Aktualnie ${count} wolnych mentorów`;
-}
-
-function initMentorAvailability() {
-  const indicators = Array.from(document.querySelectorAll("[data-mentor-availability]"));
-  if (!indicators.length) return;
-
-  function render() {
-    const count = window.mentorAvailability?.availableMentors;
-    const valid = Number.isSafeInteger(count) && count >= 0;
-    indicators.forEach((indicator) => {
-      indicator.hidden = !valid;
-      if (!valid) return;
-      indicator.querySelector("[data-mentor-availability-text]").textContent = formatMentorAvailability(count);
-      indicator.classList.toggle("is-unavailable", count === 0);
-    });
-  }
-
-  render();
-  // Local previews use the configuration loaded by the page, without fetch.
-  if (window.location.protocol === "file:") return;
-
-  let refreshing = false;
-  function refresh() {
-    if (document.hidden || refreshing) return;
-    refreshing = true;
-    const config = document.createElement("script");
-    config.src = `mentor-availability.js?v=${Date.now()}`;
-    config.onload = () => { render(); cleanup(); };
-    config.onerror = cleanup;
-    const timeout = window.setTimeout(cleanup, 10000);
-    function cleanup() {
-      window.clearTimeout(timeout);
-      config.remove();
-      refreshing = false;
-    }
-    document.head.appendChild(config);
-  }
-  window.setInterval(refresh, 60000);
-  document.addEventListener("visibilitychange", refresh);
-}
-
-initMentorAvailability();
-
-const GA_MEASUREMENT_IDS = window.GA_MEASUREMENT_IDS || {};
-const GA_MEASUREMENT_ID = String(
-  window.GA_MEASUREMENT_ID || GA_MEASUREMENT_IDS[window.location.hostname] || ""
-).trim();
-const hasAnalyticsId = /^G-[A-Z0-9]+$/i.test(GA_MEASUREMENT_ID) && !/^G-X+$/i.test(GA_MEASUREMENT_ID);
-
-function initAnalytics() {
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = window.gtag || function gtag() {
-    window.dataLayer.push(arguments);
-  };
-
-  if (!hasAnalyticsId) return;
-
-  const tag = document.createElement("script");
-  tag.async = true;
-  tag.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`;
-  document.head.appendChild(tag);
-
-  window.gtag("js", new Date());
-  window.gtag("config", GA_MEASUREMENT_ID, {
-    page_title: document.title,
-    page_location: window.location.href
-  });
-}
-
-function trackEvent(eventName, params = {}) {
-  if (!hasAnalyticsId || typeof window.gtag !== "function") return;
-
-  const safeParams = Object.fromEntries(
-    Object.entries(params)
-      .filter(([, value]) => value !== undefined && value !== null && value !== "")
-      .map(([key, value]) => [key, typeof value === "string" ? value.slice(0, 100) : value])
-  );
-
-  window.gtag("event", eventName, safeParams);
-}
-
-function getAnalyticsText(element) {
-  const label =
-    element.getAttribute("aria-label") ||
-    element.dataset.analyticsLabel ||
-    element.textContent ||
-    element.getAttribute("href") ||
-    element.tagName;
-
-  return label.replace(/\s+/g, " ").trim().slice(0, 80);
-}
-
-function getAnalyticsSection(element) {
-  return element.closest("section")?.id || element.closest("footer")?.className || "global";
-}
-
-function getAnalyticsElementType(element) {
-  if (element.matches("[data-open-quiz]")) return "quiz_open";
-  if (element.matches("[data-quiz-toggle]")) return "quiz_toggle";
-  if (element.matches("[data-quiz-close]")) return "quiz_close";
-  if (element.matches(".quizAnswer")) return "quiz_answer";
-  if (element.matches("[data-open-modal]")) return "modal_open";
-  if (element.matches("[data-modal-close]")) return "modal_close";
-  if (element.matches("[data-contact-submit], [data-cooperation-submit]")) return "form_submit_click";
-  if (element.matches("[data-expert-dot]")) return "expert_carousel_dot";
-  if (element.matches("[data-story-dot]")) return "story_carousel_dot";
-  if (element.matches("[data-package-dot]")) return "package_carousel_dot";
-  if (element.matches("[data-formula-dot]")) return "formula_carousel_dot";
-  if (element.matches("a[href^='mailto:']")) return "email_link";
-  if (element.matches("a[href^='tel:']")) return "phone_link";
-  if (element.matches("a[href*='linkedin']")) return "linkedin_link";
-  if (element.matches("a[href^='#']")) return "anchor_link";
-  if (element.matches("button")) return "button";
-  if (element.matches("a")) return "link";
-  return "click";
-}
-
-function initClickTracking() {
-  document.addEventListener("click", (event) => {
-    if (!(event.target instanceof Element)) return;
-
-    const target = event.target.closest(
-      "a, button, summary, .quoteCard, .storyCard, .packagePath, .quizAnswer"
-    );
-    if (!target || !document.documentElement.contains(target)) return;
-
-    const href = target.getAttribute("href") || "";
-    const modalType = target.getAttribute("data-open-modal") || "";
-    const eventType = getAnalyticsElementType(target);
-
-    trackEvent("select_content", {
-      content_type: eventType,
-      item_id: modalType || target.dataset.packageDot || target.dataset.storyDot || target.dataset.expertDot || href || getAnalyticsText(target),
-      item_name: getAnalyticsText(target),
-      section_id: getAnalyticsSection(target),
-      link_url: href
-    });
-  });
-}
-
-initAnalytics();
-
 /* =========================================================
    CONTENT STRINGS
    ========================================================= */
@@ -220,31 +73,12 @@ function setNavLinks(selector, links) {
   const container = document.querySelector(selector);
   if (!container || !Array.isArray(links)) return;
 
-  const isLandingPage = document.body?.dataset.page === "landing";
-  const resolveHref = (href = "") => (isLandingPage && href.startsWith("#") ? `index.html${href}` : href);
-  const keyedItems = Array.from(container.querySelectorAll("[data-nav-key]"));
-
-  if (keyedItems.length > 0) {
-    keyedItems.forEach((item) => {
-      const link = links.find((entry) => entry.key === item.dataset.navKey);
-      if (!link) return;
-
-      if (item instanceof HTMLAnchorElement) {
-        item.href = resolveHref(link.href);
-      } else {
-        item.dataset.navHref = link.href;
-      }
-      item.textContent = link.label;
-    });
-    return;
-  }
-
   const anchors = Array.from(container.querySelectorAll("a"));
   anchors.forEach((anchor, index) => {
     const link = links[index];
     if (!link) return;
 
-    anchor.href = resolveHref(link.href);
+    anchor.href = link.href;
     anchor.textContent = link.label;
   });
 }
@@ -341,9 +175,11 @@ function createExpertSlide(expert, index) {
     const stat = document.createElement("article");
     const value = document.createElement("strong");
     const suffix = item.suffix || "";
+    const prefix = item.prefix || "";
     value.dataset.countTo = String(item.value || 0);
     value.dataset.countSuffix = suffix;
-    value.textContent = `1${suffix}`;
+    value.dataset.countPrefix = prefix;
+    value.textContent = `${prefix}1${suffix}`;
 
     const label = document.createElement("span");
     label.textContent = item.label || "";
@@ -588,15 +424,6 @@ function renderPackages(packagesContent) {
     card.appendChild(context);
     card.appendChild(featureList);
     card.appendChild(outcome);
-
-    if (item.landingHref) {
-      const link = document.createElement("a");
-      link.className = "packagePath__link";
-      link.href = item.landingHref;
-      link.textContent = "Zobacz szczegóły";
-      card.appendChild(link);
-    }
-
     grid.appendChild(card);
 
     if (dots) {
@@ -659,9 +486,15 @@ function renderFormulaMobile(formulaContent) {
   dots.innerHTML = "";
   track.style.setProperty("--formula-slide-count", String(slides.length));
 
-  const background = document.createElement("span");
+  const background = document.createElement("img");
   background.className = "formulaMobile__background";
   background.setAttribute("aria-hidden", "true");
+  background.alt = "";
+  background.decoding = "sync";
+  background.draggable = false;
+  background.fetchPriority = "high";
+  background.loading = "eager";
+  background.src = "pictures/f1-mobile-panorama.png";
   track.appendChild(background);
 
   slides.forEach((slide, index) => {
@@ -722,15 +555,11 @@ function applySiteContent() {
 
   document.documentElement.dataset.contentSource = "content.js";
 
-  const preservePageMeta = document.body?.hasAttribute("data-preserve-meta");
-
-  if (content.meta?.title && !preservePageMeta) {
+  if (content.meta?.title) {
     document.title = content.meta.title;
   }
 
-  if (!preservePageMeta) {
-    setAttr('meta[name="description"]', "content", content.meta?.description);
-  }
+  setAttr('meta[name="description"]', "content", content.meta?.description);
   setAttr(".brand", "aria-label", content.labels?.home);
   setAttr(".brand__logo", "alt", content.labels?.home);
   setAttr(".heroLogo", "aria-label", content.labels?.home);
@@ -924,9 +753,7 @@ function applySiteContent() {
   setAttr('input[name="email"]', "placeholder", content.contact?.fields?.emailPlaceholder);
   setAttr('input[name="phone"]', "placeholder", content.contact?.fields?.phonePlaceholder || "+48 000 000 000");
   setAttr('textarea[name="message"]', "placeholder", content.contact?.fields?.messagePlaceholder);
-  setText(".contactConsent__text", content.contact?.fields?.consent);
-  setText(".contactConsent .consentDetails__summaryText", content.contact?.fields?.consentDetailsLabel);
-  setText(".contactConsent .consentDetails p", content.contact?.fields?.consentDetails);
+  setText(".contactConsent span", content.contact?.fields?.consent);
   setButtonText(".contactForm .btn--primary", content.contact?.submit);
 
   const footerYear = document.getElementById("year");
@@ -938,17 +765,16 @@ function applySiteContent() {
 
   setText(".footer a", content.footer?.backToTop);
   const footerModalButtons = document.querySelectorAll(".footer__links button");
-  const footerModalLabels = ["faq", "terms", "privacy", "cookies", "rodo"];
-  footerModalButtons.forEach((button, index) => {
-    const labelKey = footerModalLabels[index];
-    if (labelKey && content.footer?.[labelKey]) {
-      button.textContent = content.footer[labelKey];
-    }
-  });
+  if (footerModalButtons[0] && content.footer?.faq) {
+    footerModalButtons[0].textContent = content.footer.faq;
+  }
+  if (footerModalButtons[1] && content.footer?.privacy) {
+    footerModalButtons[1].textContent = content.footer.privacy;
+  }
 }
 
 applySiteContent();
-initClickTracking();
+window.prepareRedesign?.();
 
 /* =========================================================
    SITE MODALS
@@ -972,45 +798,6 @@ function initSiteModals(modalContent) {
     return element;
   }
 
-  function linkedTextEl(tag, className, text, links = []) {
-    const element = document.createElement(tag);
-    if (className) element.className = className;
-
-    const activeLinks = Array.isArray(links) ? links.filter((link) => link?.label && link?.target) : [];
-    if (!text || activeLinks.length === 0) {
-      element.textContent = text || "";
-      return element;
-    }
-
-    let remaining = text;
-    while (remaining) {
-      const next = activeLinks
-        .map((link) => ({ ...link, index: remaining.indexOf(link.label) }))
-        .filter((link) => link.index >= 0)
-        .sort((a, b) => a.index - b.index || b.label.length - a.label.length)[0];
-
-      if (!next) {
-        element.append(remaining);
-        break;
-      }
-
-      if (next.index > 0) {
-        element.append(remaining.slice(0, next.index));
-      }
-
-      const button = document.createElement("button");
-      button.className = "legalInlineLink";
-      button.type = "button";
-      button.dataset.openModal = next.target;
-      button.textContent = next.label;
-      element.appendChild(button);
-
-      remaining = remaining.slice(next.index + next.label.length);
-    }
-
-    return element;
-  }
-
   function renderHeader(data) {
     const header = document.createElement("header");
     header.className = "siteModal__header";
@@ -1031,12 +818,11 @@ function initSiteModals(modalContent) {
     const note = document.createElement("div");
     note.className = "siteModal__note";
     note.innerHTML = `<span aria-hidden="true">●</span><p>${data?.secureNote || ""}</p>`;
-    fragment.appendChild(note);
 
     const form = document.createElement("form");
     form.className = "modalForm";
     form.dataset.cooperationForm = "";
-    form.noValidate = true;
+    form.noValidate = false;
 
     const fields = data?.fields || {};
     form.innerHTML = `
@@ -1049,24 +835,19 @@ function initSiteModals(modalContent) {
         <input type="email" name="email" placeholder="${fields.emailPlaceholder || ""}" required>
       </label>
       <label>
-        <span>${fields.phone || "Telefon"}</span>
-        <input type="tel" name="phone" placeholder="${fields.phonePlaceholder || ""}">
+        <span>${fields.linkedin || "LinkedIn (opcjonalnie)"}</span>
+        <input type="url" name="linkedin" placeholder="Link do profilu" maxlength="500">
       </label>
       <label class="modalForm__wide">
         <span>${fields.message || "Wiadomość"}</span>
-        <textarea name="message" rows="6" placeholder="${fields.messagePlaceholder || ""}" required></textarea>
+        <textarea name="message" rows="3" placeholder="${fields.messagePlaceholder || ""}" required></textarea>
       </label>
       <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <div class="modalConsent modalForm__wide">
-        <label class="modalConsent__label">
-          <input type="checkbox" name="consent" required>
-          <span>${data?.consent || ""}</span>
-        </label>
-        <details class="consentDetails">
-          <summary><span class="consentDetails__summaryText">${data?.consentDetailsLabel || ""}</span></summary>
-          <p>${data?.consentDetails || ""}</p>
-        </details>
-      </div>
+      <label class="modalConsent modalForm__wide">
+        <input type="checkbox" name="consent" required>
+        <span>${data?.consent || ""}</span>
+      </label>
+      ${window.RelevateUI.privacy()}
       <button class="btn btn--primary btn--wide modalForm__wide" type="submit" data-cooperation-submit disabled>
         ${data?.submit || "Wyślij"}
         <span class="btn__shine" aria-hidden="true"></span>
@@ -1074,14 +855,23 @@ function initSiteModals(modalContent) {
       <p class="formStatus modalForm__wide" role="status" aria-live="polite"></p>
     `;
 
+    const roleOptions = document.createElement("fieldset");
+    roleOptions.className = "packageOptions modalForm__wide";
+    roleOptions.innerHTML = `<legend>Piszę jako</legend>${["coach", "mentor", "trener", "partner", "inne"].map(role => `<label><input type="radio" name="role" value="${role}"><span>${role}</span></label>`).join("")}`;
+    form.querySelector('label:has(textarea)').before(roleOptions);
+    note.classList.add("modalForm__wide");
+    form.querySelector(".modalConsent").before(note);
+
     const consentInput = form.querySelector('input[name="consent"]');
     const submitButton = form.querySelector("[data-cooperation-submit]");
     const syncSubmitState = () => {
       if (!submitButton) return;
-      submitButton.disabled = !consentInput?.checked;
+      submitButton.disabled = !consentInput?.checked || !form.checkValidity();
     };
 
     consentInput?.addEventListener("change", syncSubmitState);
+    form.addEventListener("input", syncSubmitState);
+    form.addEventListener("change", syncSubmitState);
     syncSubmitState();
 
     form.addEventListener("submit", async (event) => {
@@ -1090,19 +880,21 @@ function initSiteModals(modalContent) {
       const status = form.querySelector(".formStatus");
       const name = String(formData.get("name") || "").trim();
       const email = String(formData.get("email") || "").trim();
-      const phone = String(formData.get("phone") || "").trim();
-      const message = String(formData.get("message") || "").trim();
+      const linkedin = String(formData.get("linkedin") || "").trim();
+      const role = String(formData.get("role") || "").trim();
+      const messageText = String(formData.get("message") || "").trim();
+      const message = [role && `Piszę jako: ${role}.`, linkedin && `LinkedIn: ${linkedin}`, messageText].filter(Boolean).join("\n\n");
       const consent = formData.get("consent");
       const website = String(formData.get("website") || "").trim();
 
-      if (!name || !email || !message || !consent) {
+      if (!name || !email || !messageText || !consent) {
         if (status) status.textContent = data?.status?.missingFields || "";
         return;
       }
 
       const sent = await sendSiteForm({
         type: "cooperation",
-        payload: { name, email, phone, message, consent: Boolean(consent), website },
+        payload: { name, email, message, consent: Boolean(consent), website },
         statusElement: status,
         statusText: data?.status || {},
         submitButton
@@ -1153,7 +945,7 @@ function initSiteModals(modalContent) {
     return fragment;
   }
 
-  function renderLegal(data) {
+  function renderPrivacy(data) {
     const fragment = document.createDocumentFragment();
     fragment.appendChild(renderHeader(data));
 
@@ -1163,10 +955,7 @@ function initSiteModals(modalContent) {
       const article = document.createElement("article");
       article.className = "modalPrivacy__section";
       article.appendChild(textEl("h3", "", section.title));
-      const paragraphs = Array.isArray(section.paragraphs) ? section.paragraphs : [section.text];
-      paragraphs.filter(Boolean).forEach((paragraph) => {
-        article.appendChild(linkedTextEl("p", "", paragraph, section.links));
-      });
+      article.appendChild(textEl("p", "", section.text));
       list.appendChild(article);
     });
     fragment.appendChild(list);
@@ -1179,12 +968,13 @@ function initSiteModals(modalContent) {
     if (!data) return false;
 
     content.innerHTML = "";
+    modal.dataset.modalType = type;
     if (type === "cooperation") {
       content.appendChild(renderCooperation(data));
     } else if (type === "faq") {
       content.appendChild(renderFaq(data));
-    } else if (data?.sections) {
-      content.appendChild(renderLegal(data));
+    } else if (type === "privacy") {
+      content.appendChild(renderPrivacy(data));
     }
 
     return true;
@@ -1192,9 +982,6 @@ function initSiteModals(modalContent) {
 
   function openModal(type) {
     if (!renderModal(type)) return;
-    trackEvent("modal_open", {
-      modal_type: type
-    });
     activeType = type;
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
@@ -1222,13 +1009,6 @@ function initSiteModals(modalContent) {
       if (typeof setDrawer === "function") setDrawer(false);
       openModal(type);
     });
-  });
-
-  content.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-open-modal]");
-    if (!button || !content.contains(button)) return;
-    event.preventDefault();
-    openModal(button.getAttribute("data-open-modal"));
   });
 
   document.addEventListener("keydown", (event) => {
@@ -1485,14 +1265,7 @@ function initPackageQuiz(quizContent) {
         button.classList.add("quizAnswer--wide");
       }
       button.addEventListener("click", () => {
-        trackEvent("quiz_answer", {
-          quiz_name: quizContent?.title || "package_quiz",
-          question_index: currentQuestion + 1,
-          answer_text: answer.text || "",
-          persona: answer.persona || "",
-          points: Number(answer.points || 0)
-        });
-
+        window.SiteAnalytics?.track("quiz_step_answered", { step: currentQuestion + 1 });
         withPanelResize(() => {
           group.remove();
           messages.appendChild(createMessage(answer.text || "", "user"));
@@ -1582,25 +1355,17 @@ function initPackageQuiz(quizContent) {
 
   function showResult() {
     completed = true;
+    window.SiteAnalytics?.track("quiz_completed", { questions: questions.length });
     addBotMessage(quizContent?.calculatingMessage || "", 700, () => {
       addTyping(() => {
-        const result = getRecommendation();
-        trackEvent("quiz_complete", {
-          quiz_name: quizContent?.title || "package_quiz",
-          result_package: result?.package || "",
-          result_title: result?.title || ""
-        });
-        addResultMessage(result);
+        addResultMessage(getRecommendation());
         setFooterDefault();
       });
     });
   }
 
   function startQuiz() {
-    trackEvent("quiz_start", {
-      quiz_name: quizContent?.title || "package_quiz"
-    });
-
+    window.SiteAnalytics?.track("quiz_started");
     clearTimers();
     started = true;
     completed = false;
@@ -1687,8 +1452,8 @@ function getStoryCards() {
 
 function getStorySlidePositions(cards = getStoryCards()) {
   if (!storiesGrid) return [];
-
-  return cards.map((card) => card.offsetLeft - storiesGrid.offsetLeft);
+  const first = cards[0]?.getBoundingClientRect().left || 0;
+  return cards.map((card) => card.getBoundingClientRect().left - first);
 }
 
 function setActiveStorySlide(index) {
@@ -1967,50 +1732,17 @@ window.addEventListener("scroll", updateHeaderState, { passive: true });
 const navToggle = document.getElementById("navToggle");
 const drawer = document.getElementById("drawer");
 const drawerBackdrop = document.getElementById("drawerBackdrop");
-const drawerOfferTrigger = document.querySelector("[data-drawer-offer-trigger]");
-const drawerOfferList = document.getElementById("drawerOfferList");
-const offerDropdown = document.querySelector("[data-offer-dropdown]");
-const offerDropdownTrigger = document.querySelector("[data-offer-dropdown-trigger]");
 
 function setDrawer(open) {
   navToggle?.setAttribute("aria-expanded", open ? "true" : "false");
   drawer?.classList.toggle("is-open", open);
   drawer?.setAttribute("aria-hidden", open ? "false" : "true");
   document.body.classList.toggle("drawer-open", open);
-  if (!open) setDrawerOffer(false);
-}
-
-function setDrawerOffer(open) {
-  if (!drawerOfferTrigger || !drawerOfferList) return;
-
-  drawerOfferTrigger.setAttribute("aria-expanded", open ? "true" : "false");
-  drawerOfferList.classList.toggle("is-open", open);
-  drawerOfferList.setAttribute("aria-hidden", open ? "false" : "true");
-  drawerOfferList.inert = !open;
-}
-
-function setOfferDropdown(open) {
-  if (!offerDropdown || !offerDropdownTrigger) return;
-
-  offerDropdown.classList.toggle("is-open", open);
-  offerDropdownTrigger.setAttribute("aria-expanded", open ? "true" : "false");
 }
 
 navToggle?.addEventListener("click", () => {
   const isOpen = drawer?.getAttribute("aria-hidden") === "false";
   setDrawer(!isOpen);
-});
-
-offerDropdownTrigger?.addEventListener("click", () => {
-  setOfferDropdown(!offerDropdown?.classList.contains("is-open"));
-});
-
-drawerOfferTrigger?.addEventListener("click", () => {
-  setDrawerOffer(drawerOfferTrigger.getAttribute("aria-expanded") !== "true");
-});
-
-offerDropdown?.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => setOfferDropdown(false));
 });
 
 drawerBackdrop?.addEventListener("click", () => setDrawer(false));
@@ -2022,15 +1754,10 @@ drawer?.querySelectorAll("a").forEach((link) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     setDrawer(false);
-    setOfferDropdown(false);
   }
 });
 
 document.addEventListener("click", (event) => {
-  if (offerDropdown?.classList.contains("is-open") && !offerDropdown.contains(event.target)) {
-    setOfferDropdown(false);
-  }
-
   if (!drawer?.classList.contains("is-open")) return;
 
   const panel = drawer.querySelector(".drawer__panel");
@@ -2100,17 +1827,18 @@ const animatedExpertStats = new WeakSet();
 
 function animateExpertCounter(counter) {
   const target = Number(counter.dataset.countTo || 0);
-  const suffix = counter.dataset.countSuffix || "+";
+  const suffix = counter.dataset.countSuffix ?? "+";
+  const prefix = counter.dataset.countPrefix || "";
   const duration = 920;
   const start = performance.now();
   let lastValue = 1;
 
   if (prefersReduced) {
-    counter.textContent = `${target}${suffix}`;
+    counter.textContent = `${prefix}${target}${suffix}`;
     return;
   }
 
-  counter.textContent = `1${suffix}`;
+  counter.textContent = `${prefix}1${suffix}`;
   counter.classList.add("is-counting");
 
   window.setTimeout(() => {
@@ -2123,7 +1851,7 @@ function animateExpertCounter(counter) {
     const value = Math.max(1, Math.round(1 + (target - 1) * eased));
 
     if (value !== lastValue) {
-      counter.textContent = `${value}${suffix}`;
+      counter.textContent = `${prefix}${value}${suffix}`;
       lastValue = value;
     }
 
@@ -2132,7 +1860,7 @@ function animateExpertCounter(counter) {
       return;
     }
 
-    counter.textContent = `${target}${suffix}`;
+    counter.textContent = `${prefix}${target}${suffix}`;
     counter.classList.remove("is-counting");
     counter.classList.add("is-settled");
   }
@@ -2249,6 +1977,9 @@ function scrollToExpertSlide(index) {
   if (!expertsTrack || expertSlides.length === 0) return;
 
   const nextIndex = (index + expertSlides.length) % expertSlides.length;
+  expertSlides.forEach((slide, slideIndex) => {
+    if (slideIndex !== nextIndex) slide.querySelector(".expertMore")?.removeAttribute("open");
+  });
   expertProgrammaticScroll = true;
   expertsTrack.scrollTo({
     left: expertSlides[nextIndex].offsetLeft - expertsTrack.offsetLeft,
@@ -2282,6 +2013,7 @@ if (expertDots.length > 0) {
 
     dot.addEventListener("animationend", () => {
       if (!dot.classList.contains("is-active") || !expertCarouselVisible || prefersReduced) return;
+      if (expertSlides[activeExpertSlide]?.querySelector(".expertMore[open]")) return;
       scrollToExpertSlide(activeExpertSlide + 1);
     });
   });
@@ -2325,7 +2057,7 @@ if (expertsSection && expertDots.length > 0) {
    ========================================================= */
 
 const sections = Array.from(document.querySelectorAll("main section[id]"));
-const navLinks = Array.from(document.querySelectorAll(".nav__links a, .nav__links [data-nav-key='offer']"));
+const navLinks = Array.from(document.querySelectorAll(".nav__links a"));
 
 function updateActiveNav() {
   const offset = window.scrollY + 130;
@@ -2339,10 +2071,9 @@ function updateActiveNav() {
   });
 
   navLinks.forEach((link) => {
-    const href = link.getAttribute("href") || link.dataset.navHref;
-    const normalizedHref = href?.includes("#") ? `#${href.split("#").pop()}` : href;
+    const href = link.getAttribute("href");
     const isActionLink = link.hasAttribute("data-open-quiz") || link.hasAttribute("data-open-modal");
-    link.classList.toggle("is-active", !isActionLink && normalizedHref === `#${currentId}`);
+    link.classList.toggle("is-active", !isActionLink && href === `#${currentId}`);
   });
 }
 
@@ -2586,7 +2317,8 @@ contactForm?.addEventListener("submit", async (event) => {
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim();
   const phone = String(formData.get("phone") || "").trim();
-  const message = String(formData.get("message") || "").trim();
+  const selectedPackage = String(formData.get("package") || "Nie mam pewności").trim();
+  const message = String(formData.get("message") || `Prośba o bezpłatną konsultację. Pakiet: ${selectedPackage}.`).trim();
   const privacyConsent = formData.get("privacyConsent");
   const website = String(formData.get("website") || "").trim();
   const contactText = siteContent.contact || {};
@@ -2626,7 +2358,12 @@ async function sendSiteForm({ type, payload, statusElement, statusText = {}, sub
     return false;
   }
 
+  const referralError = type === "contact" ? window.SiteReferral?.submissionError() : "";
+  if (referralError) { setStatus(referralError); return false; }
+
   const previousDisabled = submitButton?.disabled;
+  const analyticsForm = type === "cooperation" ? "cooperation" : "consultation";
+  window.SiteAnalytics?.track("form_submit_started", { form: analyticsForm });
 
   try {
     if (submitButton) submitButton.disabled = true;
@@ -2638,7 +2375,7 @@ async function sendSiteForm({ type, payload, statusElement, statusText = {}, sub
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ type, ...payload })
+      body: JSON.stringify({ type, ...payload, ...(type === "contact" ? window.SiteReferral?.formPayload() : {}) })
     });
 
     let result = null;
@@ -2649,20 +2386,20 @@ async function sendSiteForm({ type, payload, statusElement, statusText = {}, sub
     }
 
     if (!response.ok || !result?.ok) {
+      const routingError = window.SiteReferral?.serverError(result?.code);
+      if (routingError) {
+        setStatus(routingError);
+        window.SiteAnalytics?.track("form_submit_failed", { form: analyticsForm });
+        return false;
+      }
       throw new Error(result?.message || "Form submission failed");
     }
 
     setStatus(statusText.success || "");
-    trackEvent("generate_lead", {
-      form_type: type,
-      method: "website_form"
-    });
+    window.SiteAnalytics?.track("form_submit_succeeded", { form: analyticsForm });
     return true;
-  } catch (error) {
-    trackEvent("form_submit_failed", {
-      form_type: type,
-      error_message: error?.message || "unknown"
-    });
+  } catch {
+    window.SiteAnalytics?.track("form_submit_failed", { form: analyticsForm });
     setStatus(statusText.error || "");
     return false;
   } finally {
