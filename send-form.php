@@ -57,33 +57,19 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 $form = $forms[$type];
-$routingConfig = require __DIR__ . '/mentor-routing-config.php';
-require_once __DIR__ . '/contact-routing.php';
-$routing = ['to' => $form['to'], 'mentorName' => '', 'sourceId' => '', 'sourceName' => ''];
-if ($type === 'contact') {
-    try {
-        $routing = resolveContactRouting($payload, $routingConfig, $form['to']);
-    } catch (InvalidArgumentException $error) {
-        respond(false, 'Unknown mentor', 422, 'mentor_unknown');
-    } catch (RuntimeException $error) {
-        respond(false, 'Mentor contact unavailable', 503, 'mentor_unavailable');
-    }
-}
 $subject = $form['subject'] . ' - ' . $name;
-if ($routing['mentorName'] !== '') {
-    $subject .= ' / ' . $routing['mentorName'];
-}
-$mailBody = buildBody($type, $name, $email, $phone, $message, $routing);
+$mailBody = buildBody($type, $name, $email, $phone, $message);
 $headers = [
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
+    'Content-Transfer-Encoding: 8bit',
     'From: ' . formatMailbox($fromName, $fromEmail),
     'Reply-To: ' . formatMailbox($name, $email),
     'X-Mailer: PHP/' . phpversion(),
 ];
 
 $sent = mail(
-    $routing['to'],
+    $form['to'],
     encodeHeader($subject),
     $mailBody,
     implode("\r\n", $headers),
@@ -96,7 +82,7 @@ if (!$sent) {
 
 respond(true);
 
-function buildBody(string $type, string $name, string $email, string $phone, string $message, array $routing = []): string
+function buildBody(string $type, string $name, string $email, string $phone, string $message): string
 {
     $labels = [
         'contact' => 'Formularz kontaktowy',
@@ -104,17 +90,10 @@ function buildBody(string $type, string $name, string $email, string $phone, str
     ];
 
     $lines = [
-        'Formularz: ' . ($labels[$type] ?? $type),
+        'Źródło: ' . ($labels[$type] ?? $type),
         'Imię: ' . $name,
         'E-mail: ' . $email,
     ];
-
-    if (($routing['mentorName'] ?? '') !== '') {
-        $lines[] = 'Wybrany ekspert: ' . $routing['mentorName'];
-    }
-    if (($routing['sourceId'] ?? '') !== '') {
-        $lines[] = 'Źródło linku (deklarowane przez URL): ' . $routing['sourceName'] . ' [' . $routing['sourceId'] . ']';
-    }
 
     if ($phone !== '') {
         $lines[] = 'Telefon: ' . $phone;
@@ -163,11 +142,11 @@ function encodeHeader(string $value): string
     return '=?UTF-8?B?' . base64_encode($value) . '?=';
 }
 
-function respond(bool $ok, string $message = '', int $status = 200, string $code = ''): void
+function respond(bool $ok, string $message = '', int $status = 200): void
 {
     http_response_code($status);
     echo json_encode(
-        ['ok' => $ok, 'message' => $message, 'code' => $code],
+        ['ok' => $ok, 'message' => $message],
         JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
     );
     exit;

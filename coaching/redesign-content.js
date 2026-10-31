@@ -117,7 +117,7 @@
     text: "Formularze przesyłają dane do serwera strony, który wysyła zapytanie na nasz adres e-mail albo do eksperta wybranego w linku kontaktowym. Do zapytania możemy dołączyć oznaczenie źródła linku, np. LinkedIn / Featured. Te oznaczenia są przekazywane w URL-u, bez zapisywania ich w cookies lub localStorage. Nie otwieramy klienta pocztowego użytkownika."
   };
   c.modals.privacy.sections[4] = {
-    title: "Analityka i odtwarzanie wizyt",
-    text: "Po dobrowolnej zgodzie możemy korzystać z PostHog do pomiaru odsłon, przewijania i kliknięć. Dane są powiązane z losowym identyfikatorem przeglądarki, a nie z imieniem ani e-mailem. Odtwarzanie wizyt wymaga osobnej zgody; teksty są maskowane, a formularze i ankieta wyłączone z nagrania. Nie przesyłamy wartości pól formularzy ani odpowiedzi ankiety. Przed zgodą i po odrzuceniu nie ładujemy PostHog ani nie wysyłamy do niego zdarzeń. Ustawienia można zmienić w stopce. Wybór zapisujemy w przeglądarce na maksymalnie 180 dni; wycofanie zgody zatrzymuje dalsze zbieranie, ale nie usuwa wcześniej zapisanych danych u dostawcy. W sprawie ich usunięcia skontaktuj się z administratorem."
+    title: "Zbiorcze statystyki korzystania ze strony",
+    text: "Korzystamy z PostHog Cloud EU w trybie cookieless do zbiorczego pomiaru odsłon, źródeł wejścia, przewijania i kliknięć. Analityka nie zapisuje cookies ani identyfikatorów w localStorage lub sessionStorage. Nie nagrywamy wizyt, nie tworzymy profili osób i nie przesyłamy danych formularzy ani odpowiedzi ankiety. Dostawca przetwarza adres IP i informacje o przeglądarce do obliczenia dziennego hasha po stronie serwera; nie jest to gwarancja pełnej anonimowości. Respektujemy Do Not Track i Global Privacy Control."
   };
 })();

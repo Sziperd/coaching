@@ -1,6 +1,0 @@
-# Optional Apache redirects. Merge into the site's existing .htaccess.
-# Canonical query links work without this file on every PHP hosting setup.
-RewriteEngine On
-RewriteRule ^from/([a-z0-9-]+)/?$ index.html?from=$1 [R=302,L]
-RewriteRule ^from:([a-z0-9-]+)/?$ index.html?from=$1 [R=302,L]
-RewriteRule ^mentor/(milosz-stawecki|paulina-mackiewicz)/?$ kontakt.html?mentor=$1&from=mentor-referral [R=302,L]

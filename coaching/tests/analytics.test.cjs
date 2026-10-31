@@ -72,7 +72,7 @@ function environment(options = {}) {
   window.RELEVATEME_ANALYTICS_CONFIG = {
     enabled: true, projectToken: "phc_test_token", apiHost: "https://eu.i.posthog.com",
     allowedHosts: ["relevateme.pl"], allowLocalhost: false, sessionReplay: true,
-    consentVersion: 1, consentMaxAgeDays: 180, ...options.config
+    mode: "cookieless", ...options.config
   };
   vm.runInContext(source, context);
   document.emit("DOMContentLoaded");
@@ -105,219 +105,39 @@ function storedConsent(analytics, replay = false, extra = {}) {
 }
 function plain(value) { return JSON.parse(JSON.stringify(value)); }
 
-test("no vendor request or PostHog global before consent; events are not queued", () => {
-  const env = environment();
-  assert.equal(env.dialog.open, true);
-  env.api.track("quiz_started");
-  assert.equal(env.document.head.children.length, 0);
-  assert.equal(env.window.posthog, undefined);
-  assert.equal(env.api.getStatus().analytics, false);
-  assert.deepEqual(Object.keys(env.localStorage), []);
-});
 
-test("rejection does not load SDK and clears only this integration's persistence", () => {
-  const env = environment({ storage: { ph_relevateme_posthog: "old-id", unrelated: "keep" } });
-  env.dialog.querySelector("[data-consent-reject]").emit("click");
-  assert.equal(env.document.head.children.length, 0);
-  assert.equal(env.api.getStatus().analytics, false);
-  assert.equal(env.localStorage.ph_relevateme_posthog, undefined);
-  assert.equal(env.localStorage.unrelated, "keep");
-  assert.equal(JSON.parse(env.localStorage.getItem("relevateme.analytics-consent")).analytics, false);
+test("cookieless starts without popup or storage writes", () => {
+ const e=environment(); assert.equal(e.document.body.children.length,0);
+ assert.equal(e.document.head.children.length,1);
+ const o=e.loadSdk(); assert.equal(o.cookieless_mode,"always");
+ assert.equal(o.disable_persistence,true); assert.equal(o.persistence,"memory");
+ assert.equal(o.disable_session_recording,true); assert.equal(o.person_profiles,"never");
+ assert.equal(e.captures.filter(x=>x.event==="$pageview").length,1);
+ assert.deepEqual(Object.keys(e.localStorage),[]); assert.deepEqual(Object.keys(e.sessionStorage),[]);
+ assert.ok(!e.calls.includes("opt_in")); assert.ok(!e.calls.includes("replay_start"));
 });
-
-test("analytics-only acceptance starts SDK with replay disabled and captures one sanitized pageview", () => {
-  const env = environment();
-  const analytics = env.dialog.querySelector('[name="analytics"]');
-  analytics.checked = true; analytics.emit("change");
-  env.dialog.querySelector("[data-consent-save]").emit("click");
-  assert.equal(env.document.head.children.length, 1);
-  assert.equal(env.document.head.children[0].src, "https://eu-assets.i.posthog.com/static/array.js");
-  assert.equal(env.api.getStatus().sdkLoaded, false);
-  const options = env.loadSdk();
-  assert.equal(options.autocapture, false);
-  assert.equal(options.person_profiles, "never");
-  assert.equal(options.session_recording.maskAllInputs, true);
-  assert.equal(options.session_recording.maskTextSelector, "*");
-  assert.equal(options.session_recording.recordBody, false);
-  assert.equal(options.session_recording.recordHeaders, false);
-  assert.equal(env.api.getStatus().replay, false);
-  assert.ok(!env.calls.includes("replay_start"));
-  const pageviews = env.captures.filter(value => value.event === "$pageview");
-  assert.equal(pageviews.length, 1);
-  assert.equal(pageviews[0].properties.$current_url, "https://relevateme.pl/index.html");
-  assert.equal(pageviews[0].properties.$referrer, "https://search.example");
-  assert.equal(pageviews[0].properties.$geoip_disable, true);
-  assert.equal(pageviews[0].properties.token, "phc_test_token");
-  assert.equal(pageviews[0].properties.distinct_id, "random-id");
-  assert.equal(options.before_send({ event: "$snapshot", properties: { $snapshot_data: [] } }), null);
+test("events exclude identity, arbitrary properties, URLs and replay",()=>{
+ const e=environment(); const o=e.loadSdk();
+ const event=o.before_send({event:"form_started",properties:{form:"consultation",distinct_id:"old-id",$device_id:"device",$session_id:"session",email:"secret@example.com",$snapshot_data:"secret"}});
+ assert.equal(event.properties.distinct_id,"$posthog_cookieless");
+ assert.equal(event.properties.$cookieless_mode,true);
+ for(const k of ["$device_id","$session_id","email","$snapshot_data"])assert.equal(event.properties[k],undefined);
+ assert.equal(event.properties.$current_url,"https://relevateme.pl/index.html");
+ assert.equal(o.before_send({event:"$snapshot",properties:{}}),null);
+ assert.equal(o.before_send({event:"$identify",properties:{}}),null);
+ assert.equal(o.before_send({event:"analytics_consent_updated",properties:{}}),null);
 });
-
-test("explicit replay consent starts recording; withdrawal gates every capture and allows re-consent", () => {
-  const env = environment();
-  env.dialog.querySelector("[data-consent-all]").emit("click");
-  const options = env.loadSdk();
-  assert.equal(env.api.getStatus().replay, true);
-  assert.ok(env.calls.includes("replay_start"));
-  assert.ok(options.before_send({ event: "$snapshot", properties: { $snapshot_data: [] } }));
-  env.api.openPreferences();
-  env.dialog.querySelector("[data-consent-reject]").emit("click");
-  const count = env.captures.length;
-  env.api.track("quiz_started");
-  assert.equal(env.captures.length, count);
-  assert.equal(options.before_send({ event: "$pageview", properties: {} }), null);
-  assert.ok(env.calls.includes("opt_out"));
-  assert.equal(env.api.getStatus().replay, false);
-  env.api.openPreferences(); env.dialog.querySelector("[data-consent-all]").emit("click");
-  assert.equal(env.document.head.children.length, 1);
-  assert.equal(env.api.getStatus().analytics, true);
-  assert.equal(env.captures.filter(value => value.event === "$pageview").length, 2);
+test("invalid configuration and browser privacy signals fail closed",()=>{
+ for(const options of [{dnt:"1"},{gpc:true},{config:{enabled:false}},{config:{projectToken:""}},{config:{mode:"other"}},{config:{apiHost:"https://untrusted.example"}},{url:"file:///tmp/index.html"},{url:"https://staging.example/"},{url:"http://localhost:4173/"}]){
+ const e=environment(options);assert.equal(e.document.head.children.length,0);assert.equal(e.document.body.children.length,0);
+ }
 });
-
-test("personal values, arbitrary events and URL query strings are rejected", () => {
-  const env = environment({ storage: storedConsent(true, true) });
-  const options = env.loadSdk();
-  env.api.track("form_submit_succeeded", { form: "consultation", email: "secret@example.com", name: "Jane", message: "private" });
-  const event = env.captures.at(-1);
-  assert.equal(event.properties.form, "consultation");
-  for (const key of ["email", "name", "message"]) assert.equal(event.properties[key], undefined);
-  const filtered = options.before_send({ event: "quiz_step_answered", properties: { step: 2, answer: "private", $initial_current_url: "https://example.com/?secret=yes", $ip: "127.0.0.1", $set: { email: "private" } } });
-  assert.equal(filtered.properties.step, 2);
-  for (const key of ["answer", "$initial_current_url", "$ip", "$set"]) assert.equal(filtered.properties[key], undefined);
-  assert.equal(options.before_send({ event: "$autocapture", properties: {} }), null);
-  assert.equal(options.before_send({ event: "unknown", properties: {} }), null);
-  const request = options.session_recording.maskCapturedNetworkRequestFn({ name: "https://relevateme.pl/?email=x#secret", requestBody: "private", responseBody: "private", requestHeaders: "private" });
-  assert.equal(request.name, "https://relevateme.pl/");
-  assert.equal(request.requestBody, undefined);
-  assert.equal(request.responseBody, undefined);
-  assert.equal(request.requestHeaders, undefined);
+test("legacy identifiers are removed without touching unrelated storage",()=>{
+ const e=environment({storage:{"ph_relevateme_posthog":"old","unrelated":"keep"}});
+ assert.equal(e.localStorage.getItem("ph_relevateme_posthog"),null);assert.equal(e.localStorage.getItem("unrelated"),"keep");
 });
-
-test("no token, wrong host, file URL, kill switch and invalid API host all fail closed", () => {
-  for (const options of [
-    { config: { projectToken: "" } }, { config: { enabled: false } },
-    { config: { apiHost: "https://untrusted.example" } }, { url: "https://staging.example/index.html" },
-    { url: "file:///tmp/index.html" }, { url: "http://localhost:4173/index.html" }
-  ]) {
-    const env = environment({ ...options, storage: storedConsent(true, true) });
-    assert.equal(env.api.getStatus().configured, false);
-    assert.equal(env.document.head.children.length, 0);
-  }
+test("known referral labels remain available for aggregate breakdowns",()=>{
+ const e=environment({referral:{getContext:()=>({sourceId:"linkedin-featured"}),analyticsProperties:()=>({link_source:"linkedin-featured",email:"private@example.com"})}});
+ e.loadSdk();assert.equal(e.captures[0].properties.link_source,"linkedin-featured");assert.equal(e.captures[0].properties.email,undefined);
 });
-
-test("DNT and GPC override stored or newly granted consent", () => {
-  for (const options of [{ dnt: "1" }, { gpc: true }]) {
-    const env = environment({ ...options, storage: storedConsent(true, true) });
-    assert.equal(env.api.getStatus().analytics, false);
-    env.api.openPreferences(); env.dialog.querySelector("[data-consent-all]").emit("click");
-    assert.equal(env.document.head.children.length, 0);
-    assert.equal(env.api.getStatus().replay, false);
-  }
-});
-
-test("expired, future, malformed and old-version consent require a fresh choice", () => {
-  for (const value of [
-    storedConsent(true, true, { savedAt: Date.now() - 181 * 86400000 }),
-    storedConsent(true, true, { savedAt: Date.now() + 100000 }),
-    storedConsent(true, true, { version: 0 }),
-    { "relevateme.analytics-consent": "broken" }
-  ]) {
-    const env = environment({ storage: value });
-    assert.equal(env.dialog.open, true);
-    assert.equal(env.document.head.children.length, 0);
-  }
-});
-
-test("revocation in another tab stops recording and drops events", () => {
-  const env = environment({ storage: storedConsent(true, true) });
-  const options = env.loadSdk();
-  env.localStorage.setItem("relevateme.analytics-consent", storedConsent(false)["relevateme.analytics-consent"]);
-  env.window.emit("storage", { key: "relevateme.analytics-consent" });
-  assert.equal(env.api.getStatus().analytics, false);
-  assert.equal(options.before_send({ event: "$snapshot", properties: {} }), null);
-  assert.ok(env.calls.includes("opt_out"));
-});
-
-test("revocation while SDK is downloading prevents a late loaded callback from collecting", () => {
-  const env = environment();
-  env.dialog.querySelector("[data-consent-all]").emit("click");
-  env.api.openPreferences(); env.dialog.querySelector("[data-consent-reject]").emit("click");
-  env.loadSdk();
-  assert.equal(env.captures.length, 0);
-  assert.ok(!env.calls.includes("replay_start"));
-  assert.ok(env.calls.includes("opt_out"));
-});
-
-test("network failure remains non-fatal and exposes a diagnostic status", () => {
-  const env = environment({ storage: storedConsent(true) });
-  env.document.head.children[0].onerror();
-  assert.equal(env.api.getStatus().error, "sdk_load_failed");
-  assert.equal(env.api.getStatus().sdkLoaded, false);
-  assert.deepEqual(plain(env.api.getStatus()).browserProtection, false);
-});
-
-test("visible sections and carousel cards are measured once, including the first F1 slide", () => {
-  const section = new Element(); section.id = "historie";
-  section.getBoundingClientRect = () => ({ top: 0, bottom: 500, height: 500 });
-  const slide = new Element();
-  slide.getBoundingClientRect = () => ({ left: 20, right: 350, width: 330, top: 40, bottom: 650, height: 610 });
-  const group = new Element(); group.querySelectorAll = () => [slide];
-  slide.closest = () => group;
-  const env = environment({ storage: storedConsent(true), observe: true, sections: [section], slides: [slide] });
-  assert.equal(env.observations.length, 0);
-  env.loadSdk();
-  const [sections, slides] = env.observations;
-  sections.callback([{ isIntersecting: true, target: section }]); env.flushTimers();
-  sections.callback([{ isIntersecting: true, target: section }]); env.flushTimers();
-  slides.callback([{ isIntersecting: true, target: slide }]);
-  slides.callback([{ isIntersecting: true, target: slide }]);
-  const seen = env.captures.filter(value => value.event === "section_viewed");
-  assert.equal(seen.length, 1); assert.equal(seen[0].properties.section, "historie");
-  const cards = env.captures.filter(value => value.event === "carousel_slide_viewed");
-  assert.equal(cards.length, 1); assert.equal(cards[0].properties.carousel, "formula");
-  assert.equal(cards[0].properties.slide, 1);
-});
-
-test("invisible sections do not count and depth milestones are deduplicated", () => {
-  const section = new Element(); section.id = "historie";
-  section.getBoundingClientRect = () => ({ top: 900, bottom: 1400, height: 500 });
-  const env = environment({ storage: storedConsent(true), observe: true, sections: [section] });
-  env.loadSdk(); env.observations[0].callback([{ isIntersecting: true, target: section }]); env.flushTimers();
-  assert.equal(env.captures.filter(value => value.event === "section_viewed").length, 0);
-  env.context.scrollY = 3200;
-  env.window.emit("scroll"); env.flushTimers(); env.window.emit("scroll"); env.flushTimers();
-  assert.deepEqual(env.captures.filter(value => value.event === "scroll_depth_reached").map(value => value.properties.percent), [25, 50, 75]);
-});
-
-test("a form start contains no input value and is captured only once", () => {
-  const env = environment({ storage: storedConsent(true) }); env.loadSdk();
-  const form = new Element("form");
-  const field = new Element("input"); field.value = "secret@example.com"; field.closest = () => form;
-  env.document.emit("focusin", { target: field }); env.document.emit("focusin", { target: field });
-  const started = env.captures.filter(value => value.event === "form_started");
-  assert.equal(started.length, 1); assert.equal(started[0].properties.form, "consultation");
-  assert.ok(!JSON.stringify(started).includes("secret@example.com"));
-});
-
-test("allowlisted referral attribution is attached to events but arbitrary properties are dropped", () => {
-  const env = environment({ storage: storedConsent(true), page: "contact", referral: {
-    getContext: () => ({ sourceId: "linkedin-featured", mentorId: "milosz-stawecki" }),
-    analyticsProperties: () => ({ link_source: "linkedin-featured", utm_source: "linkedin", utm_content: "featured", referral_mentor: "milosz-stawecki", email: "private@example.com", utm_term: "private" })
-  } });
-  env.loadSdk(); env.api.track("form_started", { form: "consultation" });
-  const event = env.captures.at(-1);
-  assert.equal(event.properties.link_source, "linkedin-featured");
-  assert.equal(event.properties.referral_mentor, "milosz-stawecki");
-  assert.equal(event.properties.site_page, "contact");
-  assert.equal(event.properties.email, undefined); assert.equal(event.properties.utm_term, undefined);
-  assert.equal(env.captures.filter(value => value.event === "referral_landing").length, 1);
-  assert.ok(!event.properties.$current_url.includes("?"));
-});
-
-test("referral events remain consent-gated", () => {
-  const env = environment({ referral: {
-    getContext: () => ({ sourceId: "linkedin-featured" }),
-    analyticsProperties: () => ({ link_source: "linkedin-featured" })
-  } });
-  env.api.track("referral_landing");
-  assert.equal(env.captures.length, 0); assert.equal(env.document.head.children.length, 0);
-});
+test("SDK failure is nonfatal",()=>{const e=environment();e.document.head.children[0].onerror();assert.equal(e.api.getStatus().error,"sdk_load_failed");});

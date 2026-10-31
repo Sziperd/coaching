@@ -63,7 +63,6 @@ window.RelevateUI = (() => {
       <div class="footer__bottom"><p>© <span id="year">${new Date().getFullYear()}</span> RelevateMe</p>
         <div class="footer__links"><a href="${home}#faq">FAQ</a>
           <a href="${home}#prywatnosc" ${isPackage ? "" : 'data-open-modal="privacy"'}>Polityka prywatności i RODO</a>
-          <button type="button" data-analytics-preferences>Ustawienia prywatności</button>
           <a href="${home}#wspolpraca" ${isPackage ? "" : 'data-open-modal="cooperation"'}>Dołącz do zespołu</a>
           <a href="#${isPackage ? "top" : "home"}">Wróć na górę ${icon("arrow-up")}</a></div></div></div>`;
   }
