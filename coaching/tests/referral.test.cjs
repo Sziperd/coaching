@@ -16,7 +16,7 @@ function load(query = "", pathname = "/index.html") {
 const plain = value => JSON.parse(JSON.stringify(value));
 
 test("LinkedIn placements have distinct, allowlisted campaign properties", () => {
-  for (const placement of ["featured", "about", "contact"]) {
+  for (const placement of ["featured", "about", "contact", "experience"]) {
     const api = load(`?from=linkedin-${placement}`);
     assert.deepEqual(plain(api.analyticsProperties()), {
       link_source: `linkedin-${placement}`, utm_source: "linkedin", utm_medium: "social", utm_content: placement, utm_campaign: "profile"
@@ -92,4 +92,28 @@ test("ordinary visits do not get synthetic referral tags", () => {
   assert.deepEqual(plain(api.analyticsProperties()), {});
   assert.equal(api.decorateUrl("navigate.html"), "navigate.html");
   assert.equal(api.submissionError(), "");
+});
+
+test("all requested short links and bracket links are supported", () => {
+  for (const placement of ["featured", "about", "contact", "experience", "dm"]) {
+    for (const query of [`?from=${placement}`, `?from[${placement}]`]) {
+      const api = load(query);
+      assert.equal(api.analyticsProperties().utm_content, placement);
+      assert.equal(api.analyticsProperties().utm_source, "linkedin");
+      assert.equal(new URL(api.decorateUrl("navigate.html")).searchParams.get("from"), `linkedin-${placement}`);
+    }
+  }
+});
+
+test("dated posts retain their date across pages without accepting arbitrary labels", () => {
+  for (const query of ["?from=post-2026-10-31", "?from[post-2026-10-31]"]) {
+    const api = load(query);
+    assert.equal(api.analyticsProperties().link_source, "post-2026-10-31");
+    assert.equal(api.analyticsProperties().post_date, "2026-10-31");
+    assert.equal(api.analyticsProperties().utm_content, "post");
+    assert.equal(new URL(api.decorateUrl("kontakt.html")).searchParams.get("from"), "post-2026-10-31");
+  }
+  for (const query of ["?from=post-2026-02-30", "?from=post-2026-13-01", "?from=post-private", "?from[dm]&from[about]", "?from=about&from[dm]", "?from[dm]=secret@example.com"]) {
+    assert.deepEqual(plain(load(query).analyticsProperties()), {});
+  }
 });

@@ -71,7 +71,7 @@
     properties.site_page = page();
     properties.site_environment = local ? "development" : "production";
     const attribution = window.SiteReferral?.analyticsProperties() || {};
-    for (const key of ["link_source", "utm_source", "utm_medium", "utm_content", "utm_campaign", "referral_mentor"]) {
+    for (const key of ["link_source", "utm_source", "utm_medium", "utm_content", "utm_campaign", "referral_mentor", "post_date"]) {
       if (typeof attribution[key] === "string" && /^[a-z0-9][a-z0-9_-]{0,63}$/.test(attribution[key])) properties[key] = attribution[key];
     }
     event.properties = properties;

@@ -122,3 +122,18 @@ Testy PHP korzystają ze skrzynek `example.com` i nie wywołują `mail()`.
 Sprawdzono 11 testów JavaScript dotyczących źródeł i linków oraz 16 testów analityki. W Safari sprawdzono kontakt mentora na desktopie i telefonie, przejście do oferty z zachowaniem źródła i mentora oraz blokadę nieznanego identyfikatora. PHP CLI nie jest dostępne lokalnie: lint, test routingu PHP, przekierowania Apache i dostarczenie wiadomości należy potwierdzić na hostingu. Nie wysyłano wiadomości testowych.
 
 Powiązane: [konfiguracja PostHog](POSTHOG.md), [oficjalna dokumentacja segmentacji UTM](https://posthog.com/docs/data/utm-segmentation).
+# Linki LinkedIn do statystyk cookieless
+
+| Miejsce | Link |
+| --- | --- |
+| Featured | `https://relevateme.pl/?from=featured` |
+| About | `https://relevateme.pl/?from=about` |
+| Contact info | `https://relevateme.pl/?from=contact` |
+| Doswiadczenie | `https://relevateme.pl/?from=experience` |
+| Post (przyklad daty) | `https://relevateme.pl/?from=post-2026-10-31` |
+| Wiadomosci prywatne | `https://relevateme.pl/?from=dm` |
+
+Obslugiwany jest tez zapis `?from[featured]`, ale zalecany jest standardowy `?from=featured`. Data posta: RRRR-MM-DD, poprawna data kalendarzowa. Linki zakladaja, ze domena serwuje strone z katalogu coaching; przy hostowaniu pod podsciezka dodaj /coaching/ przed znakiem zapytania.
+
+PostHog: filtruj `referral_landing` i rozbijaj po `link_source`; dla postow `utm_content=post` i `post_date`. Te wlasciwosci sa tez dolaczane do pozostalych zdarzen na stronie. Krotkie nazwy profilu sa normalizowane do linkedin-featured/about/contact/experience/dm, a post zachowuje post-RRRR-MM-DD. Zrodlo jest przenoszone miedzy podstronami w URL, bez storage. To deklaracja w linku, nie dowod faktycznego pochodzenia wizyty; link mozna przekazac dalej. DNT/GPC i blokery moga ograniczac pomiar.
+

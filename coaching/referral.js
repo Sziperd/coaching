@@ -5,20 +5,28 @@
   const identifier = value => typeof value === "string" && /^[a-z0-9][a-z0-9_-]{0,63}$/.test(value);
   const owns = (object, key) => Object.hasOwn(object || {}, key);
   const unique = key => params.getAll(key).length === 1 ? params.get(key) : null;
-  const rawSource = unique("from");
+  const bracketSources = [...params.keys()].filter(key => /^from\[.*\]$/.test(key));
+  const sourcePresent = params.has("from") || bracketSources.length > 0;
+  const rawSource = params.has("from") && bracketSources.length === 0 ? unique("from") :
+    !params.has("from") && bracketSources.length === 1 && params.getAll(bracketSources[0]).length === 1 && params.get(bracketSources[0]) === "" ? bracketSources[0].slice(5, -1) : null;
+  const postMatch = /^post-(\d{4}-\d{2}-\d{2})$/.exec(rawSource || "");
+  const postTimestamp = postMatch ? Date.parse(postMatch[1] + "T00:00:00Z") : NaN;
+  const postDate = postMatch && Number.isFinite(postTimestamp) && Number(postMatch[1].slice(0, 4)) >= 2000 &&
+    Number(postMatch[1].slice(0, 4)) <= 2100 &&
+    new Date(postTimestamp).toISOString().slice(0, 10) === postMatch[1] ? postMatch[1] : "";
   const rawMentor = unique("mentor");
   const sourceKey = identifier(rawSource) && owns(config.sourceAliases, rawSource) ? config.sourceAliases[rawSource] : rawSource;
   const mentorKey = identifier(rawMentor) && owns(config.mentorAliases, rawMentor) ? config.mentorAliases[rawMentor] : rawMentor;
   const mentorId = identifier(mentorKey) && owns(config.mentors, mentorKey) ? mentorKey : "";
   const invalidMentor = params.has("mentor") && !mentorId;
-  const sourceId = identifier(sourceKey) && owns(config.sources, sourceKey) ? sourceKey :
-    !params.has("from") && mentorId ? "mentor-referral" : "";
+  const sourceId = postDate ? rawSource : identifier(sourceKey) && owns(config.sources, sourceKey) ? sourceKey :
+    !sourcePresent && mentorId ? "mentor-referral" : "";
   const mentor = mentorId ? Object.freeze({ id: mentorId, ...config.mentors[mentorId] }) : null;
   const pages = new Set(["index.html", "navigate.html", "elevate.html", "relevate.html", "kontakt.html"]);
 
   function analyticsProperties() {
     const result = {};
-    const source = config.sources?.[sourceId];
+    const source = postDate ? { source: "linkedin", medium: "social", placement: "post", campaign: "posts" } : config.sources?.[sourceId];
     if (source) {
       result.link_source = sourceId;
       for (const [field, property] of Object.entries({ source: "utm_source", medium: "utm_medium", placement: "utm_content", campaign: "utm_campaign" })) {
@@ -26,6 +34,7 @@
       }
     }
     if (mentorId) result.referral_mentor = mentorId;
+    if (postDate) result.post_date = postDate;
     return result;
   }
   function decorateUrl(value) {
