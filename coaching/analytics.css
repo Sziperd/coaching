@@ -1,0 +1,24 @@
+.analyticsConsent{width:min(560px,calc(100% - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:28px;border:1px solid #1e2f4e24;border-radius:8px;background:#faf9f6;color:#1e2f4e;box-shadow:0 24px 80px #0a15243b;font-family:Inter,Arial,sans-serif;overflow-y:auto;letter-spacing:0}
+.analyticsConsent::backdrop{background:#0a15246b}
+.analyticsConsent h2{font-size:24px;line-height:1.2;margin:0 0 14px}
+.analyticsConsent p{font-size:14px;line-height:1.6;margin:0 0 18px;color:#515b6c}
+.analyticsConsent__option{display:flex;align-items:flex-start;gap:12px;padding:16px 0;border-top:1px solid #1e2f4e18;cursor:pointer}
+.analyticsConsent__option input{width:19px;height:19px;flex:0 0 19px;margin:1px 0 0;accent-color:#1e2f4e}
+.analyticsConsent__option span{min-width:0}
+.analyticsConsent__option strong{display:block;font-size:14px;line-height:1.4;margin:0 0 6px}
+.analyticsConsent__option small{display:block;font-size:13px;line-height:1.5;color:#515b6c}
+.analyticsConsent p.analyticsConsent__note{margin:8px 0 16px;font-size:12px}
+.analyticsConsent p.analyticsConsent__legal{font-size:12px;margin-bottom:20px}
+.analyticsConsent a{text-decoration:underline}
+.analyticsConsent__policy{margin:0 0 20px;font-size:13px}
+.analyticsConsent__policy summary{cursor:pointer;text-decoration:underline}
+.analyticsConsent__policy h3{font-size:14px;line-height:1.4;margin:16px 0 6px}
+.analyticsConsent__policy p{font-size:12px;margin:0 0 12px}
+.analyticsConsent__actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.analyticsConsent__actions button{min-height:44px;padding:10px 12px;border:1px solid #1e2f4e75;border-radius:6px;background:transparent;color:#1e2f4e;font:600 12px/1.4 Inter,Arial,sans-serif;cursor:pointer;white-space:normal}
+.analyticsConsent__actions button:last-child{grid-column:1/-1}
+.analyticsConsent__actions button:hover{background:#1e2f4e0a}
+.analyticsConsent button:disabled{opacity:.45;cursor:not-allowed}
+.analyticsConsent :focus-visible,[data-analytics-preferences]:focus-visible{outline:3px solid #477ba7;outline-offset:3px}
+.footer__links [data-analytics-preferences]{border:0;background:none;padding:0;color:inherit;font:500 12px/1.5 Inter,Arial,sans-serif;cursor:pointer;text-align:left}
+@media(max-width:480px){.analyticsConsent{padding:20px}.analyticsConsent h2{font-size:22px}.analyticsConsent__actions{grid-template-columns:1fr}.analyticsConsent__actions button:last-child{grid-column:auto}}

@@ -19,12 +19,12 @@ window.siteContent = {
 
   nav: {
     links: [
-      { href: "#home", label: "O nas" },
-      { href: "#pakiety", label: "Oferta" },
-      { href: "#formula", label: "Jak działamy" },
-      { href: "#eksperci", label: "Eksperci" },
-      { href: "#pakiety", label: "Ankieta dopasowania" },
-      { href: "#wspolpraca", label: "Współpraca" }
+      { key: "home", href: "#home", label: "O nas" },
+      { key: "offer", href: "#pakiety", label: "Oferta" },
+      { key: "formula", href: "#formula", label: "Jak działamy" },
+      { key: "experts", href: "#eksperci", label: "Eksperci" },
+      { key: "quiz", href: "#pakiety", label: "Ankieta dopasowania" },
+      { key: "cooperation", href: "#wspolpraca", label: "Współpraca" }
     ],
     cta: "Umów bezpłatną konsultację"
   },
@@ -159,6 +159,7 @@ window.siteContent = {
         type: "Start | klasyczny coaching",
         name: "Navigate",
         detail: "coaching",
+        landingHref: "pakiet-navigate.html",
         tagline: "Gdy masz mętlik w głowie, natłok opcji i czujesz paraliż decyzyjny w celach osobistych lub zawodowych.",
         contextLabel: "Punkt startu",
         context: "Odcinamy szum, odkrywamy bariery i ustawiamy ramy decyzji, żeby łatwiej było ruszyć z miejsca.",
@@ -171,6 +172,7 @@ window.siteContent = {
         type: "Regeneracja | work-life coaching",
         name: "Elevate",
         detail: "work-life coaching",
+        landingHref: "pakiet-elevate.html",
         tagline: "Gdy biznes idzie świetnie, ale płacisz za to brakiem snu, stresem i utratą relacji z bliskimi.",
         contextLabel: "Napięcie",
         context: "Pracujemy nad osobistym dobrostanem, twardymi granicami i odpoczynkiem bez poczucia winy.",
@@ -182,6 +184,7 @@ window.siteContent = {
         type: "Skalowanie | work-life mentoring",
         name: "Relevate",
         detail: "work-life mentoring",
+        landingHref: "pakiet-relevate.html",
         tagline: "Gdy uświadamiasz sobie, że jesteś największym wąskim gardłem w firmie i chcesz czerpać z wiedzy praktyków.",
         contextLabel: "Próg decyzji",
         context: "Łączymy skalowanie biznesu, delegowanie zadań i gotowe strategie sprawdzone w praktyce.",
