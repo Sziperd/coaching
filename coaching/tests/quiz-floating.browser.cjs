@@ -18,20 +18,22 @@ async function openPage(width, height, reducedMotion = 'no-preference') {
   return page;
 }
 
-async function assertFullscreen(page) {
+async function assertFloating(page) {
   // Even reduced-motion transitions need a paint before their final transform.
   await page.waitForFunction(() => {
     const panel = document.querySelector('[data-quiz-panel]');
     const rect = panel.getBoundingClientRect();
-    return Math.abs(rect.x) < 1 && Math.abs(rect.y) < 1
-      && Math.abs(rect.width - innerWidth) < 1 && Math.abs(rect.height - innerHeight) < 1
+    return Math.abs(rect.right - (innerWidth - 20)) < 1 && Math.abs(rect.y - 20) < 1
+      && Math.abs(rect.width - Math.min(innerWidth - 40, 500)) < 1 && Math.abs(rect.height - (innerHeight - 40)) < 1
       && getComputedStyle(panel).opacity === '1';
   }, null, { timeout: 2000 });
   const panel = await page.locator('[data-quiz-panel]').boundingBox();
   const viewport = page.viewportSize();
-  assert(Math.abs(panel.x) < 1 && Math.abs(panel.y) < 1, 'The panel must reach both top corners');
-  assert(Math.abs(panel.width - viewport.width) < 1 && Math.abs(panel.height - viewport.height) < 1,
-    'The panel must fill the complete viewport');
+  assert(panel.x >= 20 && Math.abs(panel.y - 20) < 1, 'The floating window must leave the page visible around its edges');
+  assert(Math.abs(viewport.width - panel.x - panel.width - 20) < 1 && Math.abs(viewport.height - panel.y - panel.height - 20) < 1,
+    'The floating window must stay inset from the right and bottom edges');
+  assert.equal(await page.locator('[data-quiz-panel]').evaluate(element => parseFloat(getComputedStyle(element).borderRadius) >= 20), true,
+    'The floating window must keep its rounded corners');
   const close = page.locator('[data-quiz-close]');
   assert.equal(await close.evaluate(element => {
     const rect = element.getBoundingClientRect();
@@ -42,14 +44,14 @@ async function assertFullscreen(page) {
 }
 
 for (const [width, height] of [[320, 568], [390, 844], [680, 900], [660, 360]]) {
-  test(`${engine}, ${width}x${height}: quiz covers the screen from the hero and floating button`, async () => {
+  test(`${engine}, ${width}x${height}: quiz opens as a large floating window from either button position`, async () => {
     const page = await openPage(width, height);
     try {
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.locator('[data-quiz-toggle]').click();
       await page.waitForTimeout(450);
-      await assertFullscreen(page);
+      await assertFloating(page);
       const scrollBefore = await page.evaluate(() => scrollY);
       await page.mouse.move(20, 20);
       await page.mouse.wheel(0, 500);
@@ -63,10 +65,10 @@ for (const [width, height] of [[320, 568], [390, 844], [680, 900], [660, 360]]) 
       const scrolled = await page.evaluate(() => scrollY);
       await page.locator('[data-quiz-toggle]').click();
       await page.waitForTimeout(450);
-      await assertFullscreen(page);
+      await assertFloating(page);
       await page.setViewportSize({ width, height: height + 80 });
       await page.waitForTimeout(200);
-      await assertFullscreen(page);
+      await assertFloating(page);
       await page.locator('[data-quiz-close]').click();
       assert(Math.abs(await page.evaluate(() => scrollY) - scrolled) < 1, 'Closing must preserve the underlying page position');
       assert.deepEqual(errors, []);
@@ -82,7 +84,7 @@ test(`${engine}: six answers stay scrollable; resizing to desktop and back keeps
       const answer = page.locator('.quizAnswers').last().locator('.quizAnswer:not(:disabled)').first();
       await answer.waitFor();
       await answer.click();
-      await assertFullscreen(page);
+      await assertFloating(page);
     }
     await page.locator('.quizMessage--result').waitFor();
     assert.equal(await page.locator('[data-quiz-messages]').evaluate(element => element.scrollHeight > element.clientHeight), true);
@@ -93,11 +95,11 @@ test(`${engine}: six answers stay scrollable; resizing to desktop and back keeps
     assert.equal(await page.locator('body').evaluate(element => getComputedStyle(element).overflowY), 'auto');
     await page.setViewportSize({ width: 390, height: 600 });
     await page.waitForTimeout(200);
-    await assertFullscreen(page);
+    await assertFloating(page);
     assert.equal(await page.locator('.quizMessage--result').count(), 1);
     await page.locator('[data-quiz-close]').click();
     await page.locator('[data-quiz-toggle]').click();
-    await assertFullscreen(page);
+    await assertFloating(page);
     assert.equal(await page.locator('.quizMessage--result').count(), 1);
   } finally { await page.close(); }
 });

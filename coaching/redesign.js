@@ -278,6 +278,7 @@ window.prepareRedesign = () => {
   document.getElementById("coaching")?.remove();
   document.querySelector(".heroLogo")?.remove();
   document.querySelector(".hero__title").innerHTML = c.hero.title.split("\n").map(line => `<span>${ui.escape(line).replace(/życia\.$/, '<em class="hero__life">życia.</em>')}</span>`).join("");
+  document.querySelector(".hero__lead").innerHTML = `<span class="hero__leadDefault">${ui.escape(c.hero.lead)}</span><span class="hero__leadDesktop">Dobieramy eksperta do Twojej sytuacji.<br>Po każdym spotkaniu wiesz, co robisz dalej.</span>`;
   document.querySelectorAll("[data-goal-label],[data-next-goal-label]").forEach(label => {
     label.dataset.goalCount = c.hero.goals.length;
   });

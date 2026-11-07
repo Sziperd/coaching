@@ -2463,8 +2463,6 @@ function accelerateGoalCycle() {
 function runGoalAnimation() {
   if (!goalCard || goalCards.length === 0) return;
 
-  const isMobileGoalCard = window.matchMedia("(max-width: 680px)").matches;
-
   clearGoalAnimationTimers();
   isGoalAnimating = true;
   goalCard.classList.remove("is-cycling");
@@ -2472,11 +2470,9 @@ function runGoalAnimation() {
   void goalCard.offsetWidth;
   goalCard.classList.add("is-cycling");
   hasGoalAdvanced = false;
-  // Mobile hands over on the CSS animation's actual last frame. The timeout
+  // The continuous deck hands over on the CSS animation's actual last frame. The timeout
   // only recovers if a resize or a hidden tab cancels that animation.
-  goalAnimationTimers = isMobileGoalCard
-    ? [window.setTimeout(finishGoalCycle, 1450)]
-    : [window.setTimeout(advanceGoalCard, 915), window.setTimeout(finishGoalCycle, 950)];
+  goalAnimationTimers = [window.setTimeout(finishGoalCycle, 1450)];
 }
 
 function playNextGoal() {
@@ -2489,12 +2485,9 @@ function playNextGoal() {
   }
 
   if (isGoalAnimating) {
-    if (window.matchMedia("(max-width: 680px)").matches) {
-      pendingGoalAdvances++;
-      accelerateGoalCycle();
-      return;
-    }
-    completeGoalAnimation();
+    pendingGoalAdvances++;
+    accelerateGoalCycle();
+    return;
   }
 
   runGoalAnimation();

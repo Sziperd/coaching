@@ -1,4 +1,4 @@
-// Frame-by-frame regression for the mobile deck's physical layer handoff.
+// Frame-by-frame regression for the collage/duet deck's physical layer handoff.
 const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const { chromium, webkit } = require('playwright');
@@ -69,7 +69,7 @@ test(`${engine}: a second tap preserves every layer pose and starts the next car
   } finally { await page.close(); }
 });
 
-for (const width of [320, 390, 680]) test(`${engine}, ${width}px: every card advances continuously into the layer above`, async () => {
+for (const width of [320, 390, 680, 768, 1023, 1440]) test(`${engine}, ${width}px: every card advances continuously into the layer above`, async () => {
   const page = await browser.newPage({ viewport: { width, height: 900 }, hasTouch: true });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -105,7 +105,7 @@ for (const width of [320, 390, 680]) test(`${engine}, ${width}px: every card adv
       }));
       const before = frames.at(-2), after = frames.at(-1);
       assert.notEqual(before.label, after.label, 'The goal must advance on the final animation frame');
-      assert(after.elapsed > 1000 && after.elapsed < 1400, 'The CSS animation must finish before the recovery timeout');
+      assert(after.elapsed > (width >= 681 ? 800 : 1000) && after.elapsed < 1400, 'The CSS animation must finish before the recovery timeout');
       assert(frames.every(frame => frame.rear.display !== 'none'), 'The replenishing rear card must exist throughout the animation');
       assert(frames.some(frame => frame.elapsed > 150 && frame.elapsed < 700 && frame.rear.opacity > .1), 'The rear card must appear while the stack moves');
       assert(before.rear.opacity > .99, 'The replacement rear card must be fully present before the handoff');

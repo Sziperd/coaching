@@ -58,7 +58,7 @@ for (const width of [320, 390, 480, 680]) {
       const heroHeight = await page.locator(".hero").evaluate(element => element.getBoundingClientRect().height);
       const anchor = await page.locator("[data-quiz-dock]").boundingBox();
       const button = await page.locator("[data-quiz-toggle]").boundingBox();
-      assert(Math.abs(anchor.x - button.x) < 1 && Math.abs(anchor.y - button.y) < 1);
+      assert(Math.abs(anchor.x + anchor.width / 2 - button.x - button.width / 2) < 1 && Math.abs(anchor.y - button.y) < 1);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), 0);
 
       // Opening the fixed panel must leave the same visible button in the hero.
