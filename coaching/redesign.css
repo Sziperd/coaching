@@ -605,7 +605,7 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .heroQuiz__caption{display:block;position:absolute;top:100%;left:0;width:100%;font-size:12px;line-height:1.5;font-weight:450;color:#4a5468;text-align:center;margin:10px 0 0}
   .redesign .hero__actions{grid-area:action;margin:calc(44px + var(--hero-air)) 0 0}
   .redesign .hero__actions .btn{width:100%;min-width:0;min-height:52px;padding:14px;font-size:14px;box-shadow:none}
-  .redesign .hero__footer{display:flex;align-items:center;flex-shrink:0;width:calc(100% - 44px);max-width:440px;margin-top:auto;padding:0 0 max(36px,env(safe-area-inset-bottom))}
+  .redesign .hero__footer{display:flex;align-items:center;flex-shrink:0;width:calc(100% - 44px);max-width:440px;margin-top:auto;padding:0 0 max(22px,env(safe-area-inset-bottom))}
   .redesign .hero__scroll{display:inline-flex;align-items:center;gap:14px;min-height:44px;font-size:12px;line-height:1.5;font-weight:450;color:#4a5468;text-decoration:none}
   .redesign .hero__scroll>span{font-size:19px}
   .hero__ctaArrow{display:inline-flex}
