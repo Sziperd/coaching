@@ -588,7 +588,7 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .redesign .section{padding:52px 0}
   .redesign .hero{--hero-air:clamp(0px,calc(8svh - 60.8px),16px);display:flex;flex-direction:column;min-height:calc(100svh - var(--navH) - 1px);min-height:calc(100dvh - var(--navH) - 1px)}
   .redesign .hero.is-quiz-relocating{overflow:visible;z-index:81}
-  .redesign .hero__inner{width:calc(100% - 44px);max-width:440px;padding:calc(28px + var(--hero-air)) 0 calc(42px + var(--hero-air));display:grid;grid-template-columns:minmax(116px,.92fr) minmax(0,1.08fr);grid-template-areas:"kicker kicker" "title title" "audience audience" "quiz outcome" "action action";gap:0 16px;align-items:center}
+  .redesign .hero__inner{width:calc(100% - 44px);max-width:440px;padding:calc(28px + var(--hero-air)) 0 calc(42px + var(--hero-air));display:grid;grid-template-columns:minmax(0,1.08fr) minmax(116px,.92fr);grid-template-areas:"kicker kicker" "title title" "audience audience" "outcome quiz" "action action";gap:0 16px;align-items:center}
   .redesign .hero__copy{display:contents}
   .redesign .heroLogo,.redesign .hero__lead{display:none}
   .redesign .hero__kicker{grid-area:kicker;display:block;font-size:11px;line-height:1.4;font-weight:750;letter-spacing:.07em;text-transform:uppercase;color:#806135;margin:0 0 16px}
@@ -598,7 +598,7 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .redesign .hero__life::after{content:"";position:absolute;left:0;right:-1px;bottom:2px;height:6px;background:#c499585c;border-radius:3px;transform:rotate(-2deg);z-index:-1}
   .redesign .hero__audience{grid-area:audience;display:block;font-size:14px;line-height:1.6;font-weight:450;color:#4a5468;margin:18px 0 calc(42px + var(--hero-air))}
   .redesign .hero__audience strong{font-weight:650;color:#1e2f4e}
-  .heroQuiz{grid-area:quiz;display:block;position:relative;min-width:0;align-self:center}
+  .heroQuiz{grid-area:quiz;display:block;position:relative;z-index:0;min-width:0;align-self:center}
   .heroQuiz__dock{display:flex;justify-content:center;width:100%;height:54px}
   .redesign .heroQuiz__dock>.quizFab{position:relative;right:auto;bottom:auto;width:clamp(128px,calc(100% - 12px),154px);max-width:100%;height:54px;min-width:0;border-radius:28px;padding:0}
   .redesign .heroQuiz__dock .quizFab__text{font-size:12px;line-height:1.4;padding:0 9px;white-space:normal}
@@ -610,7 +610,7 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .redesign .hero__scroll>span{font-size:19px}
   .hero__ctaArrow{display:inline-flex}
   .redesign .hero__ctaArrow svg{width:17px;height:17px}
-  .redesign .hero__aside{grid-area:outcome;width:100%;max-width:none;min-width:0;margin:0 3px 0 0;transform:rotate(3deg);gap:0;align-self:center}
+  .redesign .hero__aside{grid-area:outcome;z-index:1;width:100%;max-width:none;min-width:0;margin:0 3px 0 0;transform:rotate(3deg);gap:0;align-self:center}
   .redesign .hero__aside .quoteStackTitle{display:none}
   .redesign .quoteCard{width:100%;min-height:222px}
   .redesign .quoteCard::before{display:block;height:222px;border-radius:18px;background:var(--card-back-bg);box-shadow:none;transform:var(--deck-rear)}
