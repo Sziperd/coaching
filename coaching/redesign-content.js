@@ -101,7 +101,7 @@
   ].filter(Boolean);
   c.modals.cooperation.eyebrow = "Dołącz do zespołu";
   c.modals.cooperation.title = "Porozmawiajmy o współpracy";
-  c.modals.cooperation.lead = "Pracujesz jako coach, mentor albo trener i chcesz dołączyć do RelevateMe? Masz pomysł na wspólny projekt? Napisz kilka słów o sobie.";
+  c.modals.cooperation.lead = "Pracujesz jako coach, mentor, trener lub doradca i chcesz dołączyć do RelevateMe? Zapraszamy również doradców finansowych i emerytalnych, którzy stawiają na rzetelność i potrzeby klienta. Chcemy z czasem rozwijać kolejne obszary wsparcia. Napisz kilka słów o sobie i swoim doświadczeniu.";
   c.modals.cooperation.formEmail = "wspolpraca@relevateme.pl";
   c.modals.cooperation.fields.phone = "Telefon (opcjonalnie)";
   c.modals.cooperation.fields.linkedin = "LinkedIn (opcjonalnie)";

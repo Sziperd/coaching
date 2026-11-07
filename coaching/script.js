@@ -857,7 +857,7 @@ function initSiteModals(modalContent) {
 
     const roleOptions = document.createElement("fieldset");
     roleOptions.className = "packageOptions modalForm__wide";
-    roleOptions.innerHTML = `<legend>Piszę jako</legend>${["coach", "mentor", "trener", "partner", "inne"].map(role => `<label><input type="radio" name="role" value="${role}"><span>${role}</span></label>`).join("")}`;
+    roleOptions.innerHTML = `<legend>Piszę jako</legend>${["coach", "mentor", "trener", "doradca", "partner", "inne"].map(role => `<label><input type="radio" name="role" value="${role}"><span>${role}</span></label>`).join("")}`;
     form.querySelector('label:has(textarea)').before(roleOptions);
     note.classList.add("modalForm__wide");
     form.querySelector(".modalConsent").before(note);
@@ -1033,8 +1033,70 @@ function initPackageQuiz(quizContent) {
   const footer = document.querySelector("[data-quiz-footer]");
   const openButtons = Array.from(document.querySelectorAll("[data-open-quiz]"));
   const questions = Array.isArray(quizContent?.questions) ? quizContent.questions : [];
+  const mobileQuiz = window.matchMedia("(max-width: 680px)");
 
   if (!widget || !toggle || !panel || !messages || !footer || questions.length === 0) return;
+
+  let teaserTimer = null;
+  let teaserDismissed = false;
+  let teaserReady = false;
+  let teaserShown = false;
+
+  function sizeQuizTeaser() {
+    const prompt = toggle.querySelector("[data-quiz-prompt]");
+    if (!prompt) return;
+    const style = window.getComputedStyle(toggle);
+    const text = prompt.getBoundingClientRect();
+    const inlinePadding = parseFloat(style.getPropertyValue("--quiz-prompt-inline"));
+    const blockPadding = parseFloat(style.getPropertyValue("--quiz-prompt-block"));
+    const width = text.width + inlinePadding * 2 + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+    const height = text.height + blockPadding * 2 + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+    toggle.style.setProperty("--quiz-expanded-width", `${Math.ceil(width)}px`);
+    toggle.style.setProperty("--quiz-expanded-height", `${Math.ceil(height)}px`);
+  }
+
+  function setQuizTeaser(expanded) {
+    if (expanded) sizeQuizTeaser();
+    toggle.classList.toggle("is-expanded", expanded);
+    toggle.querySelector(".quizFab__text")?.setAttribute("aria-hidden", String(expanded));
+    toggle.querySelector("[data-quiz-prompt]")?.setAttribute("aria-hidden", String(!expanded));
+  }
+
+  window.addEventListener("resize", () => {
+    if (toggle.classList.contains("is-expanded")) sizeQuizTeaser();
+  });
+  document.fonts?.addEventListener("loadingdone", () => {
+    if (toggle.classList.contains("is-expanded")) sizeQuizTeaser();
+  });
+
+  function showQuizTeaserWhenFloating() {
+    if (!teaserReady || teaserShown || teaserDismissed || widget.classList.contains("is-open") || widget.classList.contains("is-hero-docked")) return;
+    teaserShown = true;
+    setQuizTeaser(true);
+    teaserTimer = window.setTimeout(() => setQuizTeaser(false), 5000);
+  }
+
+  widget.addEventListener("quizpositionchange", () => {
+    if (widget.classList.contains("is-hero-docked")) {
+      window.clearTimeout(teaserTimer);
+      setQuizTeaser(false);
+    } else {
+      showQuizTeaserWhenFloating();
+    }
+  });
+
+  // Keep the hero compact; the one-time prompt waits until the button is floating.
+  const teaserStartTimer = window.setTimeout(() => {
+    teaserReady = true;
+    showQuizTeaserWhenFloating();
+  }, Math.max(0, 5000 - performance.now()));
+
+  function dismissQuizTeaser() {
+    teaserDismissed = true;
+    window.clearTimeout(teaserStartTimer);
+    window.clearTimeout(teaserTimer);
+    setQuizTeaser(false);
+  }
 
   const personas = ["magda", "aleksandra", "marek", "krzysztof"];
   const pairResults = quizContent?.pairResults || {};
@@ -1100,7 +1162,7 @@ function initPackageQuiz(quizContent) {
   }
 
   function withPanelResize(callback) {
-    if (prefersReduced) {
+    if (prefersReduced || mobileQuiz.matches) {
       callback();
       return;
     }
@@ -1161,9 +1223,13 @@ function initPackageQuiz(quizContent) {
   }
 
   function openQuiz(shouldStart = true) {
+    dismissQuizTeaser();
     widget.classList.add("is-open");
+    document.body.classList.add("quiz-open");
+    updateQuizWidgetOffset();
     panel.setAttribute("aria-hidden", "false");
     toggle.setAttribute("aria-expanded", "true");
+    if (mobileQuiz.matches) close?.focus({ preventScroll: true });
 
     if (shouldStart && !started) {
       startQuiz();
@@ -1172,11 +1238,19 @@ function initPackageQuiz(quizContent) {
 
   function closeQuiz() {
     widget.classList.remove("is-open");
+    document.body.classList.remove("quiz-open");
     panel.setAttribute("aria-hidden", "true");
     toggle.setAttribute("aria-expanded", "false");
     panel.style.minHeight = "";
     panelLockedHeight = 0;
+    updateQuizWidgetOffset();
+    toggle.focus({ preventScroll: true });
   }
+
+  mobileQuiz.addEventListener("change", () => {
+    panelLockedHeight = 0;
+    finishPanelResize();
+  });
 
   function createMessage(text, type = "bot") {
     const bubble = document.createElement("div");
@@ -1387,7 +1461,10 @@ function initPackageQuiz(quizContent) {
 
   setText("[data-quiz-title]", quizContent?.title || "");
   setText("[data-quiz-eyebrow]", quizContent?.eyebrow || "");
-  setText(".quizFab__text", quizContent?.fabLabel || "");
+  const fabLabel = toggle.querySelector(".quizFab__text");
+  if (fabLabel && quizContent?.fabLabel && fabLabel.textContent !== quizContent.fabLabel) {
+    fabLabel.textContent = quizContent.fabLabel;
+  }
   setAttr("[data-quiz-panel]", "aria-label", quizContent?.panelLabel || "");
   setAttr("[data-quiz-close]", "aria-label", quizContent?.closeLabel || "");
 
@@ -1419,22 +1496,76 @@ function initPackageQuiz(quizContent) {
 initPackageQuiz(siteContent.quiz);
 
 const quizWidget = document.querySelector("[data-quiz-widget]");
+const quizToggle = document.querySelector("[data-quiz-toggle]");
+const quizDock = document.querySelector("[data-quiz-dock]");
+const quizDockMedia = window.matchMedia("(max-width: 680px)");
 const pageFooter = document.querySelector(".footer");
+let quizDockPositionReady = false;
+let quizDockMoveAnimation = null;
+
+function updateQuizDock() {
+  if (!quizWidget || !quizToggle || !quizDock) return;
+  const slot = quizDock.getBoundingClientRect();
+  const headerBottom = document.querySelector(".siteHeader")?.getBoundingClientRect().bottom || 0;
+  const wasDocked = quizWidget.classList.contains("is-hero-docked");
+  const margin = wasDocked ? 4 : 12;
+  const docked = quizDockMedia.matches
+    && slot.width > 0 && slot.top >= headerBottom + margin && slot.bottom <= window.innerHeight - margin;
+  const destination = docked ? quizDock : quizWidget;
+  if (quizToggle.parentElement !== destination) {
+    const before = quizToggle.getBoundingClientRect();
+    const focused = document.activeElement === quizToggle;
+    quizDockMoveAnimation?.cancel();
+    quizDockMoveAnimation = null;
+    const hero = quizDock.closest(".hero");
+    hero?.classList.remove("is-quiz-relocating");
+    quizToggle.classList.add("is-relocating");
+    if (docked) destination.append(quizToggle);
+    else destination.prepend(quizToggle);
+    quizWidget.classList.toggle("is-hero-docked", docked);
+    if (wasDocked !== docked) quizWidget.dispatchEvent(new Event("quizpositionchange"));
+    const after = quizToggle.getBoundingClientRect();
+    quizToggle.classList.remove("is-relocating");
+    if (focused) quizToggle.focus({ preventScroll: true });
+    if (quizDockPositionReady && quizDockMedia.matches && !prefersReduced && !quizWidget.classList.contains("is-open") && before.width && after.width) {
+      if (docked) hero?.classList.add("is-quiz-relocating");
+      quizDockMoveAnimation = quizToggle.animate([
+        { transformOrigin: "0 0", transform: `translate(${before.left - after.left}px, ${before.top - after.top}px) scale(${before.width / after.width}, ${before.height / after.height})` },
+        { transformOrigin: "0 0", transform: "none" }
+      ], { duration: 700, easing: "cubic-bezier(.22,.68,.2,1)" });
+      const animation = quizDockMoveAnimation;
+      const finish = () => {
+        if (quizDockMoveAnimation !== animation) return;
+        hero?.classList.remove("is-quiz-relocating");
+        quizDockMoveAnimation = null;
+      };
+      animation.onfinish = finish;
+      animation.oncancel = finish;
+    }
+  } else {
+    quizWidget.classList.toggle("is-hero-docked", docked);
+    if (wasDocked !== docked) quizWidget.dispatchEvent(new Event("quizpositionchange"));
+  }
+  quizDockPositionReady = true;
+}
 
 function updateQuizWidgetOffset() {
-  if (!quizWidget || !pageFooter) return;
+  if (!quizWidget) return;
 
   const baseOffset = window.matchMedia("(max-width: 680px)").matches ? 12 : 22;
   const footerGap = 8;
-  const footerTop = pageFooter.getBoundingClientRect().top;
+  const footerTop = pageFooter?.getBoundingClientRect().top ?? window.innerHeight;
   const overlap = Math.max(0, window.innerHeight - footerTop + footerGap);
 
   quizWidget.style.setProperty("--quiz-bottom-offset", `${baseOffset + overlap}px`);
+  updateQuizDock();
 }
 
 updateQuizWidgetOffset();
 window.addEventListener("scroll", rafThrottle(updateQuizWidgetOffset), { passive: true });
 window.addEventListener("resize", rafThrottle(updateQuizWidgetOffset), { passive: true });
+window.addEventListener("pageshow", updateQuizWidgetOffset);
+document.fonts?.ready.then(updateQuizWidgetOffset);
 
 /* =========================================================
    MOBILE STORY CARDS
@@ -1543,13 +1674,20 @@ function getPackageCards() {
 
 function getPackageSlidePositions(cards = getPackageCards()) {
   const firstOffset = cards[0]?.offsetLeft || 0;
-  return cards.map((item) => item.offsetLeft - firstOffset);
+  const maxOffset = Math.max(0, (packagesGrid?.scrollWidth || 0) - (packagesGrid?.clientWidth || 0));
+  return cards.map((item) => Math.min(item.offsetLeft - firstOffset, maxOffset));
 }
 
 function setActivePackageSlide(index) {
   if (packageDots.length === 0) return;
 
-  activePackageSlide = Math.max(0, Math.min(index, packageDots.length - 1));
+  const nextIndex = Math.max(0, Math.min(index, packageDots.length - 1));
+  if (nextIndex !== activePackageSlide && mobilePackages.matches) {
+    getPackageCards().forEach((card, cardIndex) => {
+      if (cardIndex !== nextIndex) window.RelevateUI.setCardDetailsOpen(card.querySelector(".packageCard__more"), false);
+    });
+  }
+  activePackageSlide = nextIndex;
   packageDots.forEach((dot, dotIndex) => {
     dot.classList.toggle("is-active", dotIndex === activePackageSlide);
   });
@@ -1950,35 +2088,89 @@ if (expertStatsCards.length > 0) {
 
 const expertsTrack = document.querySelector("[data-experts-track]");
 const expertDots = Array.from(document.querySelectorAll("[data-expert-dot]"));
+const expertAutoplayMedia = window.matchMedia("(max-width: 680px)");
 let activeExpertSlide = 0;
 let expertCarouselVisible = false;
 let expertScrollTimer = null;
 let expertProgrammaticScroll = false;
+let expertDetailsFillAnimation = null;
+
+function clearExpertDetailsFill() {
+  expertDetailsFillAnimation?.cancel();
+  expertDetailsFillAnimation = null;
+  expertDots.forEach(dot => dot.classList.remove("is-reading"));
+}
+
+function fillExpandedExpertProgress() {
+  if (!expertAutoplayMedia.matches) return;
+  if (!expertSlides[activeExpertSlide]?.querySelector("details[open]")) return;
+  const dot = expertDots[activeExpertSlide];
+  const fill = dot?.querySelector("span");
+  if (!fill || dot.classList.contains("is-reading")) return;
+
+  const startTransform = window.getComputedStyle(fill).transform;
+  clearExpertDetailsFill();
+  // CSS owns the full paused state; the animation only handles getting there.
+  dot.classList.remove("is-loading");
+  dot.classList.add("is-reading");
+  if (prefersReduced) return;
+  expertDetailsFillAnimation = fill.animate([
+    { transform: startTransform },
+    { transform: "scaleX(1)" }
+  ], {
+    duration: 400,
+    easing: "ease-out"
+  });
+  const animation = expertDetailsFillAnimation;
+  animation.onfinish = () => {
+    if (expertDetailsFillAnimation === animation) expertDetailsFillAnimation = null;
+  };
+}
 
 function setActiveExpertSlide(index, resetProgress = true) {
   if (!expertsTrack || expertSlides.length === 0) return;
 
-  activeExpertSlide = (index + expertSlides.length) % expertSlides.length;
+  const nextIndex = (index + expertSlides.length) % expertSlides.length;
+  if (nextIndex !== activeExpertSlide) {
+    clearExpertDetailsFill();
+    expertSlides.forEach((slide, slideIndex) => {
+      if (slideIndex !== nextIndex) window.RelevateUI.setCardDetailsOpen(slide.querySelector(".expertMore"), false);
+    });
+  }
+  activeExpertSlide = nextIndex;
   expertDots.forEach((dot, dotIndex) => {
     const isActive = dotIndex === activeExpertSlide;
     dot.classList.toggle("is-active", isActive);
 
-    if (isActive && resetProgress) {
+    if (isActive && resetProgress && expertAutoplayMedia.matches && expertCarouselVisible && !prefersReduced) {
       dot.classList.remove("is-loading");
       void dot.offsetWidth;
       dot.classList.add("is-loading");
-    } else if (!isActive) {
+    } else if (!isActive || !expertAutoplayMedia.matches || prefersReduced) {
       dot.classList.remove("is-loading");
     }
   });
+  fillExpandedExpertProgress();
 }
+
+expertsTrack?.querySelectorAll("details").forEach(details => {
+  details.addEventListener("toggle", () => {
+    if (details.open) {
+      fillExpandedExpertProgress();
+    } else if (expertDots.some(dot => dot.classList.contains("is-reading")) && !expertsTrack.querySelector("details[open]")) {
+      clearExpertDetailsFill();
+      // After reading, give the current profile a fresh eight-second countdown.
+      setActiveExpertSlide(activeExpertSlide);
+    }
+  });
+});
 
 function scrollToExpertSlide(index) {
   if (!expertsTrack || expertSlides.length === 0) return;
 
   const nextIndex = (index + expertSlides.length) % expertSlides.length;
   expertSlides.forEach((slide, slideIndex) => {
-    if (slideIndex !== nextIndex) slide.querySelector(".expertMore")?.removeAttribute("open");
+    if (slideIndex !== nextIndex) window.RelevateUI.setCardDetailsOpen(slide.querySelector(".expertMore"), false);
   });
   expertProgrammaticScroll = true;
   expertsTrack.scrollTo({
@@ -2011,15 +2203,21 @@ if (expertDots.length > 0) {
       scrollToExpertSlide(index);
     });
 
-    dot.addEventListener("animationend", () => {
-      if (!dot.classList.contains("is-active") || !expertCarouselVisible || prefersReduced) return;
-      if (expertSlides[activeExpertSlide]?.querySelector(".expertMore[open]")) return;
+    dot.addEventListener("animationend", (event) => {
+      if (event.animationName !== "expertDotLoad" || !expertAutoplayMedia.matches ||
+          !dot.classList.contains("is-active") || !expertCarouselVisible || prefersReduced) return;
+      if (expertsTrack.querySelector("details[open]")) return;
       scrollToExpertSlide(activeExpertSlide + 1);
     });
   });
 
   setActiveExpertSlide(0, false);
 }
+
+expertAutoplayMedia.addEventListener("change", () => {
+  clearExpertDetailsFill();
+  setActiveExpertSlide(activeExpertSlide);
+});
 
 expertsTrack?.addEventListener("scroll", () => {
   if (expertScrollTimer) {
@@ -2157,6 +2355,7 @@ let currentGoal = 0;
 let isGoalAnimating = false;
 let hasGoalAdvanced = false;
 let goalAnimationTimers = [];
+let pendingGoalAdvances = 0;
 
 function getGoalInfo(index) {
   const displayIndex = index + 1;
@@ -2239,12 +2438,32 @@ function completeGoalAnimation() {
   hasGoalAdvanced = false;
 }
 
+function finishGoalCycle() {
+  completeGoalAnimation();
+  if (pendingGoalAdvances > 0) {
+    pendingGoalAdvances--;
+    runGoalAnimation();
+    if (pendingGoalAdvances > 0) accelerateGoalCycle();
+  }
+}
+
+function accelerateGoalCycle() {
+  const animations = goalCard.getAnimations({ subtree: true });
+  const forward = animations.find(animation => animation.animationName === "mobileStackNextForward");
+  if (!forward) return;
+  // Keep the current poses and finish the whole stack together within 90ms.
+  // The next requested card can then leave without resetting any layer.
+  const remaining = forward.effect.getComputedTiming().endTime - (forward.currentTime || 0);
+  const playbackRate = Math.max(forward.playbackRate, remaining / 90);
+  animations.forEach(animation => {
+    if (animation.animationName) animation.updatePlaybackRate(playbackRate);
+  });
+}
+
 function runGoalAnimation() {
   if (!goalCard || goalCards.length === 0) return;
 
   const isMobileGoalCard = window.matchMedia("(max-width: 680px)").matches;
-  const handoffDelay = isMobileGoalCard ? 1115 : 915;
-  const finishDelay = isMobileGoalCard ? 1160 : 950;
 
   clearGoalAnimationTimers();
   isGoalAnimating = true;
@@ -2253,10 +2472,11 @@ function runGoalAnimation() {
   void goalCard.offsetWidth;
   goalCard.classList.add("is-cycling");
   hasGoalAdvanced = false;
-  goalAnimationTimers = [
-    window.setTimeout(advanceGoalCard, handoffDelay),
-    window.setTimeout(completeGoalAnimation, finishDelay)
-  ];
+  // Mobile hands over on the CSS animation's actual last frame. The timeout
+  // only recovers if a resize or a hidden tab cancels that animation.
+  goalAnimationTimers = isMobileGoalCard
+    ? [window.setTimeout(finishGoalCycle, 1450)]
+    : [window.setTimeout(advanceGoalCard, 915), window.setTimeout(finishGoalCycle, 950)];
 }
 
 function playNextGoal() {
@@ -2269,11 +2489,20 @@ function playNextGoal() {
   }
 
   if (isGoalAnimating) {
+    if (window.matchMedia("(max-width: 680px)").matches) {
+      pendingGoalAdvances++;
+      accelerateGoalCycle();
+      return;
+    }
     completeGoalAnimation();
   }
 
   runGoalAnimation();
 }
+
+goalCard?.addEventListener("animationend", (event) => {
+  if (event.animationName === "mobileStackNextForward" && isGoalAnimating) finishGoalCycle();
+});
 
 goalCard?.addEventListener("pointerdown", (event) => {
   if (event.button !== 0) return;

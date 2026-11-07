@@ -2,6 +2,169 @@ window.RelevateUI = (() => {
   const escape = (value = "") => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
   const icon = name => `<i data-lucide="${name}" aria-hidden="true"></i>`;
   const link = (href, text, extra = "") => `<a class="btn btn--primary" href="${href}" ${extra}>${text}</a>`;
+  const cardDetailsStates = new WeakMap();
+
+  function setCardDetailsOpen(details, open, { keepControlVisible = false } = {}) {
+    if (!details) return;
+    let state = cardDetailsStates.get(details);
+    if (!state) {
+      state = { targetOpen: details.open, animation: null };
+      cardDetailsStates.set(details, state);
+    }
+    state.keepControlVisible = keepControlVisible;
+    if (state.targetOpen === open && (state.animation || details.open === open)) return;
+
+    const container = details.closest(".expertProfileText") || details;
+    const startHeight = container.getBoundingClientRect().height;
+    container.style.height = `${startHeight}px`;
+    state.animation?.cancel();
+    state.animation = null;
+    state.targetOpen = open;
+    const summary = details.querySelector("summary");
+    const content = details.querySelector(":scope > div");
+    summary?.setAttribute("aria-expanded", String(open));
+    if (content) content.inert = !open;
+
+    const finish = () => {
+      details.open = state.targetOpen;
+      container.style.height = "";
+      container.style.overflow = "";
+      summary?.removeAttribute("aria-expanded");
+      state.animation?.cancel();
+      state.animation = null;
+      if (!state.targetOpen && state.keepControlVisible && container !== details) {
+        const headerBottom = document.querySelector(".siteHeader")?.getBoundingClientRect().bottom || 0;
+        if (summary.getBoundingClientRect().top < headerBottom) {
+          container.scrollIntoView({ block: "nearest", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+        }
+      }
+    };
+
+    if (!startHeight || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      finish();
+      return;
+    }
+
+    // Measure the target's natural height, including the package's closed preview.
+    details.open = open;
+    container.style.height = "auto";
+    const endHeight = container.getBoundingClientRect().height;
+    // Keep the content rendered until the closing animation finishes.
+    details.open = true;
+    container.style.height = `${startHeight}px`;
+    container.style.overflow = "hidden";
+    const animation = container.animate([
+      { height: `${startHeight}px` },
+      { height: `${endHeight}px` }
+    ], { duration: 320, easing: "cubic-bezier(.22,.68,.2,1)" });
+    state.animation = animation;
+    animation.onfinish = () => {
+      if (state.animation === animation) finish();
+    };
+  }
+
+  function initCardDetails() {
+    document.querySelectorAll(".expertMore, .packageCard__more").forEach(details => {
+      details.querySelector("summary")?.addEventListener("click", event => {
+        event.preventDefault();
+        const open = cardDetailsStates.get(details)?.targetOpen ?? details.open;
+        setCardDetailsOpen(details, !open, { keepControlVisible: open });
+      });
+    });
+  }
+
+  function initPackageCardSizing() {
+    const grid = document.querySelector("[data-packages-grid]");
+    const cards = Array.from(grid?.querySelectorAll(".packageCard") || []);
+    if (!grid || !cards.length) return;
+    const mobile = window.matchMedia("(max-width: 680px)");
+    const rows = ["heading", "tagline", "includes", "more", "price", "link"];
+    let measuredWidth = null;
+
+    function update(force = false) {
+      const width = grid.getBoundingClientRect().width;
+      if (!width || (!force && measuredWidth === width)) return;
+      measuredWidth = width;
+
+      // Measure inert, collapsed copies so an open card never sets the shared sizes.
+      const measure = document.createElement("div");
+      measure.inert = true;
+      measure.setAttribute("aria-hidden", "true");
+      measure.style.cssText = "position:absolute;top:0;left:0;visibility:hidden;pointer-events:none;contain:layout style paint";
+      grid.parentElement.append(measure);
+      try {
+        const heights = rows.map(() => 0);
+        cards.forEach(card => {
+          const copy = card.cloneNode(true);
+          copy.removeAttribute("id");
+          copy.querySelectorAll("[id]").forEach(element => element.removeAttribute("id"));
+          copy.style.width = `${card.getBoundingClientRect().width}px`;
+          const details = copy.querySelector("details");
+          details.open = false;
+          details.style.height = "";
+          details.style.overflow = "";
+          const label = ".packageCard__includesHeading > .eyebrow";
+          copy.querySelector(label).style.display = window.getComputedStyle(card.querySelector(label)).display;
+          measure.append(copy);
+          rows.forEach((row, index) => {
+            const element = copy.querySelector(`.packageCard__${row}`);
+            const style = window.getComputedStyle(element);
+            const height = element.getBoundingClientRect().height
+              + (parseFloat(style.marginTop) || 0) + (parseFloat(style.marginBottom) || 0);
+            heights[index] = Math.max(heights[index], height);
+          });
+        });
+        rows.forEach((row, index) => {
+          grid.style.setProperty(`--package-row-${row}`, `${Math.ceil(heights[index] * 100) / 100}px`);
+        });
+      } finally {
+        measure.remove();
+      }
+    }
+
+    update(true);
+    document.fonts?.ready.then(() => update(true));
+    mobile.addEventListener("change", () => update(true));
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(() => update()).observe(grid);
+    } else {
+      window.addEventListener("resize", () => update());
+    }
+  }
+  function flipCard({ id, icon: symbol, title, text, number = "", className = "" }) {
+    return `<article class="flipCard ${className}">
+      <button class="flipCard__toggle" type="button" aria-expanded="false" aria-controls="${id}-details" data-flip-card>
+        <span class="flipCard__inner">
+          <span class="flipCard__face flipCard__front">
+            ${symbol ? `<span class="outlineIcon">${icon(symbol)}</span>` : ""}
+            ${number ? `<span class="flipCard__number">${escape(number)}</span>` : ""}
+            <span class="flipCard__title">${escape(title)}</span>
+            <span class="flipCard__hint">Zobacz szczegóły ${icon("arrow-up-right")}</span>
+          </span>
+          <span class="flipCard__face flipCard__back" id="${id}-details" aria-hidden="true">
+            <span class="flipCard__title">${escape(title)}</span>
+            <span class="flipCard__description">${escape(text)}</span>
+          </span>
+        </span>
+      </button>
+    </article>`;
+  }
+  function initFlipCards() {
+    document.querySelectorAll("[data-flip-card]").forEach(button => {
+      button.addEventListener("click", () => {
+        const open = button.getAttribute("aria-expanded") !== "true";
+        button.setAttribute("aria-expanded", String(open));
+        button.querySelector(".flipCard__front").setAttribute("aria-hidden", String(open));
+        button.querySelector(".flipCard__back").setAttribute("aria-hidden", String(!open));
+      });
+      button.addEventListener("keydown", event => {
+        if (event.key === "Escape" && button.getAttribute("aria-expanded") === "true") {
+          event.preventDefault();
+          button.click();
+        }
+      });
+    });
+  }
   function linkedin(expert, compact = false) {
     const label = `LinkedIn: ${expert.name}`;
     const classes = compact ? "expertLinkedin linkedinIcon" : "btn btn--secondary expertLinkedin";
@@ -102,7 +265,7 @@ window.RelevateUI = (() => {
     }
     refreshIcons();
   }
-  return { escape, icon, link, linkedin, common, order, header, privacy, form, faq, packageMore, footer, refreshIcons, initMenus };
+  return { escape, icon, link, flipCard, initFlipCards, setCardDetailsOpen, initCardDetails, initPackageCardSizing, linkedin, common, order, header, privacy, form, faq, packageMore, footer, refreshIcons, initMenus };
 })();
 
 window.prepareRedesign = () => {
@@ -114,8 +277,11 @@ window.prepareRedesign = () => {
   document.querySelector(".nav__actions > .btn").classList.add("nav__cta");
   document.getElementById("coaching")?.remove();
   document.querySelector(".heroLogo")?.remove();
-  document.querySelector(".hero__title").innerHTML = c.hero.title.split("\n").map(line => `<span>${ui.escape(line)}</span>`).join("");
-  document.querySelector(".hero__actions").innerHTML = ui.link("#kontakt", c.nav.cta);
+  document.querySelector(".hero__title").innerHTML = c.hero.title.split("\n").map(line => `<span>${ui.escape(line).replace(/życia\.$/, '<em class="hero__life">życia.</em>')}</span>`).join("");
+  document.querySelectorAll("[data-goal-label],[data-next-goal-label]").forEach(label => {
+    label.dataset.goalCount = c.hero.goals.length;
+  });
+  document.querySelector(".hero__actions").innerHTML = ui.link("#kontakt", `${ui.escape(c.nav.cta)}<span class="hero__ctaArrow">${ui.icon("arrow-up-right")}</span>`);
   document.querySelector("[data-goal-card]").title = "Kolejna karta";
   document.querySelectorAll("[data-goal-face],[data-next-goal-face]").forEach(face => {
     const hint = document.createElement("span");
@@ -165,11 +331,11 @@ window.prepareRedesign = () => {
   start.id = "jak-zaczynamy";
   start.className = "startSteps";
   const steps = [
-    ["messages-square", "Bezpłatna konsultacja", "60 minut online. Opowiadasz, z czym przychodzisz, a my proponujemy pakiet i eksperta."],
-    ["map", "Plan współpracy", "Ustalamy cel, priorytety i to, od czego zaczynamy."],
-    ["chart-no-axes-combined", "Sesje 1:1", "Po każdej sesji dostajesz materiały, konkretne kroki i plan na następne spotkanie, więc wiesz, od czego zacząć jutro."]
+    ["messages-square", "Bezpłatna konsultacja", "60 minut online, żeby przyjrzeć się Twojej sytuacji. Rozmawiamy o tym, co Cię blokuje i jakiej zmiany potrzebujesz. Proponujemy pakiet i eksperta, a Ty sprawdzasz, czy ten sposób pracy Ci odpowiada."],
+    ["map", "Plan współpracy", "Przekładamy ogólny cel na konkretne priorytety. Ustalamy, czym zajmiemy się najpierw, jak często będziemy się spotykać i po czym poznamy postęp. Wiesz, nad czym pracujesz i jaki będzie pierwszy krok."],
+    ["chart-no-axes-combined", "Sesje 1:1", "Pracujemy na Twoich bieżących decyzjach i sytuacjach z firmy lub życia. Między spotkaniami sprawdzasz ustalone działania w praktyce. Po każdej sesji dostajesz materiały i kolejne kroki, a na następnej omawiamy, co zadziałało i co wymaga zmiany."]
   ];
-  start.innerHTML = `<p class="eyebrow">Jak zaczynamy</p><h3>Trzy kroki do pierwszej sesji</h3><div class="startSteps__grid">${steps.map(([ic, title, text], i) => `<article><span class="outlineIcon">${ui.icon(ic)}</span><span class="eyebrow">0${i + 1}</span><h4>${title}</h4><p>${text}</p></article>`).join("")}</div>`;
+  start.innerHTML = `<p class="eyebrow">Jak zaczynamy</p><h3>Trzy kroki do pierwszej sesji</h3><div class="startSteps__grid">${steps.map(([ic, title, text], i) => ui.flipCard({ id: `start-step-${i + 1}`, icon: ic, title, text, number: `0${i + 1}` })).join("")}</div>`;
   document.querySelector(".packagesCta").replaceWith(start);
   const quizCta = document.createElement("div");
   quizCta.className = "packageQuizCta";
@@ -194,7 +360,7 @@ window.prepareRedesign = () => {
     const slides = [...track.children];
     const current = slides.reduce((best, slide, idx) => Math.abs(slide.offsetLeft - track.offsetLeft - track.scrollLeft) < Math.abs(slides[best].offsetLeft - track.offsetLeft - track.scrollLeft) ? idx : best, 0);
     const next = slides[(current + (i % 2 ? 1 : -1) + slides.length) % slides.length];
-    slides.forEach(slide => { if (slide !== next) slide.querySelector(".expertMore")?.removeAttribute("open"); });
+    slides.forEach(slide => { if (slide !== next) ui.setCardDetailsOpen(slide.querySelector(".expertMore"), false); });
     track.scrollTo({ left: next.offsetLeft - track.offsetLeft, behavior: "smooth" });
   }));
   document.querySelectorAll(".expertSlide").forEach((slide, i) => {
@@ -202,37 +368,41 @@ window.prepareRedesign = () => {
     const bio = slide.querySelector(".expertBio");
     const role = document.createElement("p"); role.className = "expertRole"; role.textContent = expert.role; bio.querySelector("h3").after(role);
     const paragraphs = [...bio.querySelectorAll("p:not(.expertRole)")];
-    paragraphs.forEach(paragraph => paragraph.classList.add("expertDesktopBio"));
-    const intro = document.createElement("p");
-    intro.className = "expertMobileIntro";
-    intro.textContent = expert.shortBio;
+    const profileText = document.createElement("div");
+    profileText.className = "expertProfileText";
+    const text = document.createElement("div");
+    text.className = "expertMore__text";
+    text.id = `expert-profile-${i + 1}`;
+    text.append(...paragraphs);
     const more = document.createElement("details");
     more.className = "expertMore";
-    more.innerHTML = `<summary>Pełny profil ${ui.icon("chevron-down")}</summary><div>${paragraphs.map(paragraph => `<p>${ui.escape(paragraph.textContent)}</p>`).join("")}<dl class="expertMoreStats">${expert.stats.map(stat => `<div><dt>${ui.escape(stat.label)}</dt><dd>${ui.escape(`${stat.prefix || ""}${stat.value}${stat.suffix || ""}`)}</dd></div>`).join("")}</dl></div>`;
-    bio.append(intro, more);
+    more.innerHTML = `<summary aria-controls="${text.id}"><span>Pełny profil</span>${ui.icon("chevron-down")}</summary><div><dl class="expertMoreStats">${expert.stats.map(stat => `<div><dt>${ui.escape(stat.label)}</dt><dd>${ui.escape(`${stat.prefix || ""}${stat.value}${stat.suffix || ""}`)}</dd></div>`).join("")}</dl></div>`;
+    profileText.append(text, more);
+    bio.append(profileText);
     const actions = document.createElement("div"); actions.className = "expertActions";
     actions.innerHTML = ui.link("#kontakt", `<span class="expertCtaDesktop">${ui.escape(c.nav.cta)}</span><span class="expertCtaMobile">Umów konsultację</span>`) + ui.linkedin(expert);
     bio.append(actions);
     slide.querySelector(".expertStats")?.style.setProperty("--expert-stat-columns", expert.stats.length);
   });
   const join = document.createElement("p"); join.className = "expertJoin";
-  join.innerHTML = 'Pracujesz jako coach, mentor albo trener? <a href="#wspolpraca" data-open-modal="cooperation">Dołącz do zespołu ' + ui.icon("arrow-right") + '</a>';
+  join.innerHTML = 'Pracujesz jako coach, mentor, trener lub doradca? <a href="#wspolpraca" data-open-modal="cooperation">Dołącz do zespołu ' + ui.icon("arrow-right") + '</a>';
   document.querySelector(".experts").append(join);
   const about = document.createElement("section"); about.className = "section aboutSection"; about.id = "o-nas";
   const values = [
-    ["target", "Konkret", "Pracujemy na Twoich decyzjach. Po spotkaniu masz materiały, kolejne kroki i plan."],
-    ["handshake", "Doświadczenie z pierwszej ręki", "Nasi mentorzy sami prowadzili firmy."],
-    ["sliders-horizontal", "Dopasowanie", "Eksperta, tempo i materiały dobieramy do Twojej sytuacji."],
-    ["compass", "Kierownica po Twojej stronie", "Decyzje podejmujesz Ty. My pokazujemy, co widać z boku."]
+    ["target", "Konkret", "Zaczynamy od sytuacji, która wymaga decyzji: zaległego tematu, trudnej rozmowy lub nadmiaru obowiązków. Porządkujemy opcje i kończymy spotkanie ustaleniem, co zrobisz, kiedy i po czym poznasz postęp."],
+    ["handshake", "Doświadczenie z pierwszej ręki", "Nasi mentorzy sami prowadzili firmy, budowali zespoły i podejmowali trudne decyzje. Pomagają sprawdzić założenia, dostrzec ryzyka i porównać możliwe rozwiązania z realiami Twojej firmy."],
+    ["sliders-horizontal", "Dopasowanie", "Na konsultacji pytamy o Twój cel, obecną sytuację i możliwości czasowe. Na tej podstawie proponujemy eksperta i sposób pracy. Tempo oraz zadania między sesjami dopasowujemy do Twoich priorytetów."],
+    ["compass", "Kierownica po Twojej stronie", "Pomagamy oddzielić fakty od założeń, nazwać ryzyka i zobaczyć dostępne opcje. Możesz skonfrontować swój pomysł z inną perspektywą, ale o kierunku i kolejnych krokach decydujesz Ty."]
   ];
   about.innerHTML = `<div class="container aboutContent">
     <header class="aboutHeading"><p class="eyebrow">O nas</p><h2>Jak powstało RelevateMe</h2></header>
     <div class="aboutIntro"><div class="aboutIntro__copy"><p>Duże firmy od lat dają swoim prezesom coachów i mentorów. Właściciele małych i średnich firm zwykle zostają z decyzjami sami. RelevateMe powstało, żeby to zmienić. Dziś budujemy zespół coachów i mentorów z doświadczeniem w biznesie, z którymi pracujesz 1:1 i online.</p></div>
-      <figure class="aboutQuote"><span class="aboutQuote__mark" aria-hidden="true">„</span><blockquote>Nie musisz wybierać między firmą a życiem.</blockquote></figure>
+      ${ui.flipCard({ id: "about-balance", className: "aboutBalance", title: "Nie musisz wybierać między firmą a życiem.", text: "Pracujemy 1:1 i online. Eksperta, tempo i materiały dobieramy do Twojej sytuacji. Pomagamy uporządkować decyzje, a kierownica pozostaje po Twojej stronie." })}
     </div>
-    <div class="valuesGrid">${values.map(([ic, title, text]) => `<article><span class="outlineIcon">${ui.icon(ic)}</span><h3>${title}</h3><p>${text}</p></article>`).join("")}</div>
+    <div class="valuesGrid">${values.map(([ic, title, text], i) => ui.flipCard({ id: `about-value-${i + 1}`, icon: ic, title, text })).join("")}</div>
   </div>`;
   document.getElementById("eksperci").after(about);
+  ui.initFlipCards();
   about.after(document.getElementById("formula"));
   const formula = document.getElementById("formula");
   formula.querySelector("h2").innerHTML = 'Ty prowadzisz.<br>My widzimy<br><span class="nowrap">zakręt wcześniej.</span>';
@@ -251,7 +421,9 @@ window.prepareRedesign = () => {
   faq.innerHTML = `<div class="container faqLayout"><div><h2>Najczęściej zadawane pytania o współpracę z nami</h2></div><div>${ui.faq(c.modals.faq.items)}</div></div>`;
   document.getElementById("kontakt").after(faq);
   document.querySelector(".footer").innerHTML = ui.footer();
+  ui.initCardDetails();
   ui.initMenus();
+  ui.initPackageCardSizing();
   const footerObserver = new IntersectionObserver(entries => {
     document.querySelector(".quizWidget")?.classList.toggle("is-footer-visible", entries[0].isIntersecting);
   });

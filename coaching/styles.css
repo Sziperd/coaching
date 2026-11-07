@@ -2841,7 +2841,7 @@ img {
 }
 
 .expertsDot.is-loading span {
-  animation: expertDotLoad 5.4s linear forwards;
+  animation: expertDotLoad 8s linear forwards;
 }
 
 @keyframes expertDotLoad {
