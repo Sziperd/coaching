@@ -794,7 +794,7 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .redesign .modalForm input:not([type=checkbox]):not([type=radio]),.redesign .modalForm textarea{font-size:16px}
 }
 @media(max-width:380px){.redesign .hero__title{font-size:38px}.redesign .hero__lead{padding:18px 20px}.redesign .quoteCard__face,.redesign .quoteCard__nextFace{padding:22px;gap:14px}.redesign .miniExpert{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:380px){.redesign .hero__inner{width:calc(100% - 28px);column-gap:12px}.redesign .quoteCard,.redesign .quoteCard__face,.redesign .quoteCard__nextFace,.redesign .quoteCard__layer{min-height:236px;height:236px}.redesign .quoteCard::before{height:236px}.redesign .quoteCard__face,.redesign .quoteCard__nextFace{padding:14px 12px;gap:0}.redesign .quoteCard__text{font-size:15px}}
+@media(max-width:380px){.redesign .hero__inner,.redesign .hero__footer{width:calc(100% - 28px)}.redesign .hero__inner{column-gap:12px}.redesign .quoteCard,.redesign .quoteCard__face,.redesign .quoteCard__nextFace,.redesign .quoteCard__layer{min-height:236px;height:236px}.redesign .quoteCard::before{height:236px}.redesign .quoteCard__face,.redesign .quoteCard__nextFace{padding:14px 12px;gap:0}.redesign .quoteCard__text{font-size:15px}}
 
 /* Each layer ends exactly where the next layer rests after the handoff. */
 @keyframes mobileStackNextForward{from{transform:var(--deck-next);background-color:var(--card-next-bg);box-shadow:var(--card-stack-shadow);filter:brightness(.96) saturate(.96)}to{transform:var(--deck-front);background-color:var(--card-front-bg);box-shadow:var(--card-front-shadow);filter:brightness(1) saturate(1)}}
