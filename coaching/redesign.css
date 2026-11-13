@@ -747,7 +747,10 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .redesign .expertsTrack{padding-bottom:12px}
   .redesign .expertsDots{margin-top:0;min-height:12px;align-items:center}
   .redesign .expertJoin{font-size:12px;line-height:1.5}
-  .aboutBalance .flipCard__front{min-height:260px}
+  .aboutBalance .flipCard__face{padding:16px 18px;gap:8px}
+  .aboutBalance .flipCard__front{min-height:132px}
+  .aboutBalance .flipCard__front .flipCard__title{font-size:22px;line-height:1.2}
+  .aboutBalance .flipCard__description{font-size:14px;line-height:1.45}
   .valuesGrid{grid-template-columns:minmax(0,1fr);gap:8px;padding-top:24px}
   .valuesGrid .flipCard__face{padding:12px 14px;gap:4px 12px;border-radius:12px}
   .valuesGrid .flipCard__front{display:grid;grid-template-columns:38px minmax(0,1fr);align-content:center;min-height:86px}
