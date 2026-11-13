@@ -301,7 +301,6 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
 .redesign #kontakt{padding:120px 0}
 .redesign .contact{grid-template-columns:repeat(2,minmax(0,1fr));gap:72px;align-items:start}
 .contact__copy{display:flex;flex-direction:column;gap:20px;min-width:0}
-.contact__illustration{display:block;width:min(100%,360px);height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:8px}
 .redesign .contact__copy>.eyebrow{font-size:13px;margin:0}
 .redesign .contact__copy>h2{margin:0}
 .contact__copy>h2::after{content:"";display:block;width:88px;height:3px;border-radius:2px;background:#c49958;margin-top:20px}
@@ -691,7 +690,6 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .redesign .startSteps>h3{font-size:24px}
   .startSteps__grid{grid-template-columns:minmax(0,1fr);gap:8px}
   .flipCard__face{padding:24px}
-  .valuesGrid .outlineIcon{width:88px;height:88px;border-radius:22px}
   .startSteps__grid .flipCard__face{padding:12px 14px;gap:4px 12px}
   .startSteps__grid .flipCard__front{display:grid;grid-template-columns:38px minmax(0,1fr);align-content:center;min-height:96px}
   .startSteps__grid .outlineIcon{grid-area:1/1/4/2;align-self:center;width:38px;height:38px;margin:0;border-radius:10px}
@@ -750,7 +748,14 @@ body.redesign{--navy:#1e2f4e;--inkBlue:#1e2f4e;--gold:#c49958;--navH:76px;--max:
   .redesign .expertsDots{margin-top:0;min-height:12px;align-items:center}
   .redesign .expertJoin{font-size:12px;line-height:1.5}
   .aboutBalance .flipCard__front{min-height:260px}
-  .valuesGrid{gap:24px;padding-top:40px}
+  .valuesGrid{grid-template-columns:minmax(0,1fr);gap:8px;padding-top:24px}
+  .valuesGrid .flipCard__face{padding:12px 14px;gap:4px 12px;border-radius:12px}
+  .valuesGrid .flipCard__front{display:grid;grid-template-columns:38px minmax(0,1fr);align-content:center;min-height:86px}
+  .valuesGrid .outlineIcon{grid-area:1/1/3/2;align-self:center;width:38px;height:38px;margin:0;border-radius:10px}
+  .redesign .valuesGrid .outlineIcon svg{width:20px;height:20px}
+  .valuesGrid .flipCard__title{grid-column:2;font-size:16px;text-wrap:wrap}
+  .valuesGrid .flipCard__hint{grid-column:2;justify-self:start;margin:0;padding:0}
+  .valuesGrid .flipCard__description{font-size:14px;line-height:1.4}
   .redesign #formula{padding:40px 0}
   .redesign .formula__copy{display:none}
   .redesign #formula .formulaMobileSlide h3{font-size:38px;line-height:1.15}
