@@ -397,7 +397,7 @@ window.prepareRedesign = () => {
   ];
   about.innerHTML = `<div class="container aboutContent">
     <header class="aboutHeading"><p class="eyebrow">O nas</p><h2>Jak powstało RelevateMe</h2></header>
-    <div class="aboutIntro"><div class="aboutIntro__copy"><p>Duże firmy od lat dają swoim prezesom coachów i mentorów. Właściciele małych i średnich firm zwykle zostają z decyzjami sami. RelevateMe powstało, żeby to zmienić. Dziś budujemy zespół coachów i mentorów z doświadczeniem w biznesie, z którymi pracujesz 1:1 i online.</p></div>
+    <div class="aboutIntro"><div class="aboutIntro__copy">${c.mission.map(paragraph => `<p>${ui.escape(paragraph)}</p>`).join("")}</div>
       ${ui.flipCard({ id: "about-balance", className: "aboutBalance", title: "Nie musisz wybierać między firmą a życiem.", text: "Pracujemy 1:1 i online. Eksperta, tempo i materiały dobieramy do Twojej sytuacji. Pomagamy uporządkować decyzje, a kierownica pozostaje po Twojej stronie." })}
     </div>
     <div class="valuesGrid">${values.map(([ic, title, text], i) => ui.flipCard({ id: `about-value-${i + 1}`, icon: ic, title, text })).join("")}</div>

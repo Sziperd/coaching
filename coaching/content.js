@@ -43,7 +43,7 @@ window.siteContent = {
   },
 
   challenge: {
-    imageAlt: "Rozmowa coachingowa przy stole"
+    imageAlt: "Osoba pracująca przy laptopie wieczorem"
   },
 
   signals: {
@@ -113,7 +113,7 @@ window.siteContent = {
     items: [
       {
         name: "Marek",
-        photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=240&h=240&q=85",
+        photo: "pictures/story-marek.jpg",
         context: "producent mebli na wymiar, 21 osób",
         profile: "Wiem, jak rozwijać firmę, ale boję się ceny.",
         text: "Mam plan, doświadczenie i zespół. Wiem, co trzeba zrobić, żeby firma weszła wyżej, ale widzę też, ile mnie to będzie kosztować w domu, zdrowiu i relacjach. Stoję w miejscu już piąty rok i nie wiem, czy mam dość siły, żeby ruszyć.",
@@ -122,7 +122,7 @@ window.siteContent = {
       },
       {
         name: "Aleksandra",
-        photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&h=240&q=85",
+        photo: "pictures/story-aleksandra.jpg",
         context: "agencja marketingowa, 12 osób",
         profile: "Firma rośnie, ale rośnie kosztem mnie.",
         text: "Trzymam wszystko w ryzach, bo nikt nie zrobi tego tak dobrze jak ja. Pracuję po godzinach, gaszę pożary i coraz częściej czuję, że kontroluję firmę kosztem siebie.",
@@ -140,7 +140,7 @@ window.siteContent = {
       },
       {
         name: "Magda",
-        photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=240&h=240&q=85",
+        photo: "pictures/story-magda.jpg",
         context: "managerka e-commerce, 7 osób",
         profile: "Mam czas pomyśleć, ale nie wiem, od czego zacząć.",
         text: "Czuję, że mam energię i potencjał, ale coś się rozmywa. Szukam kogoś, kto pomoże mi nazwać kierunek, zada dobre pytania i przełoży chaos w głowie na konkretny pierwszy krok.",

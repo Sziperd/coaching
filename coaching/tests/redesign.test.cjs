@@ -14,6 +14,68 @@ function environment() {
   return context;
 }
 
+test("all seven signals show the matching before and after texts together", () => {
+  const context = environment();
+  function element() {
+    return {
+      children: [], attributes: {}, style: { setProperty() {} }, classList: { toggle() {} },
+      append(...children) { this.children.push(...children); },
+      setAttribute(key, value) { this.attributes[key] = value; },
+      addEventListener(type, handler) { this[type] = handler; }
+    };
+  }
+  const index = element(), before = element(), after = element();
+  context.document = {
+    getElementById: () => ({
+      querySelector: selector => ({
+        ".signalsIndex": index, "[data-signals-before]": before, "[data-signals-after]": after
+      })[selector]
+    }),
+    createElement: element
+  };
+  const script = fs.readFileSync(path.join(root, "script.js"), "utf8");
+  vm.runInContext(script.slice(script.indexOf("function renderSignals("), script.indexOf("function renderStories(")), context);
+  const { signals } = context.window.siteContent;
+  context.renderSignals(signals);
+  const buttons = index.children.slice(0, 7);
+  const [previous, next] = index.children.slice(7);
+  assert.equal(buttons.length, 7);
+  assert.equal(previous.hidden, true);
+  assert.equal(next.hidden, false);
+  next.click();
+  assert.equal(buttons[1].attributes["aria-pressed"], "true");
+  assert.equal(previous.hidden, false);
+  previous.click();
+  assert.equal(buttons[0].attributes["aria-pressed"], "true");
+  assert.equal(index.children[0].attributes["aria-pressed"], "true");
+  buttons.forEach((button, i) => {
+    assert.equal(button.textContent, String(i + 1).padStart(2, "0"));
+    button.click();
+    assert.deepEqual(index.children.filter(b => b.attributes["aria-pressed"] === "true"), [button]);
+    for (const [column, copy] of [[before, signals.items], [after, signals.outcomes]]) {
+      assert.equal(column.children[i].textContent, copy[i]);
+      assert.deepEqual(column.children.filter(p => p.attributes["aria-hidden"] === "false"), [column.children[i]]);
+    }
+  });
+  assert.equal(next.hidden, true);
+  assert.equal(buttons[6].hidden, false);
+  previous.click();
+  assert.equal(buttons[5].attributes["aria-pressed"], "true");
+});
+
+test("mission copy and all three story illustrations are present locally", () => {
+  const { window } = environment();
+  assert.equal(window.siteContent.mission.length, 4);
+  assert.match(window.siteContent.mission[1], /Miłosz Stawecki/);
+  for (const item of window.siteContent.stories.items) {
+    assert.match(item.photo, /^pictures\/story-.*\.jpg$/);
+    assert.ok(fs.statSync(path.join(root, item.photo)).size > 0);
+  }
+  for (const file of ["signals-before.jpg", "signals-after.jpg", "consultation.jpg"]) {
+    assert.ok(fs.statSync(path.join(root, "pictures", file)).size > 0);
+  }
+});
+
 test("LinkedIn placeholders remain accessible buttons without invented destinations", () => {
   const { window } = environment();
   const markup = window.RelevateUI.linkedin({ name: "Miłosz Stawecki", linkedin: "" }, true);

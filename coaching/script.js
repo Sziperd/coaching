@@ -220,25 +220,70 @@ function renderExperts(expertsContent) {
 }
 
 function renderSignals(signalsContent) {
-  const list = document.querySelector("[data-signals-list]");
-  if (!list || !Array.isArray(signalsContent?.items)) return;
+  const section = document.getElementById("sygnaly");
+  if (!section || !signalsContent?.items?.length ||
+      signalsContent.outcomes?.length !== signalsContent.items.length) return;
 
-  list.innerHTML = "";
-  signalsContent.items.forEach((item, index) => {
-    const signal = document.createElement("li");
-    signal.className = "signalItem";
-    signal.style.setProperty("--i", index);
+  const index = section.querySelector(".signalsIndex");
+  const before = section.querySelector("[data-signals-before]");
+  const after = section.querySelector("[data-signals-after]");
+  const buttons = [];
+  let activeIndex = 0;
+  const pairs = signalsContent.items.map((text, i) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = String(i + 1).padStart(2, "0");
+    button.style.gridColumn = String(i + 1);
+    button.setAttribute("aria-label", `Sygnał ${i + 1}`);
+    button.setAttribute("aria-controls", "signals-comparison");
+    button.addEventListener("click", () => select(i, true));
+    index.append(button);
+    buttons.push(button);
 
-    const number = document.createElement("span");
-    number.textContent = String(index + 1);
-
-    const text = document.createElement("p");
-    text.textContent = item;
-
-    signal.appendChild(number);
-    signal.appendChild(text);
-    list.appendChild(signal);
+    return [text, signalsContent.outcomes[i]].map((copy, side) => {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = copy;
+      (side === 0 ? before : after).append(paragraph);
+      return paragraph;
+    });
   });
+
+  function arrow(label, icon, step) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "signalsIndex__arrow";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("aria-controls", "signals-comparison");
+    button.innerHTML = window.RelevateUI.icon(icon);
+    button.addEventListener("click", () => select(activeIndex + step, true));
+    return button;
+  }
+  const previous = arrow("Poprzedni sygnał", "chevron-left", -1);
+  const next = arrow("Następny sygnał", "chevron-right", 1);
+  index.append(previous, next);
+
+  function select(active, animate = false) {
+    if (active < 0 || active >= buttons.length) return;
+    activeIndex = active;
+    const last = buttons.length - 1;
+    const focused = document.activeElement;
+    previous.hidden = active === 0;
+    next.hidden = active === last;
+    buttons[0].hidden = !previous.hidden;
+    buttons[last].hidden = !next.hidden;
+    index.style.setProperty("--signal-count", buttons.length);
+    index.style.setProperty("--signal-index", active);
+    buttons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === active)));
+    pairs.forEach((pair, i) => pair.forEach(paragraph => {
+      paragraph.setAttribute("aria-hidden", String(i !== active));
+      paragraph.classList.toggle("signalsEnter", animate && i === active);
+    }));
+    if (focused?.hidden && (focused === previous || focused === next || buttons.includes(focused))) {
+      buttons[active].focus();
+    }
+  }
+
+  select(0);
 }
 
 function renderStories(storiesContent) {
@@ -580,10 +625,8 @@ function applySiteContent() {
   setText(".hero__lead", content.hero?.lead);
   setText(".hero__actions .btn--text", content.hero?.secondaryCta);
 
-  setAttr("#sygnaly img", "alt", content.challenge?.imageAlt);
   setText("#sygnaly .eyebrow", content.signals?.eyebrow);
   setText("#sygnaly h2", content.signals?.title);
-  setText("#sygnaly .signalsKicker", content.signals?.kicker);
   renderSignals(content.signals);
 
   setAttr("#coaching img", "alt", content.method?.imageAlt);

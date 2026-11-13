@@ -4,15 +4,31 @@
   c.hero.lead = "Coaching i mentoring 1:1 dla właścicieli i liderów małych i średnich firm. Dobieramy eksperta do Twojej sytuacji, a po każdym spotkaniu wiesz, co robisz dalej.";
   c.hero.goalTitle = "Co zmienisz po pierwszym miesiącu";
   c.signals.eyebrow = "Sygnały ostrzegawcze";
+  c.signals.title = "Co możemy zmienić?";
+  c.signals.outcomes = [
+    "To Ty decydujesz, czym zajmujesz się każdego dnia, i znowu masz czas, żeby spokojnie pomyśleć o firmie.",
+    "Podejmujesz decyzje z większą pewnością i przestajesz odkładać ważne zmiany w nieskończoność.",
+    "Budujesz samodzielny zespół, delegujesz odpowiedzialność, a firma przestaje zależeć od Twojej nieustannej obecności.",
+    "Po pracy zostaje Ci siła na bliskich, ruch i rzeczy, które po prostu lubisz.",
+    "Zaczynasz realizować cele, na które wcześniej brakowało Ci odwagi, czasu lub przestrzeni.",
+    "Firma rośnie, a Ty w końcu możesz wyjechać na urlop bez laptopa w walizce.",
+    "Wiesz, na czym się skupić, co odpuścić i co naprawdę przybliża Cię do celu. Do tego masz kogoś, kto pilnuje z Tobą tempa."
+  ];
   c.stories.eyebrow = "Najczęstsze problemy";
-  c.stories.lead = "Trzy typowe sytuacje. Sprawdź, która brzmi najbliżej Twojej.";
+  c.mission = [
+    "Prowadzenie firmy to dużo więcej niż jej rozwój. To także codzienne decyzje, odpowiedzialność za ludzi, reagowanie na zmiany i sprawy, które trudno odłożyć na później. Właściciele mniejszych firm, nawet bardzo doświadczeni, często mierzą się z tym wszystkim sami, bo rzadko mają obok siebie kogoś, z kim mogą spojrzeć na biznes z innej perspektywy.",
+    "Właśnie z tej obserwacji i z wieloletniego doświadczenia w zarządzaniu firmami z różnych branż powstało RelevateMe. Nasz założyciel, Miłosz Stawecki, przez ponad 30 lat pracował w zarządach, rozwijał organizacje i pomagał właścicielom podejmować ważne decyzje. Wiemy, jak wygląda biznes od środka: od strategii i wyników po ludzi, którzy każdego dnia biorą za niego odpowiedzialność.",
+    "Dziś to doświadczenie uzupełniają inni eksperci z naszego zespołu. Razem pracujemy z właścicielami i liderami małych i średnich firm, które chcą się rozwijać.",
+    "Wierzymy, że dobrze prowadzona firma nie musi zabierać całego życia. Dlatego w naszej pracy z taką samą uwagą patrzymy na dwie rzeczy: dokąd zmierza firma i jak jej prowadzenie wpływa na życie ludzi, którzy za nią stoją."
+  ];
+  c.stories.lead = "Trzy przykładowe sytuacje. Sprawdź, która brzmi najbliżej Twojej. Zdjęcia są ilustracyjne.";
   const oldStories = c.stories.items;
   c.stories.items = [oldStories[3], oldStories[1], oldStories[0]];
   c.stories.items[0].text = "Czuję, że mam energię, ale coś się rozmywa. Szukam kogoś, kto pomoże mi nazwać kierunek, zada dobre pytania i przełoży chaos w głowie na konkretny pierwszy krok.";
   c.stories.items[1].packageDetail = "business-life coaching";
   c.stories.items[2].packageDetail = "business-life mentoring";
   c.stories.items[2].profile = "Wiem, jak rozwijać firmę, ale boję się, ile zapłacę za to w domu.";
-  c.packages.lead = "Ścieżki różnią się tym, od czego zaczynasz i jak długo pracujemy. To, co niżej, dostajesz w każdej z nich.";
+  c.packages.lead = "Ścieżki różnią się tym, od czego zaczynasz i jak długo pracujemy.";
   c.quiz.results.aleksandra.package = "Elevate";
   c.quiz.results.marek.package = "Relevate";
   c.quiz.results.krzysztof.package = "Relevate";

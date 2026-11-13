@@ -31,7 +31,7 @@
   <link rel="preload" href="styles.css?v=paulina-20261106-v2" as="style" />
   <link rel="preload" href="pictures/f1-mobile-panorama.png" as="image" fetchpriority="high" />
   <link rel="stylesheet" href="styles.css?v=paulina-20261106-v2" />
-  <link rel="stylesheet" href="redesign.css?v=mobile-hero-card-layers-v1" />
+  <link rel="stylesheet" href="redesign.css?v=signals-arrows-v1" />
   <link rel="stylesheet" href="analytics.css?v=posthog-v2" />
 </head>
 
@@ -139,23 +139,21 @@
 
     <section class="section section--sand" id="sygnaly">
       <div class="container signals">
-        <div class="blobImage signals__image reveal" data-tilt>
-          <img
-            src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80"
-            alt=""
-            loading="lazy"
-          />
-        </div>
-
         <div class="signals__intro reveal">
           <p class="eyebrow"></p>
           <h2></h2>
         </div>
 
         <div class="signals__panel reveal">
-          <ol class="signalsList" data-signals-list></ol>
-
-          <p class="signalsKicker"></p>
+          <div class="signalsIndex" role="group" aria-label="Wybierz sygnał"></div>
+          <div class="signalsComparison" id="signals-comparison" aria-live="polite" aria-atomic="true">
+            <div class="signalsPerspective"><h3>Przed</h3><div data-signals-before></div></div>
+            <div class="signalsPerspective signalsPerspective--after"><h3>Po</h3><div data-signals-after></div></div>
+          </div>
+          <div class="signalsNextStep">
+            <p><strong>Od czego zacząć?</strong> Dobierz ścieżkę do tego, co dziś chcesz zmienić.</p>
+            <a class="btn btn--secondary" href="#pakiety">Porównaj pakiety</a>
+          </div>
         </div>
       </div>
     </section>
@@ -329,6 +327,7 @@
           <p class="eyebrow"></p>
           <h2></h2>
           <p></p>
+          <img class="contact__illustration" src="pictures/consultation.jpg" alt="Rozmowa wideo przy laptopie" width="900" height="600" loading="lazy" />
 
           <div class="contactCards">
             <a class="contactCard" href="#">
@@ -434,11 +433,11 @@
   <script src="referral.js?v=referrals-v2"></script>
   <script src="analytics-config.js?v=cookieless-v1"></script>
   <script src="analytics.js?v=referrals-v2"></script>
-  <script src="content.js?v=formula-mobile-image-v1"></script>
+  <script src="content.js?v=mission-photos-v1"></script>
   <script src="package-content.js?v=julka-v3"></script>
-  <script src="redesign-content.js?v=paulina-20261106-v2"></script>
+  <script src="redesign-content.js?v=offer-copy-v1"></script>
   <script src="lucide.min.js"></script>
-  <script src="redesign.js?v=desktop-duet-v1"></script>
-  <script src="script.js?v=desktop-duet-v2"></script>
+  <script src="redesign.js?v=mission-photos-v1"></script>
+  <script src="script.js?v=signals-arrows-v1"></script>
 </body>
 </html>
