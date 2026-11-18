@@ -1,10 +1,10 @@
 window.packageContent = {
   "navigate": {
-    "label": "COACHING",
+    "label": "COACHING DECYZYJNY",
     "flag": false,
     "ink": "#2f6a49",
     "onColor": "#1E2F4E",
-    "title": "Navigate: coaching 1:1 dla właścicieli firm | RelevateMe",
+    "title": "Coaching decyzyjny Navigate dla właścicieli firm | RelevateMe",
     "ctaBg": "#8BBF9F",
     "ctaFg": "#1E2F4E",
     "btnBg": "#1E2F4E",
@@ -99,16 +99,16 @@ window.packageContent = {
     "ctaText": "Na bezpłatnej konsultacji sprawdzimy razem, czy Navigate to dobra ścieżka dla Ciebie.",
     "num": "01",
     "name": "Navigate",
-    "kind": "coaching",
+    "kind": "coaching decyzyjny",
     "color": "#8BBF9F",
     "hero": "#e4f0e8"
   },
   "elevate": {
-    "label": "BUSINESS-LIFE COACHING",
+    "label": "COACHING BIZNESOWO-ŻYCIOWY",
     "flag": false,
     "ink": "#7d5a24",
     "onColor": "#1E2F4E",
-    "title": "Elevate: business-life coaching dla właścicieli firm | RelevateMe",
+    "title": "Coaching biznesowo-życiowy Elevate dla właścicieli firm | RelevateMe",
     "ctaBg": "#C49958",
     "ctaFg": "#1E2F4E",
     "btnBg": "#1E2F4E",
@@ -117,7 +117,7 @@ window.packageContent = {
     "footTop": "0",
     "next": "relevate",
     "sub": "Ambicja, która nie wypala.",
-    "desc": "Business-life coaching 1:1 dla osób, które chcą dalej rosnąć zawodowo i mieć siłę na życie po pracy.",
+    "desc": "Coaching biznesowo-życiowy 1:1 dla osób, które chcą dalej rosnąć zawodowo i mieć siłę na życie po pracy.",
     "facts": [
       {
         "l": "Sesje",
@@ -153,7 +153,7 @@ window.packageContent = {
       {
         "n": "01",
         "t": "Liczymy koszt",
-        "d": "Sprawdzamy, gdzie uciekają czas, energia i uwaga, i co sprawia, że tak zostaje."
+        "d": "Sprawdzamy, gdzie uciekają Twój czas, energia i uwaga oraz jakie nawyki utrzymują ten stan."
       },
       {
         "n": "02",
@@ -166,7 +166,7 @@ window.packageContent = {
         "d": "Projektujesz tydzień tak, by regeneracja i ważne relacje nie były pierwszą rzeczą do wykreślenia."
       }
     ],
-    "chHead": "Wciąż wysoko mierzysz. Po prostu nie płacisz sobą.",
+    "chHead": "Wciąż wysoko mierzysz. Nie płacisz za to własnym zdrowiem.",
     "changes": [
       {
         "t": "Twarde granice",
@@ -192,10 +192,10 @@ window.packageContent = {
       },
       {
         "q": "Czy muszę ograniczyć pracę?",
-        "a": "Celem jest tydzień, który da się utrzymać razem z firmą. Sprawdzamy, gdzie uciekają czas i energia i co może przejąć zespół, a tempo zmian ustalasz Ty."
+        "a": "Celem jest tydzień, który da się utrzymać razem z firmą. Sprawdzamy, gdzie uciekają czas i energia oraz które sprawy może przejąć zespół. Tempo zmian ustalasz Ty."
       },
       {
-        "q": "Czym jest business-life coaching?",
+        "q": "Czym jest coaching biznesowo-życiowy?",
         "a": "To coaching 1:1, w którym pracujemy jednocześnie nad tym, jak prowadzisz firmę, i nad tym, ile Cię to kosztuje poza pracą. Bierzemy Twój prawdziwy tydzień, obowiązki i relacje i razem ustalamy granice oraz rytm, które da się utrzymać razem z firmą."
       }
     ],
@@ -203,12 +203,12 @@ window.packageContent = {
     "ctaText": "Na bezpłatnej konsultacji sprawdzimy, co najbardziej Cię obciąża: granice, sposób pracy czy podział obowiązków.",
     "num": "02",
     "name": "Elevate",
-    "kind": "business-life coaching",
+    "kind": "coaching biznesowo-życiowy",
     "color": "#C49958",
     "hero": "#f3eadb"
   },
   "relevate": {
-    "label": "BUSINESS-LIFE MENTORING",
+    "label": "MENTORING BIZNESOWO-ŻYCIOWY",
     "flag": true,
     "ink": "#1E2F4E",
     "onColor": "#fff",
@@ -244,13 +244,13 @@ window.packageContent = {
     "mB": "jeszcze",
     "mC": "nie.",
     "points": [
-      "Kluczowe decyzje, akceptacje i problemy i tak lądują na Twoim biurku.",
+      "Kluczowe decyzje, akceptacje i trudne tematy wciąż lądują na Twoim biurku.",
       "Delegujesz zadania, ale odpowiedzialność zostaje przy Tobie.",
       "Firma działa tylko wtedy, gdy jesteś pod telefonem.",
       "Chcesz skalować bez dokładania godzin do własnego dnia."
     ],
     "inPkg": [
-      "Audyt blokad w firmie i procedury",
+      "Audyt blokad decyzyjnych i przegląd kluczowych procesów",
       "Kontakt z mentorem na bieżąco, kiedy pojawia się pilna decyzja",
       "Materiały, kolejne kroki i plan po każdej sesji"
     ],
@@ -267,8 +267,8 @@ window.packageContent = {
       },
       {
         "n": "03",
-        "t": "Budujesz nową rolę",
-        "d": "Przesuwasz uwagę z reagowania na strategię, ludzi i decyzje, których naprawdę nie może podjąć nikt inny."
+        "t": "Przestajesz gasić codzienne pożary",
+        "d": "Zamiast reagować na każdą bieżącą sprawę, zajmujesz się tym, czego nikt za Ciebie nie zrobi: kierunkiem rozwoju firmy, kluczowymi decyzjami i budowaniem zespołu."
       }
     ],
     "chHead": "Mniej firmy na Twojej głowie.",
@@ -283,7 +283,7 @@ window.packageContent = {
       },
       {
         "t": "Strategiczny oddech",
-        "d": "Masz przestrzeń na rozwój firmy oraz życie, które zaczyna się przed zamknięciem laptopa."
+        "d": "Masz przestrzeń na rozwój firmy i odzyskujesz czas na życie prywatne."
       }
     ],
     "faq": [
@@ -308,7 +308,7 @@ window.packageContent = {
     "ctaText": "Na bezpłatnej konsultacji nazwiemy najważniejszą blokadę w firmie i sprawdzimy, czy mentoring to dobra odpowiedź.",
     "num": "03",
     "name": "Relevate",
-    "kind": "business-life mentoring",
+    "kind": "mentoring biznesowo-życiowy",
     "color": "#1E2F4E",
     "hero": "#e2e7ef"
   }

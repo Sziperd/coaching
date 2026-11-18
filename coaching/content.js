@@ -1,11 +1,11 @@
 window.siteContent = {
   meta: {
-    title: "Relevateme — coaching i mentoring biznesowo-życiowy",
+    title: "RelevateMe — coaching i mentoring biznesowo-życiowy",
     description: "Coaching i mentoring biznesowo-życiowy dla osób, które chcą rozwijać firmę bez tracenia życia. Praca 1:1, konkretna mapa i decyzje dopasowane do Twojej sytuacji."
   },
 
   labels: {
-    home: "Relevateme",
+    home: "RelevateMe",
     navigation: "Nawigacja",
     openMenu: "Otwórz menu",
     closeMenu: "Zamknij menu",
@@ -35,7 +35,7 @@ window.siteContent = {
     goalTitle: "Co zmieniamy po pierwszym miesiącu",
     goalPrefix: "Fiszka",
     goals: [
-      "Wiesz, którą decyzję podjąć w tym tygodniu.",
+      "Podejmujesz decyzję, którą od dawna odkładasz.",
       "Masz z kim ją skonsultować, zanim ją podejmiesz.",
       "Pracujesz nad firmą, nie tylko w firmie.",
       "Wracasz do domu głową, nie tylko ciałem."
@@ -74,7 +74,7 @@ window.siteContent = {
   offer: {
     eyebrow: "Oferta",
     title: "Co możemy przepracować?",
-    lead: "Relevateme powstało z prostego przekonania: nie musisz wybierać między firmą a życiem. Jesteśmy grupą coachów i mentorów, którzy sami prowadzili biznesy. Naszą specjalizacją jest work-life coaching - rozwijanie firmy tak, żeby była środkiem do celu, nie celem samym w sobie. Bez żargonu, bez gotowych szablonów. Konkretna praca 1:1 nad Twoimi decyzjami i Twoim życiem poza pracą.",
+    lead: "RelevateMe powstało z prostego przekonania: nie musisz wybierać między firmą a życiem. Jesteśmy grupą coachów i mentorów, którzy sami prowadzili biznesy. Naszą specjalizacją jest work-life coaching - rozwijanie firmy tak, żeby była środkiem do celu, nie celem samym w sobie. Bez żargonu, bez gotowych szablonów. Konkretna praca 1:1 nad Twoimi decyzjami i Twoim życiem poza pracą.",
     cards: [
       {
         number: "01",
@@ -281,7 +281,7 @@ window.siteContent = {
         package: "Relevate",
         label: "Zatrzymaj się, odzyskaj siebie",
         text: "Firma rośnie, ale Ty płacisz za to energią i ciągłą kontrolą. Tu warto zacząć od przestrzeni, dobrych pytań i decyzji, które zdejmują presję zamiast ją dokładać.",
-        note: "Business-life coaching dla liderów, którzy mają wszystko oprócz powietrza."
+        note: "Coaching biznesowo-życiowy dla liderów, którzy mają wszystko oprócz powietrza."
       },
       marek: {
         title: "Wygląda na to, że masz większość elementów do następnego kroku, ale potrzebujesz mapy.",
@@ -345,7 +345,7 @@ window.siteContent = {
 
   formula: {
     imageAlt: "Widok z kokpitu bolidu na tor wyścigowy",
-    eyebrow: "Partner w kokpicie",
+    eyebrow: "Twój inżynier wyścigowy",
     title: "Ty prowadzisz. My widzimy zakręt wcześniej.",
     lead: "Wyobraź sobie, że jesteś kierowcą Formuły 1. Siedzisz sam za kierownicą - czujesz tor, znasz swój samochód, podejmujesz decyzje w ułamku sekundy. Ale w słuchawce masz inżyniera, który widzi z boksu to, czego Ty z kokpitu nie widzisz: dane telemetryczne, zachowania konkurencji, zmiany pogody.",
     text: "Tak właśnie wygląda nasza rola. Nie siedzimy z Tobą w aucie. Jesteśmy w słuchawce, gdy podejmujesz trudne decyzje - widzimy zakręt, zanim w niego wjedziesz, i mówimy krótko: \"hamuj wcześniej\" albo \"możesz dodać gazu\".",
@@ -359,7 +359,7 @@ window.siteContent = {
     mobileLabel: "Jak działa wsparcie w praktyce",
     mobileSlides: [
       {
-        eyebrow: "PARTNER W KOKPICIE",
+        eyebrow: "Twój inżynier wyścigowy",
         title: "Wyobraź sobie, że jesteś kierowcą Formuły 1.",
         text: "Czujesz tor, znasz swój samochód, podejmujesz decyzje w ułamku sekundy. Ale w słuchawce masz inżyniera - kogoś, kto widzi z boksu to, czego Ty z kokpitu nie widzisz."
       },
@@ -486,7 +486,7 @@ window.siteContent = {
     cooperation: {
       eyebrow: "Współpraca",
       title: "Porozmawiajmy o współpracy",
-      lead: "Jeśli chcesz dołączyć do Relevateme jako ekspert, partner lub masz pomysł na wspólne działanie, zostaw krótką wiadomość. Oddzielamy te zapytania od konsultacji klientów, żeby szybciej trafiły we właściwe miejsce.",
+      lead: "Jeśli chcesz dołączyć do RelevateMe jako ekspert, partner lub masz pomysł na wspólne działanie, zostaw krótką wiadomość. Oddzielamy te zapytania od konsultacji klientów, żeby szybciej trafiły we właściwe miejsce.",
       secureNote: "Twoje dane wykorzystamy wyłącznie do odpowiedzi na zapytanie o współpracę.",
       formEmail: "wspolpraca@twojadomena.pl",
       submit: "Wyślij zapytanie",
@@ -519,8 +519,8 @@ window.siteContent = {
       microcopy: "Odpowiemy w 24h.",
       items: [
         {
-          question: "Czym różnią się między sobą pakiety Relevateme?",
-          answer: "Mamy trzy ścieżki. Navigate to coaching dla osób, które chcą świadomie się rozwijać, osiągać cele i pokonywać bariery. Relevate to business-life coaching dla doświadczonych liderów z objawami przeciążenia. Elevate to pełen proces dla właścicieli firm - mentoring z doradztwem w ścieżce rozwoju, skalowania albo większej wolności."
+          question: "Czym różnią się między sobą pakiety RelevateMe?",
+          answer: "Mamy trzy ścieżki. Navigate to coaching dla osób, które chcą świadomie się rozwijać, osiągać cele i pokonywać bariery. Relevate to coaching biznesowo-życiowy dla doświadczonych liderów z objawami przeciążenia. Elevate to pełen proces dla właścicieli firm - mentoring z doradztwem w ścieżce rozwoju, skalowania albo większej wolności."
         },
         {
           question: "Wydaje mi się, że potrzebuję więcej niż jednego pakietu. Co wtedy?",
@@ -567,7 +567,7 @@ window.siteContent = {
       sections: [
         {
           title: "Administrator danych",
-          text: "Administratorem danych jest Relevateme. W sprawach dotyczących danych osobowych możesz napisać na kontakt@twojadomena.pl."
+          text: "Administratorem danych jest RelevateMe. W sprawach dotyczących danych osobowych możesz napisać na kontakt@twojadomena.pl."
         },
         {
           title: "Zakres danych",
@@ -602,7 +602,7 @@ window.siteContent = {
   },
 
   footer: {
-    name: "Relevateme",
+    name: "RelevateMe",
     rights: "Wszystkie prawa zastrzeżone.",
     backToTop: "Wróć na górę",
     faq: "FAQ",

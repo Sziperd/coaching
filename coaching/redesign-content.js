@@ -1,9 +1,9 @@
 /* Content approved in the supplied redesigns. */
 (() => {
   const c = window.siteContent;
-  c.hero.lead = "Coaching i mentoring 1:1 dla właścicieli i liderów małych i średnich firm. Dobieramy eksperta do Twojej sytuacji, a po każdym spotkaniu wiesz, co robisz dalej.";
-  c.hero.goalTitle = "Co zmienisz po pierwszym miesiącu";
-  c.signals.eyebrow = "Sygnały ostrzegawcze";
+  c.hero.lead = "Coaching i mentoring 1:1 dla właścicieli i liderów małych i średnich firm. Dobieramy eksperta do Twojej sytuacji, a po każdej sesji masz konkretny plan działania.";
+  c.hero.goalTitle = "Co zmienisz w pierwszym miesiącu";
+  c.signals.eyebrow = "Efekty współpracy";
   c.signals.title = "Co możemy zmienić?";
   c.signals.outcomes = [
     "To Ty decydujesz, czym zajmujesz się każdego dnia, i znowu masz czas, żeby spokojnie pomyśleć o firmie.",
@@ -25,8 +25,9 @@
   const oldStories = c.stories.items;
   c.stories.items = [oldStories[3], oldStories[1], oldStories[0]];
   c.stories.items[0].text = "Czuję, że mam energię, ale coś się rozmywa. Szukam kogoś, kto pomoże mi nazwać kierunek, zada dobre pytania i przełoży chaos w głowie na konkretny pierwszy krok.";
-  c.stories.items[1].packageDetail = "business-life coaching";
-  c.stories.items[2].packageDetail = "business-life mentoring";
+  c.stories.items.forEach((item, i) => {
+    item.packageDetail = window.packageContent[["navigate", "elevate", "relevate"][i]].kind;
+  });
   c.stories.items[2].profile = "Wiem, jak rozwijać firmę, ale boję się, ile zapłacę za to w domu.";
   c.packages.lead = "Ścieżki różnią się tym, od czego zaczynasz i jak długo pracujemy.";
   c.quiz.results.aleksandra.package = "Elevate";
@@ -43,12 +44,12 @@
   Object.entries(pairPackages).forEach(([key, value]) => { c.quiz.pairResults[key].package = value; });
   c.packages.items.forEach((item, i) => {
     item.slug = ["navigate", "elevate", "relevate"][i];
-    item.type = ["Start | coaching", "Regeneracja | business-life coaching", "Skalowanie | business-life mentoring"][i];
+    item.type = `${["Start", "Regeneracja", "Skalowanie"][i]} | ${window.packageContent[item.slug].kind}`;
     item.contextLabel = "Jak pracujemy";
     item.includes = [
       ["4-5 sesji po 50 min", "4-6 tygodni", "matryce decyzyjne"],
       ["6 sesji po 60 min", "2,5-3 miesiące", "wiadomości audio między sesjami"],
-      ["8-9 sesji po 2 godziny", "ok. 5 miesięcy", "audyt blokad w firmie i kontakt na bieżąco"]
+      ["8-9 sesji po 2 godziny", "ok. 5 miesięcy", "audyt blokad decyzyjnych, przegląd kluczowych procesów i kontakt na bieżąco"]
     ][i];
     item.price = ["ok. 360-450 zł netto / h*", "1 500 zł netto / h*", "Wycena projektowa*"][i];
   });
@@ -105,7 +106,7 @@
   c.contact.fields.consent = "Akceptuję kontakt zwrotny i potwierdzam zapoznanie się z informacją RODO.";
   const oldFaq = c.modals.faq.items;
   c.modals.faq.items = [
-    { question: "Czym różnią się między sobą pakiety?", answer: "Mamy trzy ścieżki. Navigate to coaching dla osób, które stoją przed ważną decyzją albo mają za dużo opcji i nie wiedzą, od czego zacząć. Elevate to business-life coaching: firma działa, ale płacisz za to snem, zdrowiem i czasem z bliskimi. Relevate to business-life mentoring dla właścicieli, bez których w firmie nic się nie dzieje.", extra: "Coaching i mentoring różnią się podejściem. Coach pomaga Ci dojść do własnej decyzji: zadaje pytania, porządkuje opcje i pilnuje kolejnych kroków. Mentor robi to samo, ale sam prowadził firmy, więc kiedy trzeba, mówi wprost, co zrobił w podobnej sytuacji." },
+    { question: "Czym różnią się między sobą pakiety?", answer: "Mamy trzy ścieżki. Navigate to coaching decyzyjny dla osób, które stoją przed ważną decyzją albo mają za dużo opcji i nie wiedzą, od czego zacząć. Elevate to coaching biznesowo-życiowy: firma działa, ale płacisz za to snem, zdrowiem i czasem z bliskimi. Relevate to mentoring biznesowo-życiowy dla właścicieli, bez których w firmie nic się nie dzieje.", extra: "Coaching i mentoring różnią się podejściem. Coach pomaga Ci dojść do własnej decyzji: zadaje pytania, porządkuje opcje i pilnuje kolejnych kroków. Mentor robi to samo, ale sam prowadził firmy, więc kiedy trzeba, mówi wprost, co zrobił w podobnej sytuacji." },
     { question: "Nie wiem, który pakiet wybrać. Co zrobić?", answer: "Umów bezpłatną konsultację albo dobierz pakiet w 6 pytaniach, a ankieta od razu pokaże rekomendację. Nie ma złej odpowiedzi, ankieta i tak prowadzi do rozmowy." },
     { question: "Mogę zacząć od jednego pakietu i przejść do innego?", answer: "Tak. Zdarza się, że w trakcie Navigate okazuje się, że potrzebujesz szerszego wsparcia. Wtedy przechodzisz do Elevate albo Relevate. Czasem łączymy też elementy kilku ścieżek w jednym procesie. Decydujemy razem, kiedy znamy Twoją sytuację." },
     { question: "Co znaczy wsparcie między sesjami?", answer: "W Elevate możesz w dni robocze nagrać wiadomość audio, a ekspert wraca z odpowiedzią. W Relevate masz kontakt z mentorem na bieżąco, kiedy pojawia się pilna decyzja, problem w zespole albo nowa okazja." },

@@ -14,6 +14,20 @@ function environment() {
   return context;
 }
 
+test("homepage and package pages share the Polish package labels", () => {
+  const { window } = environment();
+  const kinds = ["coaching decyzyjny", "coaching biznesowo-życiowy", "mentoring biznesowo-życiowy"];
+  for (const [i, key] of ["navigate", "elevate", "relevate"].entries()) {
+    const pack = window.packageContent[key];
+    assert.equal(pack.kind, kinds[i]);
+    assert.equal(pack.label.toLowerCase(), kinds[i]);
+    assert.equal(window.siteContent.packages.items[i].type.split(" | ")[1], kinds[i]);
+    assert.equal(window.siteContent.stories.items[i].packageDetail, kinds[i]);
+  }
+  assert.equal(window.siteContent.footer.name, "RelevateMe");
+  assert.equal(window.siteContent.formula.eyebrow, window.siteContent.formula.mobileSlides[0].eyebrow);
+});
+
 test("all seven signals show the matching before and after texts together", () => {
   const context = environment();
   function element() {
