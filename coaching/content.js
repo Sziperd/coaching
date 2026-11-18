@@ -47,7 +47,7 @@ window.siteContent = {
   },
 
   signals: {
-    eyebrow: "Moment zmiany",
+    eyebrow: "Efekty współpracy",
     title: "7 sygnałów, że pora coś zmienić",
     items: [
       "Twój biznes rośnie, ale Ty masz coraz mniej czasu i przestrzeni na myślenie.",
@@ -345,7 +345,7 @@ window.siteContent = {
 
   formula: {
     imageAlt: "Widok z kokpitu bolidu na tor wyścigowy",
-    eyebrow: "Twój inżynier wyścigowy",
+    eyebrow: "Wsparcie z boksu",
     title: "Ty prowadzisz. My widzimy zakręt wcześniej.",
     lead: "Wyobraź sobie, że jesteś kierowcą Formuły 1. Siedzisz sam za kierownicą - czujesz tor, znasz swój samochód, podejmujesz decyzje w ułamku sekundy. Ale w słuchawce masz inżyniera, który widzi z boksu to, czego Ty z kokpitu nie widzisz: dane telemetryczne, zachowania konkurencji, zmiany pogody.",
     text: "Tak właśnie wygląda nasza rola. Nie siedzimy z Tobą w aucie. Jesteśmy w słuchawce, gdy podejmujesz trudne decyzje - widzimy zakręt, zanim w niego wjedziesz, i mówimy krótko: \"hamuj wcześniej\" albo \"możesz dodać gazu\".",
@@ -359,7 +359,7 @@ window.siteContent = {
     mobileLabel: "Jak działa wsparcie w praktyce",
     mobileSlides: [
       {
-        eyebrow: "Twój inżynier wyścigowy",
+        eyebrow: "Wsparcie z boksu",
         title: "Wyobraź sobie, że jesteś kierowcą Formuły 1.",
         text: "Czujesz tor, znasz swój samochód, podejmujesz decyzje w ułamku sekundy. Ale w słuchawce masz inżyniera - kogoś, kto widzi z boksu to, czego Ty z kokpitu nie widzisz."
       },

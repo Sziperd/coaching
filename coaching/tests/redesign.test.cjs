@@ -25,6 +25,8 @@ test("homepage and package pages share the Polish package labels", () => {
     assert.equal(window.siteContent.stories.items[i].packageDetail, kinds[i]);
   }
   assert.equal(window.siteContent.footer.name, "RelevateMe");
+  assert.equal(window.siteContent.signals.eyebrow, "Efekty współpracy");
+  assert.equal(window.siteContent.formula.eyebrow, "Wsparcie z boksu");
   assert.equal(window.siteContent.formula.eyebrow, window.siteContent.formula.mobileSlides[0].eyebrow);
 });
 
