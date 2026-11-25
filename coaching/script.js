@@ -886,10 +886,7 @@ function initSiteModals(modalContent) {
         <textarea name="message" rows="3" placeholder="${fields.messagePlaceholder || ""}" required></textarea>
       </label>
       <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <label class="modalConsent modalForm__wide">
-        <input type="checkbox" name="consent" required>
-        <span>${data?.consent || ""}</span>
-      </label>
+      ${window.RelevateUI.consent(data?.consent, { cooperation: true })}
       ${window.RelevateUI.privacy()}
       <button class="btn btn--primary btn--wide modalForm__wide" type="submit" data-cooperation-submit disabled>
         ${data?.submit || "Wyślij"}
@@ -903,7 +900,7 @@ function initSiteModals(modalContent) {
     roleOptions.innerHTML = `<legend>Piszę jako</legend>${["coach", "mentor", "trener", "doradca", "partner", "inne"].map(role => `<label><input type="radio" name="role" value="${role}"><span>${role}</span></label>`).join("")}`;
     form.querySelector('label:has(textarea)').before(roleOptions);
     note.classList.add("modalForm__wide");
-    form.querySelector(".modalConsent").before(note);
+    form.querySelector(".consentPreview").before(note);
 
     const consentInput = form.querySelector('input[name="consent"]');
     const submitButton = form.querySelector("[data-cooperation-submit]");

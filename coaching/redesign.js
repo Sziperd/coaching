@@ -202,12 +202,19 @@ window.RelevateUI = (() => {
   function privacy() {
     return `<details class="consentDetails"><summary>Pokaż pełną informację RODO</summary><div class="legalDocument">${window.RelevateLegal.render("notice")}${window.RelevateLegal.navigation()}</div></details>`;
   }
+  function consent(text, { cooperation = false } = {}) {
+    const name = cooperation ? "consent" : "privacyConsent";
+    return `<div class="consentPreview${cooperation ? " modalForm__wide" : ""}">
+      <label class="${cooperation ? "modalConsent" : "contactConsent"}"><input type="checkbox" name="${name}" required /><span id="${name}-text">${escape(text)}</span></label>
+      <button class="consentPreview__toggle" type="button" aria-expanded="false" aria-controls="${name}-text" data-consent-toggle><span>Rozwiń treść zgody</span>${icon("chevron-down")}</button>
+    </div>`;
+  }
   function form(packageName = "") {
     return `<label>IMIĘ I NAZWISKO *<input type="text" name="name" autocomplete="name" placeholder="Imię i nazwisko" required maxlength="150" /></label>
       <label>E-MAIL *<input type="email" name="email" autocomplete="email" placeholder="twoj@email.pl" required maxlength="254" /></label>
       ${packageName ? `<input type="hidden" name="package" value="${packageName}" />` : `<fieldset class="packageOptions"><legend>Który pakiet Cię interesuje?</legend>${["Navigate", "Elevate", "Relevate", "Nie mam pewności"].map((name, i) => `<label><input type="radio" name="package" value="${name}" /><span style="--option-color:${["#8bbf9f", "#c49958", "#1e2f4e", "#bfb8aa"][i]}">${name}</span></label>`).join("")}</fieldset>`}
       <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
-      <label class="contactConsent"><input type="checkbox" name="privacyConsent" required /><span>${escape(window.siteContent.contact.fields.consent)}</span></label>${privacy()}
+      ${consent(window.siteContent.contact.fields.consent)}${privacy()}
       <button class="btn btn--primary btn--wide" type="submit" data-contact-submit disabled>Umów bezpłatną konsultację</button><p class="formStatus" id="formStatus" role="status" aria-live="polite"></p>`;
   }
   function faq(items) {
@@ -267,7 +274,16 @@ window.RelevateUI = (() => {
     }
     refreshIcons();
   }
-  return { escape, icon, link, flipCard, initFlipCards, setCardDetailsOpen, initCardDetails, initPackageCardSizing, linkedin, common, order, header, privacy, form, faq, packageMore, footer, refreshIcons, initMenus };
+  if (typeof document !== "undefined") {
+    document.addEventListener("click", event => {
+      const button = event.target.closest?.("[data-consent-toggle]");
+      if (!button) return;
+      const expand = button.getAttribute("aria-expanded") !== "true";
+      button.setAttribute("aria-expanded", String(expand));
+      button.querySelector("span").textContent = expand ? "Zwiń treść zgody" : "Rozwiń treść zgody";
+    });
+  }
+  return { escape, icon, link, flipCard, initFlipCards, setCardDetailsOpen, initCardDetails, initPackageCardSizing, linkedin, common, order, header, consent, privacy, form, faq, packageMore, footer, refreshIcons, initMenus };
 })();
 
 window.prepareRedesign = () => {

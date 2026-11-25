@@ -18,7 +18,7 @@
   const form = document.getElementById("contactForm");
   const label = document.createElement("label");
   label.innerHTML = 'WIADOMOŚĆ (OPCJONALNIE)<textarea name="message" rows="4" maxlength="5000" placeholder="Opowiedz krótko, z czym przychodzisz."></textarea>';
-  form.querySelector(".contactConsent").before(label);
+  form.querySelector(".consentPreview").before(label);
   const consent = form.elements.privacyConsent;
   const button = form.querySelector("[data-contact-submit]");
   const status = form.querySelector(".formStatus");

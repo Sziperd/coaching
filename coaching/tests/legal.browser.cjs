@@ -12,6 +12,22 @@ before(async () => {
 });
 after(async () => { await browser?.close(); });
 
+async function checkConsentPreview(form, selector) {
+  const text = form.locator(selector);
+  const toggle = form.locator("[data-consent-toggle]");
+  const checkbox = form.locator(".consentPreview input");
+  const isClipped = () => text.evaluate(el => el.scrollHeight > el.clientHeight);
+  assert.equal(await toggle.getAttribute("aria-expanded"), "false");
+  assert.equal(await isClipped(), true);
+  await toggle.press("Enter");
+  assert.equal(await toggle.getAttribute("aria-expanded"), "true");
+  assert.equal(await isClipped(), false);
+  assert.equal(await checkbox.isChecked(), false);
+  await toggle.press("Space");
+  assert.equal(await toggle.getAttribute("aria-expanded"), "false");
+  assert.equal(await isClipped(), true);
+}
+
 for (const width of [390, 1440]) {
   test(`${width}px: complete legal text and consent work on every form`, async () => {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
@@ -29,6 +45,7 @@ for (const width of [390, 1440]) {
         const bounds = await consent.boundingBox();
         assert(bounds.x >= 0 && bounds.x + bounds.width <= width, "Consent must fit the viewport");
         assert.equal(await consent.evaluate(el => el.scrollWidth <= el.clientWidth), true);
+        await checkConsentPreview(form, ".contactConsent span");
         assert.equal(await form.locator("[data-contact-submit]").isDisabled(), true);
         await form.locator('input[name="name"]').fill("Test Testowy");
         await form.locator('input[name="email"]').fill("test@example.com");
@@ -48,6 +65,7 @@ for (const width of [390, 1440]) {
       const cooperation = page.locator("[data-cooperation-form]");
       await cooperation.waitFor({ state: "visible" });
       assert.equal(await cooperation.locator(".modalConsent span").textContent(), await page.evaluate(() => window.RelevateLegal.consent));
+      await checkConsentPreview(cooperation, ".modalConsent span");
       await cooperation.locator(".consentDetails summary").click();
       assert.equal(await cooperation.locator(".legalDocument > p").count(), 21);
       await page.goto(pathToFileURL(path.join(root, "index.html")).href + "#prywatnosc");

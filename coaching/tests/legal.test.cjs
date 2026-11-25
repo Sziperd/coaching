@@ -32,7 +32,7 @@ test("all four static documents contain the full approved blocks, including the 
 test("every entry point loads the shared legal documents before the content overrides", () => {
   for (const name of ["index", "navigate", "elevate", "relevate", "kontakt"]) {
     const page = read(`${name}.html`);
-    assert.match(page, /legal\.css\?v=legal-20261125-v1/);
+    assert.match(page, /legal\.css\?v=consent-preview-v1/);
     const legal = page.indexOf('src="legal-content.js');
     assert(legal > 0 && legal < page.indexOf('src="redesign-content.js'));
   }
@@ -51,6 +51,8 @@ test("consultation and cooperation checkboxes share the supplied complete consen
   assert.match(ui.form(), /Wyrażam zgodę/);
   assert.match(ui.form(), /name="privacyConsent" required/);
   assert.match(ui.form(), /data-contact-submit disabled/);
+  assert.match(ui.form(), /type="button" aria-expanded="false" aria-controls="privacyConsent-text"/);
+  assert.match(ui.consent(legal.consent, { cooperation: true }), /aria-controls="consent-text"/);
 });
 
 test("full RODO notice is shown at the forms and every legal link resolves locally", () => {
