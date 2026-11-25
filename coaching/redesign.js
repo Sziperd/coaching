@@ -200,11 +200,10 @@ window.RelevateUI = (() => {
       <a class="drawer__link" href="${isPackage ? "index.html#wspolpraca" : "#wspolpraca"}" ${isPackage ? "" : 'data-open-modal="cooperation"'}>Dołącz do zespołu</a>${link(isPackage ? "#konsultacja" : "#kontakt", "Umów bezpłatną konsultację")}</nav></div>`;
   }
   function privacy() {
-    const info = window.siteContent.modals.privacy;
-    return `<details class="consentDetails"><summary>Pokaż pełną informację RODO</summary><div>${info.sections.map(s => `<h4>${escape(s.title)}</h4><p>${escape(s.text)}</p>`).join("")}</div></details>`;
+    return `<details class="consentDetails"><summary>Pokaż pełną informację RODO</summary><div class="legalDocument">${window.RelevateLegal.render("notice")}${window.RelevateLegal.navigation()}</div></details>`;
   }
   function form(packageName = "") {
-    return `<label>IMIĘ *<input type="text" name="name" autocomplete="given-name" placeholder="Twoje imię" required maxlength="150" /></label>
+    return `<label>IMIĘ I NAZWISKO *<input type="text" name="name" autocomplete="name" placeholder="Imię i nazwisko" required maxlength="150" /></label>
       <label>E-MAIL *<input type="email" name="email" autocomplete="email" placeholder="twoj@email.pl" required maxlength="254" /></label>
       ${packageName ? `<input type="hidden" name="package" value="${packageName}" />` : `<fieldset class="packageOptions"><legend>Który pakiet Cię interesuje?</legend>${["Navigate", "Elevate", "Relevate", "Nie mam pewności"].map((name, i) => `<label><input type="radio" name="package" value="${name}" /><span style="--option-color:${["#8bbf9f", "#c49958", "#1e2f4e", "#bfb8aa"][i]}">${name}</span></label>`).join("")}</fieldset>`}
       <input class="formHoneypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
@@ -225,7 +224,10 @@ window.RelevateUI = (() => {
         <a href="mailto:kontakt@relevateme.pl">kontakt@relevateme.pl</a>${experts}</div>
       <div class="footer__bottom"><p>© <span id="year">${new Date().getFullYear()}</span> RelevateMe</p>
         <div class="footer__links"><a href="${home}#faq">FAQ</a>
-          <a href="${home}#prywatnosc" ${isPackage ? "" : 'data-open-modal="privacy"'}>Polityka prywatności i RODO</a>
+          <a href="polityka-prywatnosci.html" ${isPackage ? "" : 'data-open-modal="privacy"'}>Polityka prywatności</a>
+          <a href="klauzula-informacyjna.html">Klauzula informacyjna RODO</a>
+          <a href="polityka-cookies.html">Polityka cookies</a>
+          <a href="regulamin.html">Regulamin</a>
           <a href="${home}#wspolpraca" ${isPackage ? "" : 'data-open-modal="cooperation"'}>Dołącz do zespołu</a>
           <a href="#${isPackage ? "top" : "home"}">Wróć na górę ${icon("arrow-up")}</a></div></div></div>`;
   }

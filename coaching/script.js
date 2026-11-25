@@ -993,14 +993,8 @@ function initSiteModals(modalContent) {
     fragment.appendChild(renderHeader(data));
 
     const list = document.createElement("div");
-    list.className = "modalPrivacy";
-    (data?.sections || []).forEach((section) => {
-      const article = document.createElement("article");
-      article.className = "modalPrivacy__section";
-      article.appendChild(textEl("h3", "", section.title));
-      article.appendChild(textEl("p", "", section.text));
-      list.appendChild(article);
-    });
+    list.className = "modalPrivacy legalDocument";
+    list.innerHTML = window.RelevateLegal.render(data.document) + window.RelevateLegal.navigation();
     fragment.appendChild(list);
 
     return fragment;

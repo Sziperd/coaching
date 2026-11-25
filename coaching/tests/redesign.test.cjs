@@ -10,7 +10,7 @@ function load(context, name) {
 }
 function environment() {
   const context = vm.createContext({ window: {}, Date });
-  for (const name of ["content.js", "package-content.js", "redesign-content.js", "redesign.js"]) load(context, name);
+  for (const name of ["content.js", "package-content.js", "legal-content.js", "redesign-content.js", "redesign.js"]) load(context, name);
   return context;
 }
 

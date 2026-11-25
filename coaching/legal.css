@@ -1,0 +1,29 @@
+@font-face{font-family:Inter;src:url('pictures/inter-latin.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
+@font-face{font-family:Inter;src:url('pictures/inter-latin-ext.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0100-024F}
+.legalPage{margin:0;background:#f8f6f1;color:#1e2f4e;font:16px/1.7 Inter,system-ui,sans-serif;letter-spacing:0}
+.legalPage *{box-sizing:border-box}
+.legalPage a,.legalLinks a,.legalDocument a{color:inherit;text-underline-offset:3px;overflow-wrap:anywhere}
+.legalPage a:focus-visible{outline:3px solid #416b9d;outline-offset:4px}
+.legalHeader{max-width:1200px;margin:auto;min-height:76px;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid #1e2f4e20}
+.legalHeader img{display:block;max-width:100%;height:auto}
+.legalDocument{max-width:840px;margin:0 auto;padding:48px 24px 64px;overflow-wrap:anywhere}
+.legalDocument h1{font-size:30px;line-height:1.25;font-weight:750;margin:0 0 32px}
+.legalDocument h2{font-size:20px;line-height:1.4;font-weight:700;margin:32px 0 12px}
+.legalDocument p{margin:0 0 16px;font-size:16px;line-height:1.7;font-weight:400}
+.legalTable{max-width:100%;margin:20px 0;overflow-x:auto}
+.legalTable table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.6;text-align:left}
+.legalTable th,.legalTable td{border:1px solid #1e2f4e30;padding:12px;vertical-align:top;overflow-wrap:anywhere}
+.legalTable th{font-weight:700;background:#1e2f4e08}
+.legalLinks{display:flex;flex-wrap:wrap;gap:12px 24px;font-size:14px;line-height:1.5}
+.legalLinks a[aria-current=page]{font-weight:700}
+.redesign .legalDocument{max-width:none;margin:0;padding:0}
+.redesign .legalDocument p{font-size:14px;line-height:1.65;font-weight:400;margin:0 0 16px;color:#2f3b52}
+.redesign .legalDocument h2{font-size:18px;line-height:1.4;font-weight:700;margin:28px 0 12px}
+.redesign .consentDetails>.legalDocument{padding:12px 0 0}
+.redesign .consentDetails .legalLinks{padding:12px 0;font-size:13px}
+.redesign .contactConsent span,.redesign .modalConsent span{min-width:0;font-size:14px;line-height:1.65;font-weight:400;overflow-wrap:anywhere}
+.redesign .footer__links{flex-wrap:wrap}
+.legalFooter{max-width:1200px;margin:auto;padding:24px;border-top:1px solid #1e2f4e20}
+.legalFooter>a{display:inline-block;margin-top:24px;font-size:14px}
+@media(max-width:480px){.legalDocument{padding:32px 20px 40px}.legalDocument h1{font-size:24px}.legalHeader,.legalFooter{padding:16px 20px}.legalHeader img{width:160px}.legalTable th,.legalTable td{padding:8px}}
+@media print{.legalHeader,.legalFooter{display:none}.legalPage{background:white;color:black}.legalDocument{max-width:none;padding:0}.legalDocument h2{break-after:avoid}.legalTable{overflow:visible}}

@@ -101,9 +101,9 @@
   c.contact.lead = "Zostaw imię i e-mail. Odpowiemy w ciągu 24 godzin i zaproponujemy termin. Rozmowa jest bezpłatna, trwa 60 minut i odbywa się online.";
   c.contact.email = c.contact.formEmail = "kontakt@relevateme.pl";
   c.contact.submit = "Umów bezpłatną konsultację";
-  c.contact.fields.name = "Imię *";
+  c.contact.fields.name = "Imię i nazwisko *";
   c.contact.fields.email = "E-mail *";
-  c.contact.fields.consent = "Akceptuję kontakt zwrotny i potwierdzam zapoznanie się z informacją RODO.";
+  c.contact.fields.consent = window.RelevateLegal.consent;
   const oldFaq = c.modals.faq.items;
   c.modals.faq.items = [
     { question: "Czym różnią się między sobą pakiety?", answer: "Mamy trzy ścieżki. Navigate to coaching decyzyjny dla osób, które stoją przed ważną decyzją albo mają za dużo opcji i nie wiedzą, od czego zacząć. Elevate to coaching biznesowo-życiowy: firma działa, ale płacisz za to snem, zdrowiem i czasem z bliskimi. Relevate to mentoring biznesowo-życiowy dla właścicieli, bez których w firmie nic się nie dzieje.", extra: "Coaching i mentoring różnią się podejściem. Coach pomaga Ci dojść do własnej decyzji: zadaje pytania, porządkuje opcje i pilnuje kolejnych kroków. Mentor robi to samo, ale sam prowadził firmy, więc kiedy trzeba, mówi wprost, co zrobił w podobnej sytuacji." },
@@ -126,15 +126,10 @@
   c.modals.cooperation.fields.message = "O czym chcesz porozmawiać?";
   c.modals.cooperation.fields.messagePlaceholder = "Kim jesteś, w jakiej branży pracujesz i jaki masz pomysł";
   c.modals.cooperation.consent = c.contact.fields.consent;
-  c.modals.privacy.sections.forEach(section => {
-    section.text = section.text.replaceAll("kontakt@twojadomena.pl", "kontakt@relevateme.pl");
-  });
-  c.modals.privacy.sections[3] = {
-    title: "Obsługa formularzy",
-    text: "Formularze przesyłają dane do serwera strony, który wysyła zapytanie na nasz adres e-mail albo do eksperta wybranego w linku kontaktowym. Do zapytania możemy dołączyć oznaczenie źródła linku, np. LinkedIn / Featured. Te oznaczenia są przekazywane w URL-u, bez zapisywania ich w cookies lub localStorage. Nie otwieramy klienta pocztowego użytkownika."
-  };
-  c.modals.privacy.sections[4] = {
-    title: "Zbiorcze statystyki korzystania ze strony",
-    text: "Korzystamy z PostHog Cloud EU w trybie cookieless do zbiorczego pomiaru odsłon, źródeł wejścia, przewijania i kliknięć. Analityka nie zapisuje cookies ani identyfikatorów w localStorage lub sessionStorage. Nie nagrywamy wizyt, nie tworzymy profili osób i nie przesyłamy danych formularzy ani odpowiedzi ankiety. Dostawca przetwarza adres IP i informacje o przeglądarce do obliczenia dziennego hasha po stronie serwera; nie jest to gwarancja pełnej anonimowości. Respektujemy Do Not Track i Global Privacy Control."
+  c.modals.privacy = {
+    eyebrow: "Dokumenty prawne",
+    title: "Polityka prywatności",
+    lead: "",
+    document: "privacy"
   };
 })();
