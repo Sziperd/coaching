@@ -125,20 +125,15 @@ function createExpertSlide(expert, index) {
     img.loading = "lazy";
     photo.appendChild(img);
   } else {
+    photo.setAttribute("aria-hidden", "true");
     const initials = document.createElement("span");
     initials.className = "expertPhoto__initials";
-    initials.textContent = (expert.name || "EX")
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
+    initials.textContent = window.RelevateUI.initials(expert.name) || "EX";
     photo.appendChild(initials);
   }
 
   const signature = document.createElement("span");
   signature.className = "expertSignature";
-  signature.setAttribute("aria-label", `${siteContent.labels?.expertSignature || "Podpis"} ${expert.name || ""}`.trim());
   signature.setAttribute("aria-hidden", "true");
   signature.innerHTML = `
     <svg viewBox="0 0 520 150" role="img" focusable="false">
@@ -146,8 +141,9 @@ function createExpertSlide(expert, index) {
       <text class="signatureText" x="10" y="96" textLength="500" lengthAdjust="spacingAndGlyphs"></text>
     </svg>
   `;
-  setText("title", expert.signature || expert.name || "", signature);
-  writeSignatureText(expert.signature || expert.name || "", signature.querySelector(".signatureText"));
+  const signatureName = expert.signature || expert.name || "";
+  setText("title", signatureName, signature);
+  writeSignatureText(signatureName, signature.querySelector(".signatureText"));
   photo.appendChild(signature);
 
   const bio = document.createElement("div");

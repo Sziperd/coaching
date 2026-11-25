@@ -17,14 +17,17 @@ async function checkConsentPreview(form, selector) {
   const toggle = form.locator("[data-consent-toggle]");
   const checkbox = form.locator(".consentPreview input");
   const isClipped = () => text.evaluate(el => el.scrollHeight > el.clientHeight);
+  const waitForMotion = () => text.evaluate(el => Promise.allSettled(el.getAnimations().map(animation => animation.finished)));
   assert.equal(await toggle.getAttribute("aria-expanded"), "false");
   assert.equal(await isClipped(), true);
   await toggle.press("Enter");
   assert.equal(await toggle.getAttribute("aria-expanded"), "true");
+  await waitForMotion();
   assert.equal(await isClipped(), false);
   assert.equal(await checkbox.isChecked(), false);
   await toggle.press("Space");
   assert.equal(await toggle.getAttribute("aria-expanded"), "false");
+  await waitForMotion();
   assert.equal(await isClipped(), true);
 }
 
@@ -66,6 +69,14 @@ for (const width of [390, 1440]) {
       await cooperation.waitFor({ state: "visible" });
       assert.equal(await cooperation.locator(".modalConsent span").textContent(), await page.evaluate(() => window.RelevateLegal.consent));
       await checkConsentPreview(cooperation, ".modalConsent span");
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      const reduced = await cooperation.locator("[data-consent-toggle]").evaluate(button => {
+        button.click();
+        const copy = document.getElementById(button.getAttribute("aria-controls"));
+        return { expanded: copy.scrollHeight === copy.clientHeight, animations: copy.getAnimations().length };
+      });
+      assert.deepEqual(reduced, { expanded: true, animations: 0 });
+      await page.emulateMedia({ reducedMotion: "no-preference" });
       await cooperation.locator(".consentDetails summary").click();
       assert.equal(await cooperation.locator(".legalDocument > p").count(), 21);
       await page.goto(pathToFileURL(path.join(root, "index.html")).href + "#prywatnosc");
@@ -86,3 +97,24 @@ for (const width of [390, 1440]) {
     } finally { await context.close(); }
   });
 }
+
+test("consent expands and reverses from its current height when toggled quickly", async () => {
+  const page = await browser.newPage();
+  try {
+    await page.route(/^https?:/, route => route.abort());
+    await page.goto(pathToFileURL(path.join(root, "kontakt.html")).href);
+    const heights = await page.locator("[data-consent-toggle]").evaluate(button => {
+      const copy = document.getElementById(button.getAttribute("aria-controls"));
+      const height = () => copy.getBoundingClientRect().height;
+      const closed = height();
+      button.click();
+      const expand = copy.getAnimations().find(animation => animation.effect.getKeyframes()[0].maxBlockSize);
+      expand.currentTime = 120;
+      const middle = height();
+      button.click();
+      return { closed, middle, reversed: height(), full: copy.scrollHeight };
+    });
+    assert(heights.closed < heights.middle && heights.middle < heights.full);
+    assert(Math.abs(heights.middle - heights.reversed) < 1);
+  } finally { await page.close(); }
+});

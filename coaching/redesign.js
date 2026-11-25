@@ -165,15 +165,16 @@ window.RelevateUI = (() => {
       });
     });
   }
+  const initials = (name = "") => name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase();
+
   function linkedin(expert, compact = false) {
+    if (!expert.linkedin) return "";
     const label = `LinkedIn: ${expert.name}`;
     const classes = compact ? "expertLinkedin linkedinIcon" : "btn btn--secondary expertLinkedin";
     // Filled brand glyph from Bootstrap Icons; see LICENSES/bootstrap-icons.txt.
     const contents = `<svg class="linkedinBrand" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zM4.943 13.394V6.169H2.542v7.225zM3.743 5.182c.837 0 1.358-.554 1.358-1.248-.015-.709-.521-1.248-1.342-1.248S2.4 3.225 2.4 3.934c0 .694.521 1.248 1.327 1.248zm9.715 8.212V9.251c0-2.22-1.185-3.252-2.766-3.252-1.274 0-1.845.7-2.165 1.193V6.169H6.126c.031.678 0 7.225 0 7.225h2.401V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.217.662 1.217 1.633v3.866z"/></svg>` + (compact ? "" : " LinkedIn");
     const content = compact ? contents : contents.replace(" LinkedIn", '<span class="linkedinLabel">LinkedIn</span>');
-    return expert.linkedin
-      ? `<a class="${classes}" href="${escape(expert.linkedin)}" target="_blank" rel="noopener noreferrer" aria-label="${escape(label)}">${content}</a>`
-      : `<button class="${classes}" type="button" disabled aria-label="${escape(label)}" title="Link do profilu wkrótce">${content}</button>`;
+    return `<a class="${classes}" href="${escape(expert.linkedin)}" target="_blank" rel="noopener noreferrer" aria-label="${escape(label)}">${content}</a>`;
   }
   const order = ["navigate", "elevate", "relevate"];
   const common = [
@@ -275,15 +276,27 @@ window.RelevateUI = (() => {
     refreshIcons();
   }
   if (typeof document !== "undefined") {
+    const consentAnimations = new WeakMap();
     document.addEventListener("click", event => {
       const button = event.target.closest?.("[data-consent-toggle]");
       if (!button) return;
+      const copy = document.getElementById(button.getAttribute("aria-controls"));
+      const start = copy.getBoundingClientRect().height;
+      consentAnimations.get(copy)?.cancel();
       const expand = button.getAttribute("aria-expanded") !== "true";
       button.setAttribute("aria-expanded", String(expand));
       button.querySelector("span").textContent = expand ? "Zwiń treść zgody" : "Rozwiń treść zgody";
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const end = copy.getBoundingClientRect().height;
+      if (start !== end) {
+        consentAnimations.set(copy, copy.animate([
+          { maxBlockSize: `${start}px` },
+          { maxBlockSize: `${end}px` }
+        ], { duration: 280, easing: "cubic-bezier(.25,.65,.35,1)" }));
+      }
     });
   }
-  return { escape, icon, link, flipCard, initFlipCards, setCardDetailsOpen, initCardDetails, initPackageCardSizing, linkedin, common, order, header, consent, privacy, form, faq, packageMore, footer, refreshIcons, initMenus };
+  return { escape, icon, link, flipCard, initFlipCards, setCardDetailsOpen, initCardDetails, initPackageCardSizing, initials, linkedin, common, order, header, consent, privacy, form, faq, packageMore, footer, refreshIcons, initMenus };
 })();
 
 window.prepareRedesign = () => {

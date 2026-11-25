@@ -32,7 +32,7 @@ test("all four static documents contain the full approved blocks, including the 
 test("every entry point loads the shared legal documents before the content overrides", () => {
   for (const name of ["index", "navigate", "elevate", "relevate", "kontakt"]) {
     const page = read(`${name}.html`);
-    assert.match(page, /legal\.css\?v=consent-preview-v1/);
+    assert.match(page, /legal\.css\?v=consent-motion-v1/);
     const legal = page.indexOf('src="legal-content.js');
     assert(legal > 0 && legal < page.indexOf('src="redesign-content.js'));
   }

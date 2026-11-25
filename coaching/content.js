@@ -409,7 +409,7 @@ window.siteContent = {
       {
         role: "Ekspert",
         name: "Miłosz Stawecki",
-        photo: "pictures/expert_1_picture.jpg",
+        photo: null,
         photoAlt: "Miłosz Stawecki",
         signature: "Miłosz Stawecki",
         bio: [

@@ -92,13 +92,9 @@ test("mission copy and all three story illustrations are present locally", () =>
   }
 });
 
-test("LinkedIn placeholders remain accessible buttons without invented destinations", () => {
+test("mentors without a LinkedIn URL do not get a placeholder control", () => {
   const { window } = environment();
-  const markup = window.RelevateUI.linkedin({ name: "Miłosz Stawecki", linkedin: "" }, true);
-  assert.match(markup, /<button/);
-  assert.match(markup, /disabled/);
-  assert.match(markup, /aria-label="LinkedIn: Miłosz Stawecki"/);
-  assert.doesNotMatch(markup, /href=/);
+  assert.equal(window.RelevateUI.linkedin(window.siteContent.experts.items[1], true), "");
 });
 
 test("LinkedIn links escape attributes and protect new tabs", () => {
@@ -130,11 +126,20 @@ test("compact expert introductions do not replace the full biographies", () => {
   assert.equal(window.siteContent.modals.cooperation.fields.namePlaceholder, "Imię i nazwisko");
 });
 
-test("footer renders a LinkedIn control beside each mentor", () => {
+test("footer keeps both mentors and links only to Miłosz's LinkedIn profile", () => {
   const { window } = environment();
   const markup = window.RelevateUI.footer();
   assert.equal((markup.match(/class="footer__mentor"/g) || []).length, 2);
-  assert.equal((markup.match(/class="expertLinkedin linkedinIcon"/g) || []).length, 2);
+  assert.equal((markup.match(/class="expertLinkedin linkedinIcon"/g) || []).length, 1);
+  assert(markup.includes('href="https://pl.linkedin.com/in/mi%C5%82osz-stawecki-1a55a4198"'));
+  assert.doesNotMatch(markup, /LinkedIn: Paulina/);
+});
+
+test("both mentors use their own initials while official photos are unavailable", () => {
+  const { window } = environment();
+  const { items } = window.siteContent.experts;
+  assert(items.every(expert => !expert.photo));
+  assert.deepEqual(Array.from(items, expert => window.RelevateUI.initials(expert.name)), ["MS", "PM"]);
 });
 
 for (const key of ["navigate", "elevate", "relevate"]) {
@@ -161,7 +166,9 @@ for (const key of ["navigate", "elevate", "relevate"]) {
     load(context, "package-page.js");
     assert.match(main.innerHTML, /class="container faqLayout"/);
     assert.match(main.innerHTML, /class="packageExperts__footer"/);
-    assert.equal((main.innerHTML.match(/class="expertLinkedin linkedinIcon"/g) || []).length, 2);
+    assert.deepEqual(Array.from(main.innerHTML.matchAll(/class="miniExpert__initials" aria-hidden="true">([A-Z]+)</g), match => match[1]), ["MS", "PM"]);
+    assert.equal((main.innerHTML.match(/class="expertLinkedin linkedinIcon"/g) || []).length, 1);
+    assert.doesNotMatch(main.innerHTML, /LinkedIn: Paulina/);
     assert.match(main.innerHTML, /name="privacyConsent"/);
     assert.match(main.innerHTML, /<form class="contactForm"/);
     assert.equal(styles.get("--package-on-color"), context.window.packageContent[key].onColor);

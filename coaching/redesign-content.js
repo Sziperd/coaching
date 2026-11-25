@@ -71,7 +71,7 @@
   Object.assign(c.experts.items[0], {
     role: "Mentor biznesowy",
     shortBio: "31 lat zarządzania firmami i zespołami. Pomaga właścicielom delegować decyzje i rozwijać firmę bez płacenia za to zdrowiem i czasem.",
-    linkedin: "",
+    linkedin: "https://pl.linkedin.com/in/mi%C5%82osz-stawecki-1a55a4198",
     bio: [
       "Od 31 lat zarządza firmami i zespołami. Pracował w siedmiu branżach: transporcie, motoryzacji i handlu, produkcji, doradztwie, mediach, sporcie i medycynie - jako prezes zarządu, członek zarządu, dyrektor i członek rad nadzorczych spółek akcyjnych.",
       "Zbudował firmę od podstaw, wyprowadził spółkę z zaległości wobec urzędu skarbowego, celnego i banku, prowadził restrukturyzacje i rozmowy ze związkami zawodowymi. W TVP Katowice zbudował zespół, który zrealizował 1800 wejść na żywo do programów ogólnopolskich. Decyzje, z którymi przychodzą właściciele firm, zna od środka, bo sam je podejmował.",
